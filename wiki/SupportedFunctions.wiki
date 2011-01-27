@@ -24,5 +24,5 @@ The system:
   * shall connect to application server and retrieve bus activities
   * shall display the bus activities with no more than 5 seconds delay
   * shall show the bus activities in a list and a map
-  * shall provide and process bus activities for all operating buses.
+  * shall handle all operating buses activities
   * should able to support 100 users upload and view bus activities at the same time
