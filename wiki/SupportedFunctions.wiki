@@ -1,0 +1,28 @@
+#summary The basic Supported Functions
+#labels Phase-Requirements
+
+= Introduction =
+
+This page defines the general application functions.
+
+
+= Details =
+
+The system:
+  * shall run on Android 2.2 or above
+  * shall capture real time sensor data used for classification
+  * shall control the sensor operation, 
+    * turn off the sensor if it is not used
+    * reduce or increase the duty cycle
+  * shall determinate whether users are on bus
+  * shall allow the automatic trigger of the system
+  * shall determinate the bus activity, includes
+    * the route and direction of bus
+    * the location and speed of bus
+    * all the following bus stops and the estimated arrival time
+  * shall upload the real time bus activities to application server
+  * shall connect to application server and retrieve bus activities
+  * shall display the bus activities with no more than 5 seconds delay
+  * shall show the bus activities in a list and a map
+  * shall provide and process bus activities for all operating buses.
+  * should able to support 100 users upload and view bus activities at the same time
