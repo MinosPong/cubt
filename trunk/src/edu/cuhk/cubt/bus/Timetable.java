@@ -1,6 +1,8 @@
 package edu.cuhk.cubt.bus;
 
-import android.text.format.Time;
+import java.util.Collection;
+
+import android.location.Location;
 
 /**
  * An implementation of a Timetable.
@@ -17,6 +19,19 @@ public class Timetable {
 	};
 	
 	
+	/**
+	 * Returns all the routes on the given time and location
+	 * 
+	 * @param time The time
+	 * @param location The location
+	 * @author Kalyn
+	 * @return Collection<Route> The possible route
+	 */
+	public static Collection<Route> findRoutesByLocationTime(long time, Location location){
+		
+		
+		return null;
+	}
 	
 	
 	
