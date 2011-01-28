@@ -6,7 +6,7 @@
 This page is the features of CUHK Bus Tracking System
 
 
-= Details =
+= Features =
 
   * Provides real time bus activities
   * Estimate the waiting time/ arrival time of bus
