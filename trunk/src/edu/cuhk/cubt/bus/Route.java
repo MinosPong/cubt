@@ -1,6 +1,5 @@
 package edu.cuhk.cubt.bus;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -15,7 +14,7 @@ public class Route{
 	private List<Poi> pois = new LinkedList<Poi>();
 	
 	public Route(){
-		
+		//TODO
 	}
 	
 	public Iterator<Poi> getPois(){
