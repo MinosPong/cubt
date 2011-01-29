@@ -65,7 +65,7 @@ public class Poi{
 		return location.distanceTo(dest) <= this.range;
 	}
 	
-	public Poi getByLocation(Location dest){
+	public static Poi getByLocation(Location dest){
 		//TODO
 		return null;
 	}
