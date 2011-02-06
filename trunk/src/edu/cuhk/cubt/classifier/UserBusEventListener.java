@@ -1,4 +1,4 @@
-package edu.cuhk.cubt.prediction;
+package edu.cuhk.cubt.classifier;
 
 import java.util.EventListener;
 
