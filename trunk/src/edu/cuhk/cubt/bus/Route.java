@@ -4,17 +4,45 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import edu.cuhk.cubt.bus.Timetable.OperationDay;
+
 import android.text.format.Time;
 
 public class Route{
 	Time start;
 	Time end;
-	int operationDay;
+	OperationDay operationDay;
+	
+	private String name = "unKnown";
 	
 	private List<Poi> pois = new LinkedList<Poi>();
 	
 	public Route(){
 		//TODO
+	}
+	
+	public Route(String name, Time start, Time end, OperationDay operationDay){
+		//TODO
+		this.name = name;
+		this.start = start;
+		this.end = end;
+		this.operationDay = operationDay;
+	}
+	
+	public String getName(){
+		return name;
+	}
+	
+	public Time getStartTime(){
+		return start;
+	}
+	
+	public Time getEndTime(){
+		return end;
+	}
+	
+	public OperationDay getOperationDay(){
+		return operationDay;
 	}
 	
 	public Iterator<Poi> getPois(){
