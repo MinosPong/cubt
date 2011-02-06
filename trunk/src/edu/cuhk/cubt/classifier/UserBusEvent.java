@@ -1,0 +1,22 @@
+package edu.cuhk.cubt.prediction;
+
+import java.util.EventObject;
+
+import android.location.Location;
+
+public class UserBusEvent 
+	extends EventObject{
+
+	/**
+	 * Serial version UID.
+	 */
+	private static final long serialVersionUID = 0L;
+
+	
+	public UserBusEvent(Location location) {
+		super(location);
+		// TODO Auto-generated constructor stub
+	}
+
+
+}
