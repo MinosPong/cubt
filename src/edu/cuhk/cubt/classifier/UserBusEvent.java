@@ -17,6 +17,10 @@ public class UserBusEvent
 		super(location);
 		// TODO Auto-generated constructor stub
 	}
+	
+	public Location getLocation(){
+		return (Location) super.source;
+	}
 
 
 }
