@@ -36,7 +36,7 @@ public class Pediction{
 		Time time = new Time();
 		time.set(millis);
 		String timestring = time.toString();
-		int hour = new Date(millis).getHours();
+		int hour = time.hour;
 		
 		
 		//get the past and current POI
