@@ -18,6 +18,13 @@ public class Poi{
 	
 	protected static final String LOCATION_PROVIDER = "CUBT_POI";
 	
+	/**
+	 * 
+	 * @param name
+	 * @param latitude
+	 * @param longitude
+	 * @param range
+	 */
 	public Poi(String name, double latitude, double longitude, float range){
 		location = new Location(LOCATION_PROVIDER);
 		location.setLatitude(latitude);
@@ -65,7 +72,27 @@ public class Poi{
 		return location.distanceTo(dest) <= this.range;
 	}
 	
+	
+	/**
+	 * Returns the Poi that represent the input Location dest,
+	 * return null if no Poi matched
+	 * @param dest the Location to be check
+	 * @return the Poi that represent the input Location dest,
+	 * return null if no Poi matched
+	 */
 	public static Poi getByLocation(Location dest){
+		//TODO
+		return null;
+	}
+	
+	/**
+	 * Returns the Poi that represent the input name,
+	 * return null if no Poi matched
+	 * @param name the name of the Poi
+	 * @return the Poi that represent the input name,
+	 * return null if no Poi matched
+	 */
+	public static Poi getByName(String name){
 		//TODO
 		return null;
 	}
