@@ -33,6 +33,14 @@ public class Timetable {
 	 * @author Kalyn
 	 * @return Collection<Route> The possible route
 	 */
+	/* NOT understand
+	Please focus on:
+		1. Initiate the Routes in class [Data], << unable to do
+		2. Put all the Route information to class [Route] << unable to do
+		3. Modify [Route], or add new feature to [Route] if necessary.
+		4. In Timetable.DirectionIndicatior(), use Poi.getByLocation and Poi.isCovered for checking <<dunno if it is true
+		5. Change return type of findRoutesByLocationTime to Collection<Route>, after finish item(1-2)
+*/
 	public static /*Collection<Route>*/Collection<LinkedList<Poi>> findRoutesByLocationTime(long millis, Location location){
 		Time time = new Time();
 		time.set(millis); //any usage?	
@@ -60,8 +68,9 @@ public class Timetable {
 	
 	
 	private static directionIndicatior checkDirection(Location location){
+		//Like that??
 		//Poi target = Poi.getByLocation(location);
-		//if(target.isCoverd(location))
+		//if(target.isCoverd(location)) <= what should location be? if(target.isCoverd("Train Station")) NOT possible of cuz
 			//return directionIndicatior.UP;
 		if((location.getLatitude() == 22.414361) && (location.getLongitude() == 114.210292)) //Train Station
 			return directionIndicatior.UP;
