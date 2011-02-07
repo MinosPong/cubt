@@ -143,21 +143,21 @@ public class Timetable {
 		}
 		
 		//Weekday 23:25
-		if((time.weekDay > 0)&&(time.hour == 23)&&(time.minute == 24)) 
+		if((time.weekDay != Time.SUNDAY)&&(time.hour == 23)&&(time.minute == 24)) 
 			indicatorQueue = removeDuplicate(indicatorQueue,17);
 		
 		//Weekday before 09:00
-		if((time.weekDay > 0)&&((time.hour == 7 && time.minute == 45)||(time.hour == 8 && time.minute == 15)||(time.hour == 9 && time.minute == 45)))
+		if((time.weekDay != Time.SUNDAY)&&((time.hour == 7 && time.minute == 45)||(time.hour == 8 && time.minute == 15)||(time.hour == 9 && time.minute == 45)))
 			indicatorQueue = removeDuplicate(indicatorQueue,1); //up
 		
-		if((time.weekDay > 0)&&((time.hour == 7 && time.minute == 30)||(time.hour == 8 && time.minute == 00)||(time.hour == 8 && time.minute == 30)))
+		if((time.weekDay != Time.SUNDAY)&&((time.hour == 7 && time.minute == 30)||(time.hour == 8 && time.minute == 00)||(time.hour == 8 && time.minute == 30)))
 			indicatorQueue = removeDuplicate(indicatorQueue,5); //down
 		
-		if((time.weekDay > 0)&&(time.hour == 8)&&(time.minute == 10))
+		if((time.weekDay != Time.SUNDAY)&&(time.hour == 8)&&(time.minute == 10))
 			indicatorQueue = removeDuplicate(indicatorQueue,13); //SP1
 		
 		//Weekday 00 15 30 45
-		if((time.weekDay > 0)&&(time.hour >= 9 && time.hour <= 17)&&(time.minute == 00 || time.minute == 15 || time.minute == 30 || time.minute == 45)){
+		if((time.weekDay != Time.SUNDAY)&&(time.hour >= 9 && time.hour <= 17)&&(time.minute == 00 || time.minute == 15 || time.minute == 30 || time.minute == 45)){
 			if(time.minute != 00)
 				indicatorQueue = removeDuplicate(indicatorQueue,1); //up
 			if(time.minute == 00)
@@ -169,7 +169,7 @@ public class Timetable {
 		}
 		
 		//Weekday 00 20 40
-		if((time.weekDay > 0)&&(time.minute == 00 || time.minute == 20 || time.minute == 40)){
+		if((time.weekDay != Time.SUNDAY)&&(time.minute == 00 || time.minute == 20 || time.minute == 40)){
 			if(time.hour >= 9 && time.hour <= 17)
 				indicatorQueue = removeDuplicate(indicatorQueue,2);
 			if(time.hour >= 18 && time.hour <= 22)
@@ -187,8 +187,8 @@ public class Timetable {
 		}
 		
 		//Meet-class CC
-		//Weekday every 20 => 00 20 40
-		if((time.weekDay > 0)&&(time.minute == 00 || time.minute == 20 || time.minute == 40)){
+		//Weekday every 20 =!= Time.SUNDAY0 20 40
+		if((time.weekDay != Time.SUNDAY)&&(time.minute == 00 || time.minute == 20 || time.minute == 40)){
 			if(time.hour >= 9 && time.hour <= 16) //00 20 40
 				indicatorQueue = removeDuplicate(indicatorQueue,4);
 			if(time.hour == 17 && (time.minute == 00 || time.minute == 20)) //17:00 & 17:20
@@ -196,16 +196,16 @@ public class Timetable {
 		}
 		
 		//Weekday 18
-		if((time.weekDay > 0)&&(time.hour >= 9 && time.hour <= 17)&&(time.minute == 18))
+		if((time.weekDay != Time.SUNDAY)&&(time.hour >= 9 && time.hour <= 17)&&(time.minute == 18))
 			indicatorQueue = removeDuplicate(indicatorQueue,8); //down
 		
 		//Weekday 10 18
-		if((time.weekDay > 0)&&(time.hour >= 9 && time.hour <= 17)&&(time.minute == 18 || time.minute == 10))
+		if((time.weekDay != Time.SUNDAY)&&(time.hour >= 9 && time.hour <= 17)&&(time.minute == 18 || time.minute == 10))
 			indicatorQueue = removeDuplicate(indicatorQueue,9); //down
 		
 		//Additional
-		//Weekday every 5 => 00 05 10 15 20 25 30 35 40 40 50 55
-		if((time.weekDay > 0)&&((time.hour == 7 && time.minute == 45)||(time.hour == 8 && (time.minute == 00 || time.minute == 05 || time.minute == 10 || time.minute == 15 || time.minute == 20 || time.minute == 25 || time.minute == 30 || time.minute == 35 ||time.minute == 40 || time.minute == 45 || time.minute == 50 || time.minute == 55))||(time.hour == 9 && time.minute == 00))){
+		//Weekday every 5 =!= Time.SUNDAY0 05 10 15 20 25 30 35 40 40 50 55
+		if((time.weekDay != Time.SUNDAY)&&((time.hour == 7 && time.minute == 45)||(time.hour == 8 && (time.minute == 00 || time.minute == 05 || time.minute == 10 || time.minute == 15 || time.minute == 20 || time.minute == 25 || time.minute == 30 || time.minute == 35 ||time.minute == 40 || time.minute == 45 || time.minute == 50 || time.minute == 55))||(time.hour == 9 && time.minute == 00))){
 			indicatorQueue = removeDuplicate(indicatorQueue,10);
 			indicatorQueue = removeDuplicate(indicatorQueue,11);
 		}
