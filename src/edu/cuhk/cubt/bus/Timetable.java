@@ -38,7 +38,6 @@ public class Timetable {
 		1. Initiate the Routes in class [Data], << unable to do
 		2. Put all the Route information to class [Route] << unable to do
 		3. Modify [Route], or add new feature to [Route] if necessary.
-		4. In Timetable.DirectionIndicatior(), use Poi.getByLocation and Poi.isCovered for checking <<dunno if it is true
 		5. Change return type of findRoutesByLocationTime to Collection<Route>, after finish item(1-2)
 */
 	public static /*Collection<Route>*/Collection<LinkedList<Poi>> findRoutesByLocationTime(long millis, Location location){
@@ -70,8 +69,24 @@ public class Timetable {
 	private static directionIndicatior checkDirection(Location location){
 		//Like that??
 		//Poi target = Poi.getByLocation(location);
-		//if(target.isCoverd(location)) <= what should location be? if(target.isCoverd("Train Station")) NOT possible of cuz
+		//if(target.isCoverd(location)) <= what should location be? if(target.isCoverd(Data.STOP_MTR)) NOT possible of cuz
 			//return directionIndicatior.UP;
+
+		if(Poi.getByName(Data.STOP_MTR).isCovered(location)) //Train Station
+			return directionIndicatior.UP;
+		if(Poi.getByName(Data.STOP_CCS).isCovered(location)) //Chung Chi Teaching Blocks
+			return directionIndicatior.UP;
+		if(Poi.getByName(Data.STOP_SRR).isCovered(location)) //Sir Run Run Hall
+			return directionIndicatior.UP;
+		
+		if(Poi.getByName(Data.STOP_NAS).isCovered(location)) //New Asia College
+			return directionIndicatior.DOWN;
+		if(Poi.getByName(Data.STOP_SCS).isCovered(location)) //Shaw College
+			return directionIndicatior.DOWN;
+		if(Poi.getByName(Data.STOP_R11).isCovered(location)) //Residences No.10 and 11
+			return directionIndicatior.DOWN;
+		return directionIndicatior.UNDEFINED;
+		/*
 		if((location.getLatitude() == 22.414361) && (location.getLongitude() == 114.210292)) //Train Station
 			return directionIndicatior.UP;
 		if((location.getLatitude() == 22.415306) && (location.getLongitude() == 114.208428)) //Chung Chi Teaching Blocks
@@ -86,6 +101,7 @@ public class Timetable {
 		if((location.getLatitude() == 22.425152) && (location.getLongitude() == 114.207891)) //Residences No.10 and 11
 			return directionIndicatior.DOWN;
 		return directionIndicatior.UNDEFINED;
+		*/
 	}
 	
 	private static LinkedList<Integer> checkTime(Time time){ //already findRoutesByLocationTime, Extract all possible routes in particular time, neglect the direction
@@ -216,121 +232,121 @@ public class Timetable {
 		//maybe too exact?
 		if((indicator == 0)||(indicator == 17))/*Mon-Sat; 23:25; Sun*/{
 			//Predicted Route Weekday: 2300up; Sunday: up00
-			stop = hashtable.get("Train Station");
+			stop = hashtable.get(Data.STOP_MTR);
 			predictedRoute.add(stop);
-			stop = hashtable.get("Jockey Club Post-Graduate Hall"); //dun know exact time???
+			stop = hashtable.get(Data.STOP_PGH); //dun know exact time???
 			predictedRoute.add(stop);
-			stop = hashtable.get("University Sports Centre (Upward)");
+			stop = hashtable.get(Data.STOP_SPU);
 			predictedRoute.add(stop);
-			stop = hashtable.get("Sir Run Run Hall");
+			stop = hashtable.get(Data.STOP_SRR);
 			predictedRoute.add(stop);
-			stop = hashtable.get("Fung King Hey Building");
+			stop = hashtable.get(Data.STOP_FKH);
 			predictedRoute.add(stop);
-			stop = hashtable.get("United college");
+			stop = hashtable.get(Data.STOP_UCS);
 			predictedRoute.add(stop);
-			stop = hashtable.get("New Asia College ");
+			stop = hashtable.get(Data.STOP_NAS);
 			predictedRoute.add(stop);
-			stop = hashtable.get("Residences No.3 and 4 ");
+			stop = hashtable.get(Data.STOP_R34);
 			predictedRoute.add(stop);
 			if(indicator == 0){
-			stop = hashtable.get("Shaw College"); //eliminate in Weekday: 2300up
+			stop = hashtable.get(Data.STOP_SCS); //eliminate in Weekday: 2300up
 			predictedRoute.add(stop);
 			}
-			stop = hashtable.get("United College Staff Residence");
+			stop = hashtable.get(Data.STOP_RUC);
 			predictedRoute.add(stop);
-			stop = hashtable.get("Residences No.15");
+			stop = hashtable.get(Data.STOP_R15);
 			predictedRoute.add(stop);
-			stop = hashtable.get("Residences No.10 and 11");
+			stop = hashtable.get(Data.STOP_R11);
 			predictedRoute.add(stop);
 		}	
 		
 		if((indicator == 1)||(indicator ==16)){
 			//Predicted Route Weekday: b40900up, normalup
-			stop = hashtable.get("Train Station");
+			stop = hashtable.get(Data.STOP_MTR);
 			predictedRoute.add(stop);
 			if(indicator == 16){
-			stop = hashtable.get("Jockey Club Post-Graduate Hall");
+			stop = hashtable.get(Data.STOP_PGH);
 			predictedRoute.add(stop);
 			}
-			stop = hashtable.get("University Sports Centre (Upward)");
+			stop = hashtable.get(Data.STOP_SPU);
 			predictedRoute.add(stop);
-			stop = hashtable.get("Sir Run Run Hall");
+			stop = hashtable.get(Data.STOP_SRR);
 			predictedRoute.add(stop);
-			stop = hashtable.get("Fung King Hey Building");
+			stop = hashtable.get(Data.STOP_FKH);
 			predictedRoute.add(stop);
-			stop = hashtable.get("United college");
+			stop = hashtable.get(Data.STOP_UCS);
 			predictedRoute.add(stop);
-			stop = hashtable.get("New Asia College ");
+			stop = hashtable.get(Data.STOP_NAS);
 			predictedRoute.add(stop);
 		}
 
 		if(indicator == 2){
 			//Predicted Route Weekday: Shaw up
-			stop = hashtable.get("Train Station");
+			stop = hashtable.get(Data.STOP_MTR);
 			predictedRoute.add(stop);
-			stop = hashtable.get("University Sports Centre (Upward)");
+			stop = hashtable.get(Data.STOP_SPU);
 			predictedRoute.add(stop);
-			stop = hashtable.get("Sir Run Run Hall");
+			stop = hashtable.get(Data.STOP_SRR);
 			predictedRoute.add(stop);
-			stop = hashtable.get("Fung King Hey Building");
+			stop = hashtable.get(Data.STOP_FKH);
 			predictedRoute.add(stop);
-			stop = hashtable.get("Shaw College");
+			stop = hashtable.get(Data.STOP_SCS);
 			predictedRoute.add(stop);
-			stop = hashtable.get("Residences No.10 and 11");
+			stop = hashtable.get(Data.STOP_R11);
 			predictedRoute.add(stop);
-			stop = hashtable.get("Residences No.15");
+			stop = hashtable.get(Data.STOP_R15);
 			predictedRoute.add(stop);
-			stop = hashtable.get("United College Staff Residence");
+			stop = hashtable.get(Data.STOP_RUC);
 			predictedRoute.add(stop);
-			stop = hashtable.get("Chan Chun Ha Hostel");
+			stop = hashtable.get(Data.STOP_CCH);
 			predictedRoute.add(stop);
-			stop = hashtable.get("Shaw College");
+			stop = hashtable.get(Data.STOP_SCS);
 			predictedRoute.add(stop);
-			stop = hashtable.get("University Administrative Building");
+			stop = hashtable.get(Data.STOP_ADM);
 			predictedRoute.add(stop);
-			stop = hashtable.get("Pentecostal Mission Hall Complex");
+			stop = hashtable.get(Data.STOP_P5H);
 			predictedRoute.add(stop);
-			stop = hashtable.get("University Sports Centre (Downward)");
+			stop = hashtable.get(Data.STOP_SPD);
 			predictedRoute.add(stop);
-			stop = hashtable.get("Train Station");
+			stop = hashtable.get(Data.STOP_MTR);
 			predictedRoute.add(stop);
 		}
 		
 		if(indicator == 3){
 			//Predicted Route Weekday: after1800up; Sunday: up01
-			stop = hashtable.get("Train Station");
+			stop = hashtable.get(Data.STOP_MTR);
 			predictedRoute.add(stop);
-			stop = hashtable.get("University Sports Centre (Upward)");
+			stop = hashtable.get(Data.STOP_SPU);
 			predictedRoute.add(stop);
-			stop = hashtable.get("Sir Run Run Hall");
+			stop = hashtable.get(Data.STOP_SRR);
 			predictedRoute.add(stop);
-			stop = hashtable.get("New Asia College ");
+			stop = hashtable.get(Data.STOP_NAS);
 			predictedRoute.add(stop);
-			stop = hashtable.get("United college");
+			stop = hashtable.get(Data.STOP_UCS);
 			predictedRoute.add(stop);
-			stop = hashtable.get("Residences No.3 and 4 ");
+			stop = hashtable.get(Data.STOP_R34);
 			predictedRoute.add(stop);
-			stop = hashtable.get("Shaw College");
+			stop = hashtable.get(Data.STOP_SCS);
 			predictedRoute.add(stop);
 		}
 		
 		if(indicator == 4){
 			//Predicted Route Weekday: Meet-class up
-			stop = hashtable.get("Chung Chi Teaching Blocks");
+			stop = hashtable.get(Data.STOP_CCS);
 			predictedRoute.add(stop);
-			stop = hashtable.get("University Sports Centre (Upward)");
+			stop = hashtable.get(Data.STOP_SPU);
 			predictedRoute.add(stop);
-			stop = hashtable.get("Sir Run Run Hall");
+			stop = hashtable.get(Data.STOP_SRR);
 			predictedRoute.add(stop);
-			stop = hashtable.get("Fung King Hey Building");
+			stop = hashtable.get(Data.STOP_FKH);
 			predictedRoute.add(stop);
-			stop = hashtable.get("United college");
+			stop = hashtable.get(Data.STOP_UCS);
 			predictedRoute.add(stop);
-			stop = hashtable.get("New Asia College ");
+			stop = hashtable.get(Data.STOP_NAS);
 			predictedRoute.add(stop);
-			stop = hashtable.get("Residences No.3 and 4 ");
+			stop = hashtable.get(Data.STOP_R34);
 			predictedRoute.add(stop);
-			stop = hashtable.get("Shaw College");
+			stop = hashtable.get(Data.STOP_SCS);
 			predictedRoute.add(stop);
 		}	
 			
@@ -338,105 +354,105 @@ public class Timetable {
 			
 		if((indicator == 5)||(indicator == 15)){	
 			//Predicted Route Weekday: b40900down, normaldown w.SP2
-			stop = hashtable.get("New Asia College ");
+			stop = hashtable.get(Data.STOP_NAS);
 			predictedRoute.add(stop);
-			stop = hashtable.get("United college");
+			stop = hashtable.get(Data.STOP_UCS);
 			predictedRoute.add(stop);
-			stop = hashtable.get("University Administrative Building");
+			stop = hashtable.get(Data.STOP_ADM);
 			predictedRoute.add(stop);
-			stop = hashtable.get("Pentecostal Mission Hall Complex");
+			stop = hashtable.get(Data.STOP_P5H);
 			predictedRoute.add(stop);
-			stop = hashtable.get("University Sports Centre (Downward)");
+			stop = hashtable.get(Data.STOP_SPD);
 			predictedRoute.add(stop);
 			if(indicator == 15){
-				stop = hashtable.get("Jockey Club Post-Graduate Hall"); //SP2
+				stop = hashtable.get(Data.STOP_PGH); //SP2
 				predictedRoute.add(stop);
 			}
-			stop = hashtable.get("Train Station");
+			stop = hashtable.get(Data.STOP_MTR);
 			predictedRoute.add(stop);
 		}
 		
 		if(indicator == 6){	
 			//Predicted Route Weekday: after1800down; Sunday: down01
-			stop = hashtable.get("Shaw College");
+			stop = hashtable.get(Data.STOP_SCS);
 			predictedRoute.add(stop);
-			stop = hashtable.get("Residences No.3 and 4 ");
+			stop = hashtable.get(Data.STOP_R34);
 			predictedRoute.add(stop);
-			stop = hashtable.get("New Asia College ");
+			stop = hashtable.get(Data.STOP_NAS);
 			predictedRoute.add(stop);
-			stop = hashtable.get("United college");
+			stop = hashtable.get(Data.STOP_UCS);
 			predictedRoute.add(stop);
-			stop = hashtable.get("University Administrative Building");
+			stop = hashtable.get(Data.STOP_ADM);
 			predictedRoute.add(stop);
-			stop = hashtable.get("Pentecostal Mission Hall Complex");
+			stop = hashtable.get(Data.STOP_P5H);
 			predictedRoute.add(stop);
-			stop = hashtable.get("University Sports Centre (Downward)");
+			stop = hashtable.get(Data.STOP_SPD);
 			predictedRoute.add(stop);
-			stop = hashtable.get("Train Station");
+			stop = hashtable.get(Data.STOP_MTR);
 			predictedRoute.add(stop);
 		}
 		
 		if(indicator == 7){
 			//Predicted Route Weekday: after 2300down; Sunday: down00
-			stop = hashtable.get("Residences No.10 and 11");
+			stop = hashtable.get(Data.STOP_R11);
 			predictedRoute.add(stop);
-			stop = hashtable.get("Residences No.15");
+			stop = hashtable.get(Data.STOP_R15);
 			predictedRoute.add(stop);
-			stop = hashtable.get("United College Staff Residence");
+			stop = hashtable.get(Data.STOP_RUC);
 			predictedRoute.add(stop);
-			stop = hashtable.get("Shaw College");
+			stop = hashtable.get(Data.STOP_SCS);
 			predictedRoute.add(stop);
-			stop = hashtable.get("Residences No.3 and 4 ");
+			stop = hashtable.get(Data.STOP_R34);
 			predictedRoute.add(stop);
-			stop = hashtable.get("New Asia College ");
+			stop = hashtable.get(Data.STOP_NAS);
 			predictedRoute.add(stop);
-			stop = hashtable.get("United college");
+			stop = hashtable.get(Data.STOP_UCS);
 			predictedRoute.add(stop);
-			stop = hashtable.get("University Administrative Building");
+			stop = hashtable.get(Data.STOP_ADM);
 			predictedRoute.add(stop);
-			stop = hashtable.get("Pentecostal Mission Hall Complex");
+			stop = hashtable.get(Data.STOP_P5H);
 			predictedRoute.add(stop);
-			stop = hashtable.get("University Sports Centre (Downward)");
+			stop = hashtable.get(Data.STOP_SPD);
 			predictedRoute.add(stop);
-			stop = hashtable.get("Jockey Club Post-Graduate Hall"); //eliminate in Sunday: down00
+			stop = hashtable.get(Data.STOP_PGH); //eliminate in Sunday: down00
 			predictedRoute.add(stop);
-			stop = hashtable.get("Train Station");
+			stop = hashtable.get(Data.STOP_MTR);
 			predictedRoute.add(stop);
 		}
 			
 		if(indicator == 8){
 			//Predicted Route Weekday: Meet-class down NA
-			stop = hashtable.get("New Asia College ");
+			stop = hashtable.get(Data.STOP_NAS);
 			predictedRoute.add(stop);
-			stop = hashtable.get("United college");
+			stop = hashtable.get(Data.STOP_UCS);
 			predictedRoute.add(stop);
-			stop = hashtable.get("University Administrative Building");
+			stop = hashtable.get(Data.STOP_ADM);
 			predictedRoute.add(stop);
-			stop = hashtable.get("Pentecostal Mission Hall Complex");
+			stop = hashtable.get(Data.STOP_P5H);
 			predictedRoute.add(stop);
-			stop = hashtable.get("University Sports Centre (Downward)");
+			stop = hashtable.get(Data.STOP_SPD);
 			predictedRoute.add(stop);
-			stop = hashtable.get("Chung Chi Teaching Blocks");
+			stop = hashtable.get(Data.STOP_CCS);
 			predictedRoute.add(stop);
 		}	
 		
 		if(indicator == 9){
 			//Predicted Route Weekday: Meet-class down shaw
-			stop = hashtable.get("Shaw College");//shaw
+			stop = hashtable.get(Data.STOP_SCS);//shaw
 			predictedRoute.add(stop);
-			stop = hashtable.get("Residences No.3 and 4 ");//shaw
+			stop = hashtable.get(Data.STOP_R34);//shaw
 			predictedRoute.add(stop);
-			stop = hashtable.get("New Asia College ");
+			stop = hashtable.get(Data.STOP_NAS);
 			predictedRoute.add(stop);
-			stop = hashtable.get("United college");
+			stop = hashtable.get(Data.STOP_UCS);
 			predictedRoute.add(stop);
-			stop = hashtable.get("University Administrative Building");
+			stop = hashtable.get(Data.STOP_ADM);
 			predictedRoute.add(stop);
-			stop = hashtable.get("Pentecostal Mission Hall Complex");
+			stop = hashtable.get(Data.STOP_P5H);
 			predictedRoute.add(stop);
-			stop = hashtable.get("University Sports Centre (Downward)");
+			stop = hashtable.get(Data.STOP_SPD);
 			predictedRoute.add(stop);
-			stop = hashtable.get("Chung Chi Teaching Blocks");
+			stop = hashtable.get(Data.STOP_CCS);
 			predictedRoute.add(stop);
 		}	
 			
@@ -444,87 +460,87 @@ public class Timetable {
 			
 		if(indicator == 10){	
 			//Predicted Route Weekday: Additional first
-			stop = hashtable.get("Train Station");
+			stop = hashtable.get(Data.STOP_MTR);
 			predictedRoute.add(stop);
-			stop = hashtable.get("University Sports Centre (Upward)");
+			stop = hashtable.get(Data.STOP_SPU);
 			predictedRoute.add(stop);
-			stop = hashtable.get("Sir Run Run Hall");
+			stop = hashtable.get(Data.STOP_SRR);
 			predictedRoute.add(stop);
-			stop = hashtable.get("University Administrative Building");
+			stop = hashtable.get(Data.STOP_ADM);
 			predictedRoute.add(stop);
-			stop = hashtable.get("Pentecostal Mission Hall Complex");
+			stop = hashtable.get(Data.STOP_P5H);
 			predictedRoute.add(stop);
-			stop = hashtable.get("University Sports Centre (Downward)");
+			stop = hashtable.get(Data.STOP_SPD);
 			predictedRoute.add(stop);
-			stop = hashtable.get("Train Station");
+			stop = hashtable.get(Data.STOP_MTR);
 			predictedRoute.add(stop);
 		}
 		
 		if(indicator == 11){
 			//Predicted Route Weekday: Additional Second  5 min each!!!!!?????!!!!!????
-			stop = hashtable.get("Sir Run Run Hall");
+			stop = hashtable.get(Data.STOP_SRR);
 			predictedRoute.add(stop);
-			stop = hashtable.get("New Asia College ");
+			stop = hashtable.get(Data.STOP_NAS);
 			predictedRoute.add(stop);
-			stop = hashtable.get("United college");
+			stop = hashtable.get(Data.STOP_UCS);
 			predictedRoute.add(stop);
-			stop = hashtable.get("Residences No.3 and 4 ");
+			stop = hashtable.get(Data.STOP_R34);
 			predictedRoute.add(stop);
-			stop = hashtable.get("Shaw College");
+			stop = hashtable.get(Data.STOP_SCS);
 			predictedRoute.add(stop);
-			stop = hashtable.get("Residences No.3 and 4 ");
+			stop = hashtable.get(Data.STOP_R34);
 			predictedRoute.add(stop);
-			stop = hashtable.get("University Administrative Building");
+			stop = hashtable.get(Data.STOP_ADM);
 			predictedRoute.add(stop);
-			stop = hashtable.get("Sir Run Run Hall");
+			stop = hashtable.get(Data.STOP_SRR);
 			predictedRoute.add(stop);
 		}
 		
 		if(indicator == 12){
 			//Predicted Route Weekday0-4: Circular, not on sat
-			stop = hashtable.get("Shaw College");
+			stop = hashtable.get(Data.STOP_SCS);
 			predictedRoute.add(stop);
-			stop = hashtable.get("Residences No.3 and 4 ");
+			stop = hashtable.get(Data.STOP_R34);
 			predictedRoute.add(stop);
-			stop = hashtable.get("University Administrative Building");
+			stop = hashtable.get(Data.STOP_ADM);
 			predictedRoute.add(stop);
-			stop = hashtable.get("Sir Run Run Hall");
+			stop = hashtable.get(Data.STOP_SRR);
 			predictedRoute.add(stop);
-			stop = hashtable.get("New Asia College ");
+			stop = hashtable.get(Data.STOP_NAS);
 			predictedRoute.add(stop);
-			stop = hashtable.get("United college");
+			stop = hashtable.get(Data.STOP_UCS);
 			predictedRoute.add(stop);
-			stop = hashtable.get("Residences No.3 and 4 ");
+			stop = hashtable.get(Data.STOP_R34);
 			predictedRoute.add(stop);
-			stop = hashtable.get("Shaw College");
+			stop = hashtable.get(Data.STOP_SCS);
 			predictedRoute.add(stop);
 		}
 		
 		if((indicator == 13)||(indicator == 14)){	
 			//Predicted Route Weekday: after1800down SP4 =>14; b40900down SP1 =>13
-			stop = hashtable.get("Shaw College");
+			stop = hashtable.get(Data.STOP_SCS);
 			predictedRoute.add(stop);
-			stop = hashtable.get("Residences No.3 and 4 ");
+			stop = hashtable.get(Data.STOP_R34);
 			predictedRoute.add(stop);
-			stop = hashtable.get("New Asia College ");
+			stop = hashtable.get(Data.STOP_NAS);
 			predictedRoute.add(stop);
-			stop = hashtable.get("United college");
+			stop = hashtable.get(Data.STOP_UCS);
 			predictedRoute.add(stop);
-			stop = hashtable.get("University Administrative Building");
+			stop = hashtable.get(Data.STOP_ADM);
 			predictedRoute.add(stop);
-			stop = hashtable.get("Pentecostal Mission Hall Complex");
+			stop = hashtable.get(Data.STOP_P5H);
 			predictedRoute.add(stop);
-			stop = hashtable.get("University Sports Centre (Downward)");
+			stop = hashtable.get(Data.STOP_SPD);
 			predictedRoute.add(stop);
 			if(indicator == 13){
-				stop = hashtable.get("Chung Chi Teaching Blocks");
+				stop = hashtable.get(Data.STOP_CCS);
 				predictedRoute.add(stop);
 			}
 			if(indicator == 14){
-				stop = hashtable.get("Jockey Club Post-Graduate Hall");
+				stop = hashtable.get(Data.STOP_PGH);
 				predictedRoute.add(stop);
 			}			
-			stop = hashtable.get("Train Station");
+			stop = hashtable.get(Data.STOP_MTR);
 			predictedRoute.add(stop);
 		}
 		return predictedRoute;
