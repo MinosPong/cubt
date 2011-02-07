@@ -68,7 +68,7 @@ public class Poi{
 	 * @param dest Location
 	 * @return true if the input <tt>Location</tt> inside the range of this POI
 	 */
-	public boolean isCoverd(Location dest){
+	public boolean isCovered(Location dest){
 		return location.distanceTo(dest) <= this.range;
 	}
 	
