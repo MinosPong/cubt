@@ -21,12 +21,13 @@ public class Route{
 		//TODO
 	}
 	
-	public Route(String name, Time start, Time end, OperationDay operationDay){
+	public Route(String name, Time start, Time end, OperationDay operationDay, List<Poi> pois){
 		//TODO
 		this.name = name;
 		this.start = start;
 		this.end = end;
 		this.operationDay = operationDay;
+		this.pois = pois;
 	}
 	
 	public String getName(){
