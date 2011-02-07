@@ -1,6 +1,8 @@
 package edu.cuhk.cubt.bus;
 
 import java.util.Hashtable;
+import java.util.LinkedList;
+import java.util.List;
 
 public class Data {
 
@@ -10,25 +12,49 @@ public class Data {
 	private static final int TYPE_POI = 0;
 	private static final int TYPE_STOP = 1;
 	
+	public static final String STOP_MTR = "Train Station";
+	public static final String STOP_SPU = "University Sports Centre (Upward)";
+	public static final String STOP_SPD = "University Sports Centre (Downward)";
+	public static final String STOP_SRR = "Sir Run Run Hall";
+	public static final String STOP_FKH = "Fung King Hey Building";
+	public static final String STOP_UCS = "United college";
+	public static final String STOP_NAS = "New Asia College";
+	public static final String STOP_ADM = "University Administrative Building";
+	public static final String STOP_P5H = "Pentecostal Mission Hall Complex";
+	public static final String STOP_R34 = "Residences No.3 and 4";
+	public static final String STOP_SCS = "Shaw College";
+	public static final String STOP_R11 = "Residences No.10 and 11";
+	public static final String STOP_R15 = "Residences No.15";
+	public static final String STOP_RUC = "United College Staff Residence";
+	public static final String STOP_CCH = "Chan Chun Ha Hostel";
+	public static final String STOP_PGH = "Jockey Club Post-Graduate Hall";
+	public static final String STOP_CCS = "Chung Chi Teaching Blocks";
+
+	/**
+	 * Load and init all the POIs, return in a Hashtable
+	 * @return the Hash List of all POIs
+	 */
 	public static Hashtable<String, Poi> getPois(){
-		if(pois == null){		
-			poisInitHelper(pois,"Train Station",22.414361, 114.210292,50,TYPE_STOP);
-			poisInitHelper(pois,"University Sports Centre (Upward)",22.417778, 114.210284,30,TYPE_STOP);
-			poisInitHelper(pois,"University Sports Centre (Downward)",22.417793, 114.211290,30,TYPE_STOP);
-			poisInitHelper(pois,"Sir Run Run Hall",22.419737, 114.206974,50,TYPE_STOP);
-			poisInitHelper(pois,"Fung King Hey Building",22.419784, 114.203401,50,TYPE_STOP);
-			poisInitHelper(pois,"United college",22.420463, 114.205311,50,TYPE_STOP);
-			poisInitHelper(pois,"New Asia College ",22.421279, 114.207486,50,TYPE_STOP);
-			poisInitHelper(pois,"University Administrative Building",22.418663,114.205284,50,TYPE_STOP);
-			poisInitHelper(pois,"Pentecostal Mission Hall Complex",22.418358,114.209289,30,TYPE_STOP);
-			poisInitHelper(pois,"Residences No.3 and 4 ",22.421604, 114.203136,30,TYPE_STOP);
-			poisInitHelper(pois,"Shaw College",22.422397, 114.201395,50,TYPE_STOP);
-			poisInitHelper(pois,"Residences No.10 and 11",22.425152, 114.207891,30,TYPE_STOP);
-			poisInitHelper(pois,"Residences No.15",22.423766, 114.206700,30,TYPE_STOP);
-			poisInitHelper(pois,"United College Staff Residence",22.423364, 114.205308,30,TYPE_STOP);
-			poisInitHelper(pois,"Chan Chun Ha Hostel",22.421966, 114.204946,30,TYPE_STOP);
-			poisInitHelper(pois,"Jockey Club Post-Graduate Hall",22.420002, 114.212384,40,TYPE_STOP);
-			poisInitHelper(pois,"Chung Chi Teaching Blocks",22.415306, 114.208428,50,TYPE_STOP);
+		if(pois == null){	
+			pois = new Hashtable<String, Poi>();
+			
+			poisInitHelper(pois, STOP_MTR, 22.414361, 114.210292, 50, TYPE_STOP);
+			poisInitHelper(pois, STOP_SPU, 22.417778, 114.210284, 30, TYPE_STOP);
+			poisInitHelper(pois, STOP_SPD, 22.417793, 114.211290, 30, TYPE_STOP);
+			poisInitHelper(pois, STOP_SRR, 22.419737, 114.206974, 50, TYPE_STOP);
+			poisInitHelper(pois, STOP_FKH, 22.419784, 114.203401, 50, TYPE_STOP);
+			poisInitHelper(pois, STOP_UCS, 22.420463, 114.205311, 50, TYPE_STOP);
+			poisInitHelper(pois, STOP_NAS, 22.421279, 114.207486, 50, TYPE_STOP);
+			poisInitHelper(pois, STOP_ADM, 22.418663, 114.205284, 50, TYPE_STOP);
+			poisInitHelper(pois, STOP_P5H, 22.418358, 114.209289, 30, TYPE_STOP);
+			poisInitHelper(pois, STOP_R34, 22.421604, 114.203136, 30, TYPE_STOP);
+			poisInitHelper(pois, STOP_SCS, 22.422397, 114.201395, 50, TYPE_STOP);
+			poisInitHelper(pois, STOP_R11, 22.425152, 114.207891, 30, TYPE_STOP);
+			poisInitHelper(pois, STOP_R15, 22.423766, 114.206700, 30, TYPE_STOP);
+			poisInitHelper(pois, STOP_RUC, 22.423364, 114.205308, 30, TYPE_STOP);
+			poisInitHelper(pois, STOP_CCH, 22.421966, 114.204946, 30, TYPE_STOP);
+			poisInitHelper(pois, STOP_PGH, 22.420002, 114.212384, 40, TYPE_STOP);
+			poisInitHelper(pois, STOP_CCS, 22.415306, 114.208428, 50, TYPE_STOP);
 		}
 		return pois;
 	}
@@ -47,12 +73,54 @@ public class Data {
 
 	/*   END POINT OF INTEREST INIT   */
 	
+
+	/*   BEGIN ROUTE INIT   */	
 	
+	/**
+	 * defines the Route ID number here
+	 * Reuse the key(variable name) instead of integer for identify
+	 */
+	public static final int ROUTE_UNKNOWN = 0;
 	
+	private static Hashtable<Integer, Route> routes;
 	
+	public static Hashtable<Integer, Route> getRoutes(){
+		if(routes == null){
+			routes = new Hashtable<Integer, Route>();
+			
+		}
+		return routes;
+	}
 	
-	
-	
+	/**
+	 * Change the helper function to fit you and make it more easy to read and modify.
+	 * Also change the constructor of Route such that you can fit your input
+	 * @param routes
+	 * @param id
+	 * @param name
+	 * @param operatingDays Change and make it to a format that you can easily used.
+	 * @param startTime
+	 * @param endTime
+	 * @param pois
+	 * 
+	 * @author Kayln
+	 */
+	private static void routesInitHelper(Hashtable<Integer, Poi> routes,
+			int id, String name, int[] operatingDays, int startTime, int endTime, String[] poisName){
+		
+		//TODO Change the helper function to fit you and make it more easy to read and modify.
+		//TODO Also change the constructor of Route such that you can fit your input
+		//TODO poisInitHelper may help you understand more how to do it
+		//more to know: if data come from database, helper function may help you to map it and create objects
+		
+		List<Poi> pois = new LinkedList<Poi>();
+		for(String poiName : poisName){
+			pois.add(Poi.getByName(poiName));
+		}
+
+
+	}
+	/*   END ROUTE INIT   */	
 	
 	
 }
