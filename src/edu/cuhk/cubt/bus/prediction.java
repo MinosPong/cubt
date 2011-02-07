@@ -97,11 +97,11 @@ public class prediction{
 			//ever-passed algorithm
 			else if ((fkh==false) && currentpoi.equals("New Asia College")){return "United college";}
 			else if ((fkh==true) && (r34==false)&& currentpoi.equals("New Asia College")){return "Residences No.3 and 4";}
-			else if ((fkh==true) && (r34=true) && currentpoi.equals("New Asia College")){return "United college";}
-			else if ((fkh==false) && (r34=false) && currentpoi.equals("United college")){return "Residences No.3 and 4";}
-			else if ((fkh==false) && (r34=true) && currentpoi.equals("United college")){return "University Administrative Building";}
-			else if ((fkh==true) && (r34=false) && currentpoi.equals("United college")){return "New Asia College";}
-			else if ((fkh==true) && (r34=true) && currentpoi.equals("United college")){return "University Administrative Building";}
+			else if ((fkh==true) && (r34==true) && currentpoi.equals("New Asia College")){return "United college";}
+			else if ((fkh==false) && (r34==false) && currentpoi.equals("United college")){return "Residences No.3 and 4";}
+			else if ((fkh==false) && (r34==true) && currentpoi.equals("United college")){return "University Administrative Building";}
+			else if ((fkh==true) && (r34==false) && currentpoi.equals("United college")){return "New Asia College";}
+			else if ((fkh==true) && (r34==true) && currentpoi.equals("United college")){return "University Administrative Building";}
 			else {return null;}	
 		}
 					
