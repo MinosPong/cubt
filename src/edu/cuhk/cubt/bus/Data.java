@@ -11,6 +11,7 @@ public class Data {
 	
 	private static final int TYPE_POI = 0;
 	private static final int TYPE_STOP = 1;
+	private static final int TYPE_CHECKPOINT = 2;
 	
 	public static final String STOP_MTR = "Train Station";
 	public static final String STOP_SPU = "University Sports Centre (Upward)";
@@ -30,11 +31,11 @@ public class Data {
 	public static final String STOP_PGH = "Jockey Club Post-Graduate Hall";
 	public static final String STOP_CCS = "Chung Chi Teaching Blocks";
 	//checkpoints
-	public static final String STOP_CJC = "Jockey Club Post-Graduate Hall Checkpoint";
-	public static final String STOP_CCC = "Chung Chi Teaching Blocks Checkpoint";
-	public static final String STOP_CAB = "University Administrative Building Checkpoint";
-	public static final String STOP_CNA = "New Asia College Checkpoint";
-	public static final String STOP_CSC = "Shaw College Checkpoint";
+	public static final String CHECKPOINT_CJC = "Jockey Club Post-Graduate Hall Checkpoint";
+	public static final String CHECKPOINT_CCC = "Chung Chi Teaching Blocks Checkpoint";
+	public static final String CHECKPOINT_CAB = "University Administrative Building Checkpoint";
+	public static final String CHECKPOINT_CNA = "New Asia College Checkpoint";
+	public static final String CHECKPOINT_CSC = "Shaw College Checkpoint";
 
 	/**
 	 * Load and init all the POIs, return in a Hashtable
@@ -63,11 +64,11 @@ public class Data {
 			poisInitHelper(pois, STOP_PGH, 22.420002, 114.212384, 40, TYPE_STOP);
 			poisInitHelper(pois, STOP_CCS, 22.415306, 114.208428, 50, TYPE_STOP);
 			//Checkpoints
-			poisInitHelper(pois, STOP_CJC, 22.417852, 114.212770, 50, TYPE_STOP);
-			poisInitHelper(pois, STOP_CCC, 22.416107, 114.210815, 50, TYPE_STOP);
-			poisInitHelper(pois, STOP_CAB, 22.419779, 114.204453, 50, TYPE_STOP);
-			poisInitHelper(pois, STOP_CNA, 22.420037, 114.206287, 50, TYPE_STOP);
-			poisInitHelper(pois, STOP_CSC, 22.421792, 114.203315, 50, TYPE_STOP);
+			poisInitHelper(pois, CHECKPOINT_CJC, 22.417852, 114.212770, 50, TYPE_CHECKPOINT);
+			poisInitHelper(pois, CHECKPOINT_CCC, 22.416107, 114.210815, 50, TYPE_CHECKPOINT);
+			poisInitHelper(pois, CHECKPOINT_CAB, 22.419779, 114.204453, 50, TYPE_CHECKPOINT);
+			poisInitHelper(pois, CHECKPOINT_CNA, 22.420037, 114.206287, 50, TYPE_CHECKPOINT);
+			poisInitHelper(pois, CHECKPOINT_CSC, 22.421792, 114.203315, 50, TYPE_CHECKPOINT);
 		}
 		return pois;
 	}
@@ -79,6 +80,9 @@ public class Data {
 			pois.put(name, new Poi(name, latitude, longitude, range));
 			break;
 		case TYPE_STOP:
+			pois.put(name, new Stop(name, latitude, longitude, range));
+			break;
+		case TYPE_CHECKPOINT:
 			pois.put(name, new Stop(name, latitude, longitude, range));
 			break;
 		}
