@@ -29,11 +29,18 @@ public class Data {
 	public static final String STOP_CCH = "Chan Chun Ha Hostel";
 	public static final String STOP_PGH = "Jockey Club Post-Graduate Hall";
 	public static final String STOP_CCS = "Chung Chi Teaching Blocks";
+	//checkpoints
+	public static final String STOP_CJC = "Jockey Club Post-Graduate Hall Checkpoint";
+	public static final String STOP_CCC = "Chung Chi Teaching Blocks Checkpoint";
+	public static final String STOP_CAB = "University Administrative Building Checkpoint";
+	public static final String STOP_CNA = "New Asia College Checkpoint";
+	public static final String STOP_CSC = "Shaw College Checkpoint";
 
 	/**
 	 * Load and init all the POIs, return in a Hashtable
 	 * @return the Hash List of all POIs
 	 */
+	
 	public static Hashtable<String, Poi> getPois(){
 		if(pois == null){	
 			pois = new Hashtable<String, Poi>();
@@ -55,6 +62,12 @@ public class Data {
 			poisInitHelper(pois, STOP_CCH, 22.421966, 114.204946, 30, TYPE_STOP);
 			poisInitHelper(pois, STOP_PGH, 22.420002, 114.212384, 40, TYPE_STOP);
 			poisInitHelper(pois, STOP_CCS, 22.415306, 114.208428, 50, TYPE_STOP);
+			//Checkpoints
+			poisInitHelper(pois, STOP_CJC, 22.417852, 114.212770, 50, TYPE_STOP);
+			poisInitHelper(pois, STOP_CCC, 22.416107, 114.210815, 50, TYPE_STOP);
+			poisInitHelper(pois, STOP_CAB, 22.419779, 114.204453, 50, TYPE_STOP);
+			poisInitHelper(pois, STOP_CNA, 22.420037, 114.206287, 50, TYPE_STOP);
+			poisInitHelper(pois, STOP_CSC, 22.421792, 114.203315, 50, TYPE_STOP);
 		}
 		return pois;
 	}
