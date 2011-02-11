@@ -1,6 +1,5 @@
 package edu.cuhk.cubt.bus;
 
-import android.location.Location;
 
 public class Stop extends Poi {	
 
@@ -8,11 +7,5 @@ public class Stop extends Poi {
 
 	public Stop(String name, double latitude, double longitude, float range) {
 		super(name, latitude, longitude, range);
-	}
-
-	public static Stop getByLocation(Location dest){
-		//TODO
-		
-		return null;
 	}
 }

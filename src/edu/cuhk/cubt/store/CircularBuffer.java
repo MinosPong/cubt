@@ -2,6 +2,9 @@ package edu.cuhk.cubt.store;
 
 import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * A Circular Buffer implementation, used to store data temporally 
@@ -62,5 +65,19 @@ public class CircularBuffer<T> {
 	public synchronized int count(){
 		return (full)? buffer.length : head;
 	}
-	
+
+	public synchronized Iterator<T> getAll(){
+		List<T> list = new ArrayList<T>();
+		int ptr = head;
+		while(ptr--!=0){
+			list.add(buffer[ptr]);
+		}
+		if(full){
+		ptr = 20;
+			while(ptr-- != head){
+				list.add(buffer[ptr]);			
+			}
+		}
+		return list.iterator();
+	}
 }

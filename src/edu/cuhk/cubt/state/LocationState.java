@@ -8,6 +8,7 @@ package edu.cuhk.cubt.state;
  */
 public class LocationState implements State{
 
+	public static final int TYPE_ID = State.TYPE_LOCATION;
 	
 	public static final String _FAR_FROM_CUHK = "Far from CUHK";
 	
@@ -39,6 +40,12 @@ public class LocationState implements State{
 		new LocationState(_INSIDE_CHECKPOINT);
 	
 	
+	public static final String _OUTSIDE_POI = "Outside POI";
+
+	public static final LocationState OUTSIDE_POI = 
+		new LocationState( _OUTSIDE_POI);
+	
+	
 	public static final String _UNKNOWN = "Unknown Location";
 	
 	public static final LocationState UNKNOWN = 
@@ -63,6 +70,11 @@ public class LocationState implements State{
 	 */
 	public String toString(){
 		return getClass().getName() + ":" + getStateString();
+	}
+
+	@Override
+	public int getTypeID() {
+		return TYPE_ID;
 	}
 	
 }

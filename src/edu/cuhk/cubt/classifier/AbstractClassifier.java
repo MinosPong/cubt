@@ -1,6 +1,15 @@
 package edu.cuhk.cubt.classifier;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Vector;
+
+import android.os.Handler;
+import android.os.Message;
+
 import edu.cuhk.cubt.state.State;
+import edu.cuhk.cubt.state.event.StateChangeEvent;
 
 /**
  * Provides implementations for common <tt>Classifier</tt>
@@ -17,6 +26,8 @@ public abstract class AbstractClassifier<T extends State> implements Classifier 
 	 * the <tt>State</tt> classify by this classifier
 	 */
 	private T state;
+	
+	private List<Handler> handlers = new Vector<Handler>();;
 	
 	/**
 	 * Constructor of the Abstract Classifier
@@ -46,8 +57,26 @@ public abstract class AbstractClassifier<T extends State> implements Classifier 
 	 * @param newState
 	 */
 	protected void fireStateChangeEvent(T oldState, T newState){
+		
 		//TODO Create Event
 		//TODO call state change listener
+		
+		StateChangeEvent<T> evt = 
+			new StateChangeEvent<T>(this, oldState, newState);
+		
+		Iterator<Handler> handlers;
+		synchronized(this.handlers){
+			handlers = 
+				new ArrayList<Handler>(this.handlers).iterator();
+		}
+		
+		while(handlers.hasNext()){
+			Handler handler = handlers.next();
+			
+			//TODO Change to obtain Message
+			Message msg = handler.obtainMessage(newState.getTypeID() , evt);
+			handler.sendMessage(msg);
+		}
 	}
 
 

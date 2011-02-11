@@ -26,7 +26,7 @@ public class ClassifierManager {
 			if(locationManager == null){
 				throw new UnsupportedOperationException("Location serivce not exist");
 			}
-			LocationClassifier locationClassifier = new LocationClassifier(this , null);
+			LocationClassifier locationClassifier = new LocationClassifier(this);
 			
 			addClassifier(LocationClassifier.class, locationClassifier);
 			
