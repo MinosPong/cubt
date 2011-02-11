@@ -7,6 +7,8 @@ package edu.cuhk.cubt.state;
  */
 public class SpeedState implements State{
 	
+	public static final int TYPE_ID = State.TYPE_SPEED;
+	
 	public static final String _HIGH = "Fast";
 	
 	public static final SpeedState HIGH = 
@@ -57,5 +59,10 @@ public class SpeedState implements State{
 	 */
 	public String toString(){
 		return getClass().getName() + ":" + getStateString();
+	}
+
+	@Override
+	public int getTypeID() {
+		return TYPE_ID;
 	}
 }
