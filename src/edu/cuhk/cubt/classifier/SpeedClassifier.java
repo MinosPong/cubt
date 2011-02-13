@@ -24,7 +24,7 @@ public class SpeedClassifier extends AbstractClassifier<SpeedState> {
 	protected void processClassification() {
 		if(newLocation == null) return;
 	
-		// calc the speed
+		// Calculate the speed
 		float smav = SPEED_MOVING_AVERAGE;
 		
 		if(lastLocation != null){
