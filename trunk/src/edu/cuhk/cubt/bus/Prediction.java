@@ -3,6 +3,8 @@ package edu.cuhk.cubt.bus;
 import java.util.Collection;
 import java.util.Date;
 
+import edu.cuhk.cubt.store.PoiData;
+
 import android.location.Location;
 import android.text.format.Time;
 
@@ -41,7 +43,7 @@ public class Prediction{
 		
 		
 		//get the past and current POI
-		Poi poi = Poi.getByLocation(location);
+		Poi poi = PoiData.getPoiByLocation(location);
 		String getPoi = poi.getName();
 		if (getPoi.equals(currentPoi)) 
 		{
