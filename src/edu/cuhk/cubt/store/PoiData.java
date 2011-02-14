@@ -46,10 +46,10 @@ public class PoiData {
 	public static void poisInitHelper(Hashtable<String, Poi> pois, 
 			String name, double latitude, double longitude, float range, int type){
 		switch(type){
-		case PoiData.TYPE_POI:
+		case TYPE_POI:
 			pois.put(name, new Poi(name, latitude, longitude, range));
 			break;
-		case PoiData.TYPE_STOP:
+		case TYPE_STOP:
 			pois.put(name, new Stop(name, latitude, longitude, range));
 			break;
 		case TYPE_CHECKPOINT:

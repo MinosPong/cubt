@@ -24,7 +24,7 @@ public class CuhkLocation extends Location{
 	
 	private CuhkLocation() {
 		super("CUBT");
-		this.setAltitude(altitude);
+		this.setLatitude(altitude);
 		this.setLongitude(longitude);
 	}
 

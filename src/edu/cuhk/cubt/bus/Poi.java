@@ -43,7 +43,7 @@ public class Poi{
 		return range;
 	}
 	
-	public double getLatitiude(){
+	public double getLatitude(){
 		return location.getLatitude();
 	}
 	
