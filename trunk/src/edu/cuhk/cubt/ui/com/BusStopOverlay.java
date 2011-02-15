@@ -1,6 +1,7 @@
 package edu.cuhk.cubt.ui.com;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import android.graphics.drawable.Drawable;
@@ -10,18 +11,44 @@ import com.google.android.maps.ItemizedOverlay;
 import com.google.android.maps.OverlayItem;
 
 import edu.cuhk.cubt.bus.Poi;
+import edu.cuhk.cubt.bus.Route;
 import edu.cuhk.cubt.store.PoiData;
+import edu.cuhk.cubt.store.RouteData;
 
 public class BusStopOverlay extends ItemizedOverlay<OverlayItem> {
 
-	private List<Poi> mOverlays = new ArrayList<Poi>(PoiData.getPois().values());
+	private List<Poi> mOverlays = new ArrayList<Poi>();
+	private String routeName = null;
 	
-	public BusStopOverlay(Drawable defaultMarker) {
+	public BusStopOverlay(Drawable defaultMarker){
 		super(boundCenterBottom(defaultMarker));
-		populate();
-		// TODO Auto-generated constructor stub
+		updateDisplay();		
 	}
 
+	private void updateDisplay(){
+		mOverlays.clear();
+		if(routeName == null){
+			mOverlays.addAll(PoiData.getAllStops());
+		}
+		else{
+			Route route = RouteData.getRouteByName(routeName);
+			if(route != null){
+				Iterator<Poi> iter = route.getPois();
+				while(iter.hasNext()){
+					mOverlays.add(iter.next());
+				}
+			}
+		}
+		populate();
+	}
+
+	public void setRoute(String routeName){
+		if(this.routeName != routeName){
+			this.routeName = routeName;
+			updateDisplay();
+		}
+	}
+	
 	@Override
 	protected OverlayItem createItem(int i) {
 		Poi poi = mOverlays.get(i);

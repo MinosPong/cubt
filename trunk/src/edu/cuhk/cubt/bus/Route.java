@@ -14,6 +14,7 @@ public class Route{
 	OperationDay operationDay;
 	
 	private String name = "unKnown";
+	private String description = "";
 	
 	private List<Poi> pois = new LinkedList<Poi>();
 	
@@ -21,9 +22,10 @@ public class Route{
 		//TODO
 	}
 	
-	public Route(String name, Time start, Time end, OperationDay operationDay, List<Poi> pois){
+	public Route(String name, String description,OperationDay operationDay, Time start, Time end,  List<Poi> pois){
 		//TODO
 		this.name = name;
+		this.description = description;
 		this.start = start;
 		this.end = end;
 		this.operationDay = operationDay;
@@ -32,6 +34,10 @@ public class Route{
 	
 	public String getName(){
 		return name;
+	}
+	
+	public String getDescription(){
+		return description;
 	}
 	
 	public Time getStartTime(){
