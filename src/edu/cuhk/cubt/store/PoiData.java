@@ -2,6 +2,8 @@ package edu.cuhk.cubt.store;
 
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 import android.location.Location;
 
@@ -53,7 +55,7 @@ public class PoiData {
 			pois.put(name, new Stop(name, latitude, longitude, range));
 			break;
 		case TYPE_CHECKPOINT:
-			pois.put(name, new Stop(name, latitude, longitude, range));
+			pois.put(name, new Poi(name, latitude, longitude, range));
 			break;
 		}
 	}
@@ -65,7 +67,7 @@ public class PoiData {
 	 * @return the Hash List of all POIs
 	 */
 	
-	public static Hashtable<String, Poi> getPois(){
+	public synchronized static Hashtable<String, Poi> getPois(){
 		if(pois == null){	
 			pois = new Hashtable<String, Poi>();
 			
@@ -96,11 +98,32 @@ public class PoiData {
 		return pois;
 	}
 
-
+	public static List<Poi> getAllPois(){
+		List<Poi> pois = new LinkedList<Poi>();
+		pois.addAll(getPois().values());
+		return pois;
+	}
+	
+	public static List<Stop> getAllStops(){
+		Iterator<Poi> iter;
+		synchronized (getPois()){
+			iter = getPois().values().iterator();
+		}
+		Poi poi;
+		List<Stop> pois = new LinkedList<Stop>();
+		while(iter.hasNext()){
+			poi = iter.next();
+			if(poi instanceof Stop){
+				pois.add((Stop)poi);
+			}
+		}
+		return pois;		
+	}
 
 	public static Stop getStopByLocation(Location dest){
 		//TODO
 		Poi poi = PoiData.getPoiByLocation(dest);
+		
 		if(poi instanceof Stop)
 			return (Stop)poi;
 		return null;
@@ -117,10 +140,13 @@ public class PoiData {
 	 */
 	public static Poi getPoiByLocation(Location dest){
 		//TODO
-		Iterator<Poi> pois = getPois().values().iterator();
+		Iterator<Poi> iter;
+		synchronized (getPois()){
+			iter = getPois().values().iterator();
+		}
 		
-		while(pois.hasNext()){
-			Poi poi = pois.next();
+		while(iter.hasNext()){
+			Poi poi = iter.next();
 			if(poi.isCovered(dest))
 				return poi;
 		}
