@@ -41,7 +41,7 @@ public class CubtMapView extends MapActivity {
 	    List<Overlay> mapOverlays = mapView.getOverlays();
 	    Drawable drawable = this.getResources().getDrawable(android.R.drawable.star_on);
 	    
-	    stopOverlay = new BusStopOverlay(drawable);
+	    stopOverlay = new BusStopOverlay(drawable,this);
 	    
 	    mapOverlays.add(stopOverlay);
 	    

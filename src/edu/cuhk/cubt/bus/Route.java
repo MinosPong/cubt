@@ -52,6 +52,15 @@ public class Route{
 		return operationDay;
 	}
 	
+	/**
+	 * Returns whether bus route pass through specific POI or STOP
+	 * @param poi
+	 * @return whether bus route pass through specific POI or STOP
+	 */
+	public boolean isPassThrough(Poi poi){
+		return pois.contains(poi);
+	}
+	
 	public Iterator<Poi> getPois(){
 		return pois.iterator();
 	}
