@@ -2,6 +2,7 @@ package edu.cuhk.cubt.classifier;
 
 import android.location.Location;
 import edu.cuhk.cubt.state.SpeedState;
+import edu.cuhk.cubt.store.LocationHistory;
 
 public class SpeedClassifier extends AbstractClassifier<SpeedState> {
 	
@@ -9,11 +10,16 @@ public class SpeedClassifier extends AbstractClassifier<SpeedState> {
 	
 	private float speed = 0;
 	
+	LocationHistory locationHistory;
+	ClassifierManager manager;
+	
 	private Location lastLocation;
 	private Location newLocation;
 	
-	public SpeedClassifier() {
+	public SpeedClassifier(ClassifierManager manager, LocationHistory locationHistory) {
 		super(SpeedState.UNKNOWN);
+		this.locationHistory = locationHistory;
+		this.manager = manager;
 	}
 
 	public float getSpeed() {
@@ -22,6 +28,11 @@ public class SpeedClassifier extends AbstractClassifier<SpeedState> {
 	
 	@Override
 	protected void processClassification() {
+		if(newLocation == locationHistory.getLast()) return;
+		
+		lastLocation = newLocation;
+		newLocation = locationHistory.getLast();
+		
 		if(newLocation == null) return;
 	
 		// Calculate the speed

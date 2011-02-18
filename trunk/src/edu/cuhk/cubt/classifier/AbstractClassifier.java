@@ -49,6 +49,25 @@ public abstract class AbstractClassifier<T extends State> implements Classifier 
 		return state;
 	}
 	
+	public void addHandler(Handler handler){
+		if(handler == null)
+			throw new NullPointerException("handler");
+		
+		synchronized(handlers)
+		{
+			if(!handlers.contains(handler))
+				handlers.add(handler);
+		}
+	}
+	
+	public void removeHandler(Handler handler){
+		if(handler != null)
+			synchronized(handlers)
+			{
+				handlers.remove(handler);
+			}
+	}
+	
 	/**
 	 * Creates a <tt>StateChangeEvent</tt> with this class as
      * <tt>sourceClassifier</tt>,  and the specified <tt>eventID</tt> and old and new
