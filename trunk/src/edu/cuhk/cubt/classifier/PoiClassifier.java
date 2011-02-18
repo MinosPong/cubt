@@ -22,8 +22,7 @@ public class PoiClassifier extends AbstractClassifier<LocationState> {
 
 	@Override
 	protected void processClassification() {
-		// TODO Auto-generated method stub
-
+		
 		Location location = getLastLocation();
 		
 		Poi poi= PoiData.getPoiByLocation(location);
