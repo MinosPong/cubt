@@ -10,22 +10,35 @@ import edu.cuhk.cubt.store.PoiData;
 public class PoiClassifier extends AbstractClassifier<LocationState> {
 
 
+	ClassifierManager manager;
+	
 	LocationHistory locationHistory;
 	
-	public PoiClassifier() {
+	Location location;
+	
+	Poi poi;
+	
+	public PoiClassifier(ClassifierManager manager, LocationHistory locationHistory) {
 		super(LocationState.UNKNOWN);
+		this.locationHistory = locationHistory;
+		this.manager = manager;
 	}
 	
-	public Location getLastLocation(){
-		return locationHistory.getLast();
+	public Location getLocation(){
+		return location;
+	}
+	
+	public Poi getPoi(){
+		return poi;
 	}
 
 	@Override
 	protected void processClassification() {
+		if(locationHistory.getLast() == location) return;
 		
-		Location location = getLastLocation();
+		location = locationHistory.getLast();
 		
-		Poi poi= PoiData.getPoiByLocation(location);
+		poi = PoiData.getPoiByLocation(location);
 		
 		if(poi==null){
 			this.setState(LocationState.OUTSIDE_POI);

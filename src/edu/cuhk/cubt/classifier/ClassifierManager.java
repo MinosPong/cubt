@@ -3,42 +3,33 @@ package edu.cuhk.cubt.classifier;
 import java.util.Hashtable;
 import java.util.Map;
 
-import android.content.Context;
-import android.location.LocationManager;
+import edu.cuhk.cubt.SCCMEngine;
 
 public class ClassifierManager {
-	
-	private Context context;
-
-	private boolean bVirtual = false;
 
     private final Map<String, Classifier> classifiers
         = new Hashtable<String, Classifier>();
 	
-	
-	protected void initialize()
+    private SCCMEngine engine;
+    
+    public ClassifierManager(SCCMEngine engine){
+    	this.engine = engine;
+    }
+   
+	public void initialize()
 		throws UnsupportedOperationException{
 		
-		if(!bVirtual){
 			
-			//init Location Classifier
-			LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-			if(locationManager == null){
-				throw new UnsupportedOperationException("Location serivce not exist");
-			}
-			LocationClassifier locationClassifier = new LocationClassifier(this);
+			LocationClassifier locationClassifier = new LocationClassifier(this, engine.getLocationHistory());
 			addClassifier(LocationClassifier.class, locationClassifier);
 
-			PoiClassifier poiClassifier = new PoiClassifier();
+			PoiClassifier poiClassifier = new PoiClassifier(this, engine.getLocationHistory());
 			addClassifier(PoiClassifier.class, poiClassifier);
 			
-			SpeedClassifier speedClassifier = new SpeedClassifier();
-			addClassifier(SpeedClassifier.class, speedClassifier);
+			SpeedClassifier speedClassifier = new SpeedClassifier(this, engine.getLocationHistory());
+			addClassifier(SpeedClassifier.class, speedClassifier);	
 			
-			
-			
-		}	
-		
+
 	}
 	
 	protected <T extends Classifier> void addClassifier(

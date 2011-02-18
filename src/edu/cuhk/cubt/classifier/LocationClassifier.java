@@ -5,6 +5,11 @@ import edu.cuhk.cubt.store.LocationHistory;
 import edu.cuhk.cubt.util.CuhkLocation;
 import android.location.Location;
 
+/**
+ * This is a coarse location classifier to determinate the location distance to CUHK 
+ * @author PKM
+ *
+ */
 public class LocationClassifier extends AbstractClassifier<LocationState>
 	implements Classifier{
 
@@ -12,21 +17,25 @@ public class LocationClassifier extends AbstractClassifier<LocationState>
 	
 	LocationHistory locationHistory;
 	
-	public LocationClassifier(ClassifierManager manager) {
-		
+	Location location;
+	
+	public LocationClassifier(ClassifierManager manager, LocationHistory locationHistory) {
 		super(LocationState.UNKNOWN);
-		
+		this.locationHistory = locationHistory;
 		this.manager = manager;
 	}
-	
-	public Location getLastLocation(){
-		return locationHistory.getLast();
+
+	public Location getLocation(){
+		return location;
 	}
 	
 	@Override
 	protected void processClassification(){
+		if(locationHistory.getLast() == location) return;
+		
+		location = locationHistory.getLast();
+		
 		CuhkLocation cuhkLocation = CuhkLocation.getInstance();
-		Location location = getLastLocation();
 		switch(cuhkLocation.getDistanceDescriptionTo(location))
 		{
 			case CuhkLocation.FAR:
