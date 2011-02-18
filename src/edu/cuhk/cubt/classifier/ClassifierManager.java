@@ -27,8 +27,14 @@ public class ClassifierManager {
 				throw new UnsupportedOperationException("Location serivce not exist");
 			}
 			LocationClassifier locationClassifier = new LocationClassifier(this);
-			
 			addClassifier(LocationClassifier.class, locationClassifier);
+
+			PoiClassifier poiClassifier = new PoiClassifier();
+			addClassifier(PoiClassifier.class, poiClassifier);
+			
+			SpeedClassifier speedClassifier = new SpeedClassifier();
+			addClassifier(SpeedClassifier.class, speedClassifier);
+			
 			
 			
 		}	

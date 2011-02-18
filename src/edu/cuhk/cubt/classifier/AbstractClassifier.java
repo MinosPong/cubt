@@ -58,8 +58,8 @@ public abstract class AbstractClassifier<T extends State> implements Classifier 
 	 */
 	protected void fireStateChangeEvent(T oldState, T newState){
 		
-		//TODO Create Event
-		//TODO call state change listener
+		//TODO Create Event - Done
+		//TODO call state change listener / Message Handler
 		
 		StateChangeEvent<T> evt = 
 			new StateChangeEvent<T>(this, oldState, newState);
@@ -70,10 +70,12 @@ public abstract class AbstractClassifier<T extends State> implements Classifier 
 				new ArrayList<Handler>(this.handlers).iterator();
 		}
 		
+		/**
+		 * Send the Message to every registered event Handler
+		 */
 		while(handlers.hasNext()){
 			Handler handler = handlers.next();
 			
-			//TODO Change to obtain Message
 			Message msg = handler.obtainMessage(newState.getTypeID() , evt);
 			handler.sendMessage(msg);
 		}
