@@ -26,25 +26,7 @@ public class LocationState implements State{
 	
 	public static final LocationState INSIDE_CUHK = 
 		new LocationState(_INSIDE_CUHK);
-	
-	
-	public static final String _INSIDE_BUS_STOP = "Inside Bus Stop";
-	
-	public static final LocationState INSIDE_BUS_STOP = 
-		new LocationState(_INSIDE_BUS_STOP);
-	
-	
-	public static final String _INSIDE_CHECKPOINT = "Inside Check Point";
-	
-	public static final LocationState INSIDE_CHECKPOINT = 
-		new LocationState(_INSIDE_CHECKPOINT);
-	
-	
-	public static final String _OUTSIDE_POI = "Outside POI";
-
-	public static final LocationState OUTSIDE_POI = 
-		new LocationState( _OUTSIDE_POI);
-	
+		
 	
 	public static final String _UNKNOWN = "Unknown Location";
 	

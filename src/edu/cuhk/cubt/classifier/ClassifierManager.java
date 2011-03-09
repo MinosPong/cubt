@@ -19,7 +19,6 @@ public class ClassifierManager {
 	public void initialize()
 		throws UnsupportedOperationException{
 		
-			
 			LocationClassifier locationClassifier = new LocationClassifier(this, engine.getLocationHistory());
 			addClassifier(LocationClassifier.class, locationClassifier);
 

@@ -37,6 +37,7 @@ public class CircularBuffer<T> {
 	
 	public synchronized T getLast(int n){
 		if(n >= buffer.length) throw new BufferOverflowException();
+		
 		int ptr = head - n - 1; 
 		if(ptr < 0){
 			if(!full) throw new BufferUnderflowException();
