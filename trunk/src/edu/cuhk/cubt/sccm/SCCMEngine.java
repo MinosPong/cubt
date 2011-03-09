@@ -1,4 +1,4 @@
-package edu.cuhk.cubt;
+package edu.cuhk.cubt.sccm;
 
 import android.content.Context;
 import android.location.Criteria;
@@ -27,6 +27,7 @@ public class SCCMEngine {
 	PoiClassifier poiClassifier;
 	SpeedClassifier speedClassifier;
 	LocationManager locationManager;
+	LocationSensor locationSensor;
 	
 	public SCCMEngine(Context context){
 		mContext = context;
@@ -40,7 +41,8 @@ public class SCCMEngine {
 		if(locationManager == null){
 			throw new UnsupportedOperationException("Location serivce not exist");
 		}
-				
+		
+		locationSensor = new LocationSensor(locationManager);
 		
 		//Initialize Classifiers
 		classifierManager.initialize();
@@ -50,9 +52,15 @@ public class SCCMEngine {
 		speedClassifier    = classifierManager.getClassifier(SpeedClassifier.class);
 		
 		locationClassifier.addHandler(locationChangeHandler);
+		locationSensor.addHandler(locationChangeHandler);
 		
-		setLocationCapture(locationClassifier.getState());
+		locationSensor.start();
+		
 		return true;
+	}
+	
+	public LocationSensor getLocationSensor(){
+		return locationSensor;
 	}
 	
 	public LocationHistory getLocationHistory(){
@@ -65,20 +73,6 @@ public class SCCMEngine {
 	}
 	
 	
-	private Criteria getCoarseCriteria(){
-		Criteria criteria = new Criteria();
-		criteria.setAccuracy(Criteria.ACCURACY_COARSE);
-		criteria.setPowerRequirement(Criteria.POWER_LOW);
-		return criteria;
-	}
-	
-	private Criteria getFineCriteria(){
-		Criteria criteria = new Criteria();
-		criteria.setAccuracy(Criteria.ACCURACY_FINE);
-		return criteria;
-	}
-	
-	
 	private void newLocation(Location location){
 		locationHistroy.add(location);
 		locationClassifier.process();
@@ -88,33 +82,6 @@ public class SCCMEngine {
 		}		
 	}
 	
-	private void setLocationCapture(LocationState state){
-		if(state == null) state = LocationState.UNKNOWN;
-		long minTime = 0;
-		float minDistance = 0;
-		Criteria criteria = null;
-		if (state == LocationState.UNKNOWN){
-			criteria = getCoarseCriteria();
-			minTime = 1000;
-	    }else if(state == LocationState.INSIDE_CUHK){
-			criteria = getFineCriteria();
-			minTime = 1000;			
-		}else if(state == LocationState.CLOSE_TO_CUHK){
-			criteria = getCoarseCriteria();
-			minTime = 60 * 1000;						
-		}else if(state == LocationState.FAR_FROM_CUHK){
-			criteria = getCoarseCriteria();	
-			minTime = 15 * 60 * 1000;			
-		}	
-		
-		//locationManager.removeUpdates(locationListener);
-		locationManager.requestLocationUpdates(
-				locationManager.getBestProvider(criteria, true), 
-				minTime, 
-				minDistance, 
-				locationListener);
-		
-	}
 	
 	Handler locationChangeHandler = new Handler(){
 		//TODO
@@ -125,36 +92,14 @@ public class SCCMEngine {
 				case State.TYPE_LOCATION:
 					StateChangeEvent<LocationState> evt = (StateChangeEvent<LocationState>) msg.obj;
 					LocationState state = evt.getNewState();
-					setLocationCapture(state);		
+					locationSensor.setCapturingState(state);		
+					break;
+				case LocationSensor.MSG_NEW_LOCATION:
+					newLocation((Location) msg.obj);
 					break;
 			}
 		}		
 	};	
 	
-	
-	LocationListener locationListener = new LocationListener(){
-		//TODO
-
-		@Override
-		public void onLocationChanged(Location location) {
-			// TODO Auto-generated method stub
-			newLocation(location);
-		}
-
-		@Override
-		public void onProviderDisabled(String provider) {
-			// TODO Auto-generated method stub	
-		}
-
-		@Override
-		public void onProviderEnabled(String provider) {
-			// TODO Auto-generated method stub
-		}
-
-		@Override
-		public void onStatusChanged(String provider, int status, Bundle extras) {
-			// TODO Auto-generated method stub
-		}	
-	};
 
 }
