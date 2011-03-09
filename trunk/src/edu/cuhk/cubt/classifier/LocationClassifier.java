@@ -19,7 +19,9 @@ public class LocationClassifier extends AbstractClassifier<LocationState>
 	
 	Location location;
 	
-	public LocationClassifier(ClassifierManager manager, LocationHistory locationHistory) {
+	public LocationClassifier(ClassifierManager manager, 
+			LocationHistory locationHistory) 
+	{
 		super(LocationState.UNKNOWN);
 		this.locationHistory = locationHistory;
 		this.manager = manager;

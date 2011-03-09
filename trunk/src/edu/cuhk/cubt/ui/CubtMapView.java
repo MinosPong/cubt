@@ -74,7 +74,7 @@ public class CubtMapView extends MapActivity {
 
 
 	@Override
-	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+	public boolean onOptionsItemSelected(MenuItem item) {
 		// TODO Auto-generated method stub
 		switch(item.getItemId()){
 			case MENU_ROUTE:
@@ -89,7 +89,7 @@ public class CubtMapView extends MapActivity {
 				return true;
 		}
 		
-		return super.onMenuItemSelected(featureId, item);
+		return super.onOptionsItemSelected(item);
 	}
 
 

@@ -13,8 +13,8 @@ public class SpeedClassifier extends AbstractClassifier<SpeedState> {
 	LocationHistory locationHistory;
 	ClassifierManager manager;
 	
-	private Location lastLocation;
-	private Location newLocation;
+	private Location lastLocation = null;
+	private Location newLocation = null;
 	
 	public SpeedClassifier(ClassifierManager manager, LocationHistory locationHistory) {
 		super(SpeedState.UNKNOWN);
@@ -28,7 +28,8 @@ public class SpeedClassifier extends AbstractClassifier<SpeedState> {
 	
 	@Override
 	protected void processClassification() {
-		if(newLocation == locationHistory.getLast()) return;
+		if(newLocation == null  ||
+				locationHistory.getLast() == newLocation) return;
 		
 		lastLocation = newLocation;
 		newLocation = locationHistory.getLast();

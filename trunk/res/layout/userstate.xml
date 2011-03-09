@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:orientation="vertical" 
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent">
+  
+  <TextView android:id="@+id/timeText" 
+  			android:layout_width="fill_parent"
+	        android:layout_height="wrap_content" 
+	        android:textSize="20sp"
+	        android:text="timeText"/>	
+  
+  <TextView android:id="@+id/locationText" 
+            android:layout_width="fill_parent" 
+            android:layout_height="wrap_content" 
+            android:textSize="20sp"
+            android:text="locationText"/>
+  <TextView android:id="@+id/latText" 
+            android:layout_width="fill_parent" 
+            android:layout_height="wrap_content"
+            android:textSize="20sp" 
+            android:text="Lat. :"/>          
+  <TextView android:id="@+id/longText" 
+	        android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:textSize="20sp" 
+			android:text="Long. :"/>		
+  <TextView android:id="@+id/altText" 
+            android:layout_width="fill_parent" 
+            android:layout_height="wrap_content"
+            android:textSize="20sp" 
+            android:text="Altitude unavaliable"/>
+  
+  <TextView android:id="@+id/poiText" 
+            android:layout_width="fill_parent" 
+            android:layout_height="wrap_content" 
+            android:text=""/>	
+            
+  <TextView android:id="@+id/speedText" 
+            android:layout_width="fill_parent" 
+            android:layout_height="wrap_content"
+            android:text="Speed unavailable"/>
+  <TextView android:id="@+id/speedValue" 
+            android:layout_width="fill_parent" 
+            android:layout_height="wrap_content"
+            android:text="Speed unavailable"/>
+  
+</LinearLayout>

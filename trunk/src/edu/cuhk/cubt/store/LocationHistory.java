@@ -1,5 +1,7 @@
 package edu.cuhk.cubt.store;
 
+import java.nio.BufferUnderflowException;
+
 import android.location.Location;
 
 public class LocationHistory extends CircularBuffer<Location>{
@@ -32,7 +34,10 @@ public class LocationHistory extends CircularBuffer<Location>{
 	 */
 	private void assertNewLocation(Location location)
 		throws IllegalArgumentException{
-		Location lastLocation = (Location) getLast();
+		Location lastLocation =null;
+		try{
+			lastLocation = (Location) getLast();
+		}catch (BufferUnderflowException e){}
 		if(lastLocation != null){
 			
 			if(lastLocation.getTime() > location.getTime()) 
