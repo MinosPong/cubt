@@ -3,7 +3,7 @@ package edu.cuhk.cubt.classifier;
 import java.util.Hashtable;
 import java.util.Map;
 
-import edu.cuhk.cubt.SCCMEngine;
+import edu.cuhk.cubt.sccm.SCCMEngine;
 
 public class ClassifierManager {
 
