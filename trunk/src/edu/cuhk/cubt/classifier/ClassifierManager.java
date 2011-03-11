@@ -19,15 +19,17 @@ public class ClassifierManager {
 	public void initialize()
 		throws UnsupportedOperationException{
 		
-			LocationClassifier locationClassifier = new LocationClassifier(this, engine.getLocationHistory());
+			LocationClassifier locationClassifier = new LocationClassifier(this, engine.getLocationSensor());
 			addClassifier(LocationClassifier.class, locationClassifier);
 
-			PoiClassifier poiClassifier = new PoiClassifier(this, engine.getLocationHistory());
+			PoiClassifier poiClassifier = new PoiClassifier(this, engine.getLocationSensor());
 			addClassifier(PoiClassifier.class, poiClassifier);
 			
-			SpeedClassifier speedClassifier = new SpeedClassifier(this, engine.getLocationHistory());
+			SpeedClassifier speedClassifier = new SpeedClassifier(this, engine.getLocationSensor());
 			addClassifier(SpeedClassifier.class, speedClassifier);	
 			
+			BusClassifier busClassifier = new BusClassifier(poiClassifier, speedClassifier);
+			addClassifier(BusClassifier.class, busClassifier);
 
 	}
 	

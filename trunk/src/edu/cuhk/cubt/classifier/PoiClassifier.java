@@ -1,8 +1,11 @@
 package edu.cuhk.cubt.classifier;
 
 import android.location.Location;
+import android.os.Handler;
+import android.os.Message;
 import edu.cuhk.cubt.bus.Poi;
 import edu.cuhk.cubt.bus.Stop;
+import edu.cuhk.cubt.sccm.LocationSensor;
 import edu.cuhk.cubt.state.PoiState;
 import edu.cuhk.cubt.store.LocationHistory;
 import edu.cuhk.cubt.store.PoiData;
@@ -13,14 +16,16 @@ public class PoiClassifier extends AbstractClassifier<PoiState> {
 	ClassifierManager manager;
 	
 	LocationHistory locationHistory;
+	LocationSensor locationSensor;
 	
 	Location location;
 	
 	Poi poi;
 	
-	public PoiClassifier(ClassifierManager manager, LocationHistory locationHistory) {
+	public PoiClassifier(ClassifierManager manager, 
+			LocationSensor locationSensor) {
 		super(PoiState.UNKNOWN);
-		this.locationHistory = locationHistory;
+		this.locationSensor = locationSensor;
 		this.manager = manager;
 	}
 	
@@ -34,9 +39,9 @@ public class PoiClassifier extends AbstractClassifier<PoiState> {
 
 	@Override
 	protected void processClassification() {
-		if(locationHistory.getLast() == location) return;
+		if(this.location == locationSensor.getLastLocation() ) return;
 		
-		location = locationHistory.getLast();
+		this.location = locationSensor.getLastLocation();
 		
 		poi = PoiData.getPoiByLocation(location);
 		
@@ -49,5 +54,27 @@ public class PoiClassifier extends AbstractClassifier<PoiState> {
 		}
 		
 	}
+	
+	@Override
+	protected void onStart() {
+		locationSensor.addHandler(mHandler);
+		processClassification();
+	}
+
+	@Override
+	protected void onStop() {
+		locationSensor.removeHandler(mHandler);
+	}
+	
+	Handler mHandler = new Handler(){
+		@Override
+		public void handleMessage(Message msg){
+			switch(msg.what){
+			case LocationSensor.MSG_NEW_LOCATION:
+				processClassification();
+				break;
+			}
+		}
+	};
 
 }

@@ -1,8 +1,10 @@
 package edu.cuhk.cubt.classifier;
 
 import android.location.Location;
+import android.os.Handler;
+import android.os.Message;
+import edu.cuhk.cubt.sccm.LocationSensor;
 import edu.cuhk.cubt.state.SpeedState;
-import edu.cuhk.cubt.store.LocationHistory;
 
 public class SpeedClassifier extends AbstractClassifier<SpeedState> {
 	
@@ -10,15 +12,16 @@ public class SpeedClassifier extends AbstractClassifier<SpeedState> {
 	
 	private float speed = 0;
 	
-	LocationHistory locationHistory;
+	LocationSensor locationSensor;
 	ClassifierManager manager;
 	
 	private Location lastLocation = null;
 	private Location newLocation = null;
 	
-	public SpeedClassifier(ClassifierManager manager, LocationHistory locationHistory) {
+	public SpeedClassifier(ClassifierManager manager, 
+			LocationSensor locationSensor) {
 		super(SpeedState.UNKNOWN);
-		this.locationHistory = locationHistory;
+		this.locationSensor = locationSensor;
 		this.manager = manager;
 	}
 
@@ -28,13 +31,13 @@ public class SpeedClassifier extends AbstractClassifier<SpeedState> {
 	
 	@Override
 	protected void processClassification() {
-		if(newLocation == null  ||
-				locationHistory.getLast() == newLocation) return;
+		if(locationSensor.getLastLocation() == null ||
+				locationSensor.getLastLocation() == newLocation) return;
 		
 		lastLocation = newLocation;
-		newLocation = locationHistory.getLast();
+		newLocation = locationSensor.getLastLocation();
 		
-		if(newLocation == null) return;
+		if(lastLocation == null) return;
 	
 		// Calculate the speed
 		float smav = SPEED_MOVING_AVERAGE;
@@ -55,6 +58,28 @@ public class SpeedClassifier extends AbstractClassifier<SpeedState> {
 			this.setState(SpeedState.SLOW);
 		}else{
 			this.setState(SpeedState.STILL);
+		}
+	}
+
+	@Override
+	protected void onStart() {
+		locationSensor.addHandler(mHandler);
+		processClassification();
+	}
+
+	@Override
+	protected void onStop() {
+		locationSensor.removeHandler(mHandler);
+	}
+	
+	Handler mHandler = new Handler(){
+		@Override
+		public void handleMessage(Message msg){
+			switch(msg.what){
+			case LocationSensor.MSG_NEW_LOCATION:
+				processClassification();
+				break;
+			}
 		}
 	};
 }

@@ -1,9 +1,11 @@
 package edu.cuhk.cubt.classifier;
 
+import edu.cuhk.cubt.sccm.LocationSensor;
 import edu.cuhk.cubt.state.LocationState;
-import edu.cuhk.cubt.store.LocationHistory;
 import edu.cuhk.cubt.util.CuhkLocation;
 import android.location.Location;
+import android.os.Handler;
+import android.os.Message;
 
 /**
  * This is a coarse location classifier to determinate the location distance to CUHK 
@@ -15,27 +17,26 @@ public class LocationClassifier extends AbstractClassifier<LocationState>
 
 	ClassifierManager manager;
 	
-	LocationHistory locationHistory;
+	//LocationHistory locationHistory;
+	LocationSensor locationSensor;
 	
 	Location location;
 	
 	public LocationClassifier(ClassifierManager manager, 
-			LocationHistory locationHistory) 
+			LocationSensor locationSensor) 
 	{
 		super(LocationState.UNKNOWN);
-		this.locationHistory = locationHistory;
+		this.locationSensor = locationSensor;
 		this.manager = manager;
-	}
-
-	public Location getLocation(){
-		return location;
 	}
 	
 	@Override
 	protected void processClassification(){
-		if(locationHistory.getLast() == location) return;
+		if(locationSensor.getLastLocation() == null ||
+				this.location == locationSensor.getLastLocation() ) return;
 		
-		location = locationHistory.getLast();
+		this.location = locationSensor.getLastLocation();
+		
 		
 		CuhkLocation cuhkLocation = CuhkLocation.getInstance();
 		switch(cuhkLocation.getDistanceDescriptionTo(location))
@@ -53,6 +54,28 @@ public class LocationClassifier extends AbstractClassifier<LocationState>
 				break;
 		}
 	}
+
+	
+	@Override
+	protected void onStart() {
+		locationSensor.addHandler(mHandler);
+	}
+
+	@Override
+	protected void onStop() {
+		locationSensor.removeHandler(mHandler);
+	}
+	
+	Handler mHandler = new Handler(){
+		@Override
+		public void handleMessage(Message msg){
+			switch(msg.what){
+			case LocationSensor.MSG_NEW_LOCATION:
+				processClassification();
+				break;
+			}
+		}
+	};
 	
 
 }

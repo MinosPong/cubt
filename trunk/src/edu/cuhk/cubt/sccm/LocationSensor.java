@@ -6,23 +6,38 @@ import java.util.List;
 import java.util.Vector;
 
 import edu.cuhk.cubt.state.LocationState;
+
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.location.LocationProvider;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 
 public class LocationSensor {
 
+	private static final String tag = "LocationSensor"; 
+	
 	Criteria coarseCriteria = null;
 	Criteria fineCriteria = null;
 	
-	public static final int MSG_NEW_LOCATION = 14231;
+	public static final int MSG_NEW_LOCATION = 14101;
+	public static final int MSG_PROVIDER_DISABLE = 14102;
+	public static final int MSG_PROVIDER_ENABLE = 14103;
+	public static final int MSG_PROVIDER_STATUS_CHANGE = 14104;
+
+	public static final int STATE_UNKNOWN = 0;
+	public static final int STATE_FAR = 1;
+	public static final int STATE_CLOSE = 2;
+	public static final int STATE_INSIDE = 3;
+	public static final int STATE_HOT = 4;
 	
 	LocationManager locationManager;
 	SCCMEngine engine;
+	Location lastLocation = null;
 
 	private List<Handler> handlers = new Vector<Handler>();;
 	
@@ -49,6 +64,83 @@ public class LocationSensor {
 			}
 	}
 	
+	public Location getLastLocation(){
+		return lastLocation;
+	}
+	
+	public void start(){
+		setCapturingState(STATE_UNKNOWN);
+	}
+	
+	public void stop(){
+		locationManager.removeUpdates(locationListener);		
+	}
+	
+	public void setCapturingState(LocationState state){
+		if(state == null || state == LocationState.UNKNOWN) setCapturingState(STATE_UNKNOWN);
+		else if(state == LocationState.INSIDE_CUHK) setCapturingState(STATE_INSIDE);
+		else if(state == LocationState.CLOSE_TO_CUHK) setCapturingState(STATE_CLOSE);
+		else if(state == LocationState.FAR_FROM_CUHK) setCapturingState(STATE_FAR);
+			
+	}
+	
+	
+	public void setCapturingState(int state){
+		long minTime = 0;
+		float minDistance = 0;
+		Criteria criteria = null;
+		String provider = "";
+		if (state == 0 || state == STATE_UNKNOWN){
+			criteria = getCoarseCriteria();
+			minTime = 3000;
+	    }else if(state == STATE_HOT){
+			criteria = getFineCriteria();
+			minTime = 1000;		
+	    }else if(state == STATE_INSIDE){
+			criteria = getFineCriteria();
+			minTime = 30 * 1000;			
+		}else if(state == STATE_CLOSE){
+			criteria = getCoarseCriteria();
+			minTime = 60 * 1000;						
+		}else if(state == STATE_FAR){
+			criteria = getCoarseCriteria();	
+			minTime = 15 * 60 * 1000;			
+		}	
+		
+
+		provider = locationManager.getBestProvider(criteria, true);
+		Log.i(tag,"Provdier Changed:" + provider + ", minTime:" + minTime);
+		fireMessageToHandlers(MSG_PROVIDER_STATUS_CHANGE,"Provider Change " + provider + ",minTime:" + minTime);
+		//locationManager.removeUpdates(locationListener);
+		locationManager.requestLocationUpdates(
+				provider, 
+				minTime, 
+				minDistance, 
+				locationListener);
+	}
+	
+	private void fireNewLocation(Location location){
+		fireMessageToHandlers(MSG_NEW_LOCATION,location);
+	}
+
+	private void fireMessageToHandlers(int what, Object obj){
+		Iterator<Handler> handlers;
+		synchronized(this.handlers){
+			handlers = 
+				new ArrayList<Handler>(this.handlers).iterator();
+		}
+		
+		/**
+		 * Send the Message to every registered event Handler
+		 */
+		while(handlers.hasNext()){
+			Handler handler = handlers.next();
+			
+			Message msg = handler.obtainMessage(what,obj);
+			handler.sendMessage(msg);
+		}		
+	}
+	
 	private Criteria getCoarseCriteria(){
 		if( coarseCriteria == null){
 			coarseCriteria  = new Criteria();
@@ -66,85 +158,46 @@ public class LocationSensor {
 		return fineCriteria;
 	}
 	
-	public void start(){
-		setCapturingState(LocationState.UNKNOWN);
-	}
-	
-	public void stop(){
-		locationManager.removeUpdates(locationListener);		
-	}
-	
-	public void setCapturingState(LocationState state){
-		long minTime = 0;
-		float minDistance = 0;
-		Criteria criteria = null;
-		if (state == null || state == LocationState.UNKNOWN){
-			criteria = getCoarseCriteria();
-			minTime = 1000;
-	    }else if(state == LocationState.INSIDE_CUHK){
-			criteria = getFineCriteria();
-			minTime = 1000;			
-		}else if(state == LocationState.CLOSE_TO_CUHK){
-			criteria = getCoarseCriteria();
-			minTime = 60 * 1000;						
-		}else if(state == LocationState.FAR_FROM_CUHK){
-			criteria = getCoarseCriteria();	
-			minTime = 15 * 60 * 1000;			
-		}	
-		
-		//locationManager.removeUpdates(locationListener);
-		locationManager.requestLocationUpdates(
-				locationManager.getBestProvider(criteria, true), 
-				minTime, 
-				minDistance, 
-				locationListener);
-	}
-	
-	private void fireNewLocation(Location location){
-		Iterator<Handler> handlers;
-		synchronized(this.handlers){
-			handlers = 
-				new ArrayList<Handler>(this.handlers).iterator();
-		}
-		
-		/**
-		 * Send the Message to every registered event Handler
-		 */
-		while(handlers.hasNext()){
-			Handler handler = handlers.next();
-			
-			Message msg = handler.obtainMessage(MSG_NEW_LOCATION,location);
-			handler.sendMessage(msg);
-		}
-	}
-		
-	
 	
 	LocationListener locationListener = new LocationListener(){
 		//TODO
 
 		@Override
 		public void onLocationChanged(Location location) {
-			// TODO Auto-generated method stub
-			//newLocation(location);
-			fireNewLocation(location);
+			if(lastLocation != location){
+				lastLocation = location;
+				fireNewLocation(location);
+			}
 		}
 
 		@Override
 		public void onProviderDisabled(String provider) {
-			// TODO Auto-generated method stub	
+			Log.i(tag, "Provider Disabled" + provider);
+			fireMessageToHandlers(MSG_PROVIDER_DISABLE,"Provider Disabled" + provider);
 		}
 
 		@Override
 		public void onProviderEnabled(String provider) {
-			// TODO Auto-generated method stub
+			Log.i(tag, "Provider Enabled" + provider);
+			fireMessageToHandlers(MSG_PROVIDER_ENABLE,"Provider Enabled" + provider);
 		}
 
 		@Override
 		public void onStatusChanged(String provider, int status, Bundle extras) {
-			// TODO Auto-generated method stub
+			String msg = "";
+			switch(status){
+			case LocationProvider.AVAILABLE:
+				msg = "avaliable";
+				break;
+			case LocationProvider.OUT_OF_SERVICE:
+				msg = "out of service";
+				break;
+			case LocationProvider.TEMPORARILY_UNAVAILABLE:
+				msg = "temporarily unavailable";
+				break;				
+			}
+			fireMessageToHandlers(MSG_PROVIDER_STATUS_CHANGE, "Status Changed " + provider + ":" + msg);
+			Log.i(tag, "Status Changed " + provider + ":" + msg);
 		}	
 	};
-	
-	
 }
