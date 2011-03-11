@@ -7,6 +7,7 @@ import java.util.Vector;
 
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 
 import edu.cuhk.cubt.state.State;
 import edu.cuhk.cubt.state.event.StateChangeEvent;
@@ -26,6 +27,7 @@ public abstract class AbstractClassifier<T extends State> implements Classifier 
 	 * the <tt>State</tt> classify by this classifier
 	 */
 	private T state;
+	private boolean bStarted = false;
 	
 	private List<Handler> handlers = new Vector<Handler>();;
 	
@@ -79,6 +81,7 @@ public abstract class AbstractClassifier<T extends State> implements Classifier 
 		
 		//TODO Create Event - Done
 		//TODO call state change listener / Message Handler
+		Log.i("State Changed", "State Change : " + oldState.getStateString() + " > " + newState.getStateString());
 		
 		StateChangeEvent<T> evt = 
 			new StateChangeEvent<T>(this, oldState, newState);
@@ -95,11 +98,24 @@ public abstract class AbstractClassifier<T extends State> implements Classifier 
 		while(handlers.hasNext()){
 			Handler handler = handlers.next();
 			
+			Log.i(this.getClass().getName(), "Handler: " + handler.getClass().getName() + 
+					", State Change : " + oldState.getStateString() + " > " + newState.getStateString());
+			
 			Message msg = handler.obtainMessage(newState.getTypeID() , evt);
 			handler.sendMessage(msg);
 		}
 	}
 
+	public void start(){
+		if(bStarted) return;
+		Log.i(this.getClass().getName(),"Classifier Started - " + this.getClass().getName());
+		onStart();
+	}
+	public void stop(){
+		if(!bStarted) return;
+		onStop();
+		Log.i(this.getClass().getName(),"Classifier Stopped - " + this.getClass().getName());
+	}
 
 	@Override
 	/**
@@ -111,4 +127,8 @@ public abstract class AbstractClassifier<T extends State> implements Classifier 
 	}
 
 	protected abstract void processClassification();
+	
+	protected abstract void onStart();
+	protected abstract void onStop();
+	
 }

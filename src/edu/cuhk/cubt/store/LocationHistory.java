@@ -23,6 +23,7 @@ public class LocationHistory extends CircularBuffer<Location>{
 	public void add(Location location)
 		throws IllegalArgumentException{
 		
+		
 		assertNewLocation(location);		
 		super.add(location);
 	}

@@ -10,5 +10,8 @@ public interface Classifier {
 	/**
 	 * Request the classifier to process
 	 */
+	public void start();
+	public void stop();
+	
 	public void process();
 }

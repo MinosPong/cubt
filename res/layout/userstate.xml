@@ -11,6 +11,12 @@
 	        android:textSize="20sp"
 	        android:text="timeText"/>	
   
+  <TextView android:id="@+id/gpsStatusText" 
+            android:layout_width="fill_parent" 
+            android:layout_height="wrap_content" 
+            android:textSize="20sp"
+            android:text="gpsStatusText"/>
+  
   <TextView android:id="@+id/locationText" 
             android:layout_width="fill_parent" 
             android:layout_height="wrap_content" 
@@ -45,5 +51,10 @@
             android:layout_width="fill_parent" 
             android:layout_height="wrap_content"
             android:text="Speed unavailable"/>
+  
+  <TextView android:id="@+id/busText" 
+            android:layout_width="fill_parent" 
+            android:layout_height="wrap_content"
+            android:text="Bus unknown"/>
   
 </LinearLayout>

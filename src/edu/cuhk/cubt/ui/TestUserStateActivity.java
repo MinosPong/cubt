@@ -1,5 +1,6 @@
 package edu.cuhk.cubt.ui;
 
+import edu.cuhk.cubt.classifier.BusClassifier;
 import edu.cuhk.cubt.classifier.LocationClassifier;
 import edu.cuhk.cubt.classifier.PoiClassifier;
 import edu.cuhk.cubt.classifier.SpeedClassifier;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 public class TestUserStateActivity extends Activity {
 
 	TextView textTime;
+	TextView textGpsStatus;
 	
 	TextView textGpsLongitude;
 	TextView textGpsLatitude;
@@ -29,6 +31,7 @@ public class TestUserStateActivity extends Activity {
 
 	TextView textSpeedValue;
 	TextView textSpeedState;
+	TextView textBusState;
 	
 	SCCMEngine engine;
 	
@@ -43,18 +46,22 @@ public class TestUserStateActivity extends Activity {
 		engine = new SCCMEngine(this);
 		engine.startEngine();
 		engine.getClassifierManager().
-			getClassifier(LocationClassifier.class).addHandler(handler);
+			getClassifier(LocationClassifier.class).addHandler(mHandler);
 		engine.getClassifierManager().
-			getClassifier(PoiClassifier.class).addHandler(handler);
+			getClassifier(PoiClassifier.class).addHandler(mHandler);
 		engine.getClassifierManager().
-			getClassifier(SpeedClassifier.class).addHandler(handler);
-		engine.getLocationSensor().addHandler(handler);
+			getClassifier(SpeedClassifier.class).addHandler(mHandler);
+		engine.getClassifierManager()
+			.getClassifier(BusClassifier.class).addHandler(mHandler);
+		engine.getLocationSensor().addHandler(mHandler);
+		
 	}
 	
 	
 	
 	private void findViews() {
 		textTime = (TextView) findViewById(R.id.timeText);
+		textGpsStatus = (TextView) findViewById(R.id.gpsStatusText);
 		textGpsLongitude = (TextView) findViewById(R.id.longText);
 		textGpsLatitude = (TextView) findViewById(R.id.latText);
 		textGpsAltitude = (TextView) findViewById(R.id.altText);
@@ -62,11 +69,12 @@ public class TestUserStateActivity extends Activity {
 		textPoiState = (TextView) findViewById(R.id.poiText);
 		textSpeedValue = (TextView) findViewById(R.id.speedValue);
 		textSpeedState = (TextView) findViewById(R.id.speedText);
+		textBusState = (TextView) findViewById(R.id.busText);
 	}
 
 
 
-	Handler handler = new Handler(){
+	Handler mHandler = new Handler(){
 		@SuppressWarnings("unchecked")
 		@Override
 		public void handleMessage(Message msg){
@@ -81,6 +89,7 @@ public class TestUserStateActivity extends Activity {
 				evt = (StateChangeEvent<State>) msg.obj;
 				textLocationState.setText(evt.getNewState().getStateString());
 				break;
+				
 				
 			case State.TYPE_POI:
 				evt = (StateChangeEvent<State>) msg.obj;
@@ -99,11 +108,22 @@ public class TestUserStateActivity extends Activity {
 						.getClassifier(SpeedClassifier.class).getSpeed());
 				textSpeedState.setText(engine.getClassifierManager()
 						.getClassifier(SpeedClassifier.class).getState().getStateString());
-				
 				break;
-
+			
+			case State.TYPE_BUS:
+				evt = (StateChangeEvent<State>) msg.obj;
+				textBusState.setText(engine.getClassifierManager()
+						.getClassifier(BusClassifier.class).getState().getStateString());
+				break;				
+				
 			case LocationSensor.MSG_NEW_LOCATION:
 				updateLocation((Location) msg.obj);
+				break;
+
+			case LocationSensor.MSG_PROVIDER_DISABLE:
+			case LocationSensor.MSG_PROVIDER_ENABLE:
+			case LocationSensor.MSG_PROVIDER_STATUS_CHANGE:
+				textGpsStatus.setText((CharSequence) msg.obj);
 				break;
 			}
 			
