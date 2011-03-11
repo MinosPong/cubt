@@ -106,15 +106,17 @@ public abstract class AbstractClassifier<T extends State> implements Classifier 
 		}
 	}
 
-	public void start(){
+	public synchronized void start(){
 		if(bStarted) return;
 		Log.i(this.getClass().getName(),"Classifier Started - " + this.getClass().getName());
 		onStart();
+		bStarted = true;
 	}
-	public void stop(){
+	public synchronized void stop(){
 		if(!bStarted) return;
 		onStop();
 		Log.i(this.getClass().getName(),"Classifier Stopped - " + this.getClass().getName());
+		bStarted = false;
 	}
 
 	@Override
