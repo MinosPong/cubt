@@ -1,5 +1,6 @@
 package edu.cuhk.cubt.ui;
 
+import edu.cuhk.cubt.CubtApplication;
 import edu.cuhk.cubt.classifier.BusClassifier;
 import edu.cuhk.cubt.classifier.LocationClassifier;
 import edu.cuhk.cubt.classifier.PoiClassifier;
@@ -11,15 +12,29 @@ import edu.cuhk.cubt.state.State;
 import edu.cuhk.cubt.state.event.StateChangeEvent;
 import edu.cuhk.ie.cubt.R;
 import android.app.Activity;
+import android.content.ComponentName;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Message;
 import android.text.format.Time;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class TestUserStateActivity extends Activity {
 
+	private static final String TAG = "TestUserStateActivity";
+
+	private static final int MENU_START = Menu.FIRST;
+	private static final int MENU_STOP = Menu.FIRST + 1;
+	private static final int MENU_EXIT = Menu.FIRST + 2;
+	
 	TextView textTime;
 	TextView textGpsStatus;
 	
@@ -34,17 +49,100 @@ public class TestUserStateActivity extends Activity {
 	TextView textBusState;
 	
 	SCCMEngine engine;
+	private boolean mIsBound;
 	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		int i=0;
+		menu.add(0, MENU_START, i++, R.string.menu_start).setIcon(android.R.drawable.ic_menu_add);
+		menu.add(0, MENU_STOP, i++, R.string.menu_stop).setIcon(android.R.drawable.ic_menu_close_clear_cancel);
+		menu.add(0, MENU_EXIT, i++, R.string.menu_exit).setIcon(android.R.drawable.ic_menu_revert);
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch(item.getItemId()){
+			case MENU_START:
+				((CubtApplication)getApplication()).start();
+				doBindService();
+				return true;
+			case MENU_STOP:
+				doUnbindService();
+				((CubtApplication)getApplication()).stop();
+				return true;
+			case MENU_EXIT:
+				finish();
+				return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		((CubtApplication)getApplication()).start();
+		
+		doBindService();	
+		
 		setContentView(R.layout.userstate);
 		findViews();
-		//Intent intent = new Intent(this, CubtService.class);
-		//startService(intent);
-		
-		engine = new SCCMEngine(this);
-		engine.startEngine();
+	}
+
+	@Override
+	protected void onDestroy(){
+		doUnbindService();
+		super.onDestroy();
+	}
+	
+	void doBindService(){
+		bindService(new Intent(TestUserStateActivity.this, CubtService.class), 
+				mConnection , 0);
+		mIsBound = true;
+		Toast.makeText(TestUserStateActivity.this, "Binding..." , Toast.LENGTH_SHORT).show();
+	}
+	
+	void doUnbindService(){
+		if(mIsBound){
+            unbindService(mConnection);
+            mIsBound = false;
+    		Toast.makeText(TestUserStateActivity.this, "Unbinding...", Toast.LENGTH_SHORT).show();
+		}
+	}	
+	
+	private ServiceConnection mConnection = new ServiceConnection(){
+
+		@Override
+		public void onServiceConnected(ComponentName name, IBinder service) {
+			CubtService mService = ((CubtService.CubtServiceBinder)service).getService();
+			engine = mService.getSCCMEngine();
+			setHandler();
+			Log.i(TAG,"Service Connected");
+		}
+
+		@Override
+		public void onServiceDisconnected(ComponentName name) {
+			Log.i(TAG,"Service Disconnected");
+			removeHandler();
+			engine = null;
+		}
+
+	};
+
+	private void removeHandler() {
+		engine.getClassifierManager().
+			getClassifier(LocationClassifier.class).removeHandler(mHandler);
+		engine.getClassifierManager().
+			getClassifier(PoiClassifier.class).removeHandler(mHandler);
+		engine.getClassifierManager().
+			getClassifier(SpeedClassifier.class).removeHandler(mHandler);
+		engine.getClassifierManager()
+			.getClassifier(BusClassifier.class).removeHandler(mHandler);
+		engine.getLocationSensor().removeHandler(mHandler);
+	}		
+	
+	private void setHandler(){
 		engine.getClassifierManager().
 			getClassifier(LocationClassifier.class).addHandler(mHandler);
 		engine.getClassifierManager().
@@ -53,10 +151,8 @@ public class TestUserStateActivity extends Activity {
 			getClassifier(SpeedClassifier.class).addHandler(mHandler);
 		engine.getClassifierManager()
 			.getClassifier(BusClassifier.class).addHandler(mHandler);
-		engine.getLocationSensor().addHandler(mHandler);
-		
+		engine.getLocationSensor().addHandler(mHandler);		
 	}
-	
 	
 	
 	private void findViews() {
