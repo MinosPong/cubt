@@ -63,6 +63,18 @@ public class SCCMEngine {
 		return true;
 	}
 	
+	public boolean stopEngine(){
+
+		locationClassifier.stop();
+		locationSensor.stop();	
+
+		locationSensor.removeHandler(mHandler);
+		locationClassifier.removeHandler(mHandler);
+		poiClassifier.removeHandler(mHandler);
+		busClassifier.removeHandler(mHandler);		
+		return true;
+	}
+	
 	public LocationSensor getLocationSensor(){
 		return locationSensor;
 	}
