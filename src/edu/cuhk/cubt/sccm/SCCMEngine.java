@@ -5,6 +5,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Handler;
 import android.os.Message;
+import edu.cuhk.cubt.CubtApplication;
 import edu.cuhk.cubt.classifier.BusClassifier;
 import edu.cuhk.cubt.classifier.ClassifierManager;
 import edu.cuhk.cubt.classifier.LocationClassifier;
@@ -21,7 +22,7 @@ public class SCCMEngine {
 	
 	Context mContext;
 	ClassifierManager classifierManager = new ClassifierManager(this);
-	LocationHistory locationHistroy = new LocationHistory();
+	LocationHistory locationHistory;
 	
 	LocationClassifier locationClassifier;
 	PoiClassifier poiClassifier;
@@ -32,6 +33,7 @@ public class SCCMEngine {
 	
 	public SCCMEngine(Context context){
 		mContext = context;
+		locationHistory = ((CubtApplication)context.getApplicationContext()).getLocationHistory();
 		//TODO		
 	}
 	
@@ -79,10 +81,6 @@ public class SCCMEngine {
 		return locationSensor;
 	}
 	
-	public LocationHistory getLocationHistory(){
-		return locationHistroy;
-	}
-	
 
 	public ClassifierManager getClassifierManager(){
 		return classifierManager;
@@ -91,7 +89,7 @@ public class SCCMEngine {
 	
 	private void newLocation(Location location){
 		try{
-		locationHistroy.add(location);
+		locationHistory.add(location);
 		}catch(Exception e){
 			
 		}

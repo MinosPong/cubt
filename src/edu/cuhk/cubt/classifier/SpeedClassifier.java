@@ -47,6 +47,9 @@ public class SpeedClassifier extends AbstractClassifier<SpeedState> {
 			smav = (timeInterval < 1000)? smav = (float) 0.7 : (float) (1.5/ Math.log10(timeInterval)); 
 		}
 		
+		//remove smav for test
+		smav = 0;
+		
 		speed = speed * (smav) + lastLocation.getSpeed() * (1 - smav);
 		
 		//Do classification

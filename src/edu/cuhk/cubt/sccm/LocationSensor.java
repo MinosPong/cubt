@@ -88,27 +88,25 @@ public class LocationSensor {
 	public void setCapturingState(int state){
 		long minTime = 0;
 		float minDistance = 0;
-		Criteria criteria = null;
 		String provider = "";
 		if (state == 0 || state == STATE_UNKNOWN){
-			criteria = getCoarseCriteria();
+			provider = getCoarseProvider();
 			minTime = 3000;
 	    }else if(state == STATE_HOT){
-			criteria = getFineCriteria();
+			provider = getFineProvider();
 			minTime = 1000;		
 	    }else if(state == STATE_INSIDE){
-			criteria = getFineCriteria();
-			minTime = 30 * 1000;			
+			provider = getFineProvider();
+			minTime = 15 * 1000;			
 		}else if(state == STATE_CLOSE){
-			criteria = getCoarseCriteria();
+			provider = getCoarseProvider();
 			minTime = 60 * 1000;						
 		}else if(state == STATE_FAR){
-			criteria = getCoarseCriteria();	
-			minTime = 15 * 60 * 1000;			
+			provider = getCoarseProvider();	
+			minTime = 10 * 60 * 1000;			
 		}	
 		
 
-		provider = locationManager.getBestProvider(criteria, true);
 		Log.i(tag,"Provdier Changed:" + provider + ", minTime:" + minTime);
 		fireMessageToHandlers(MSG_PROVIDER_STATUS_CHANGE,"Provider Change " + provider + ",minTime:" + minTime);
 		//locationManager.removeUpdates(locationListener);
@@ -141,6 +139,14 @@ public class LocationSensor {
 		}		
 	}
 	
+	private String getCoarseProvider(){
+		return LocationManager.NETWORK_PROVIDER;
+	}
+	
+	private String getFineProvider(){
+		return LocationManager.GPS_PROVIDER;
+	}
+	
 	private Criteria getCoarseCriteria(){
 		if( coarseCriteria == null){
 			coarseCriteria  = new Criteria();
@@ -154,6 +160,7 @@ public class LocationSensor {
 		if (fineCriteria == null ){
 			fineCriteria = new Criteria();
 			fineCriteria.setAccuracy(Criteria.ACCURACY_FINE);
+			fineCriteria.setSpeedRequired(true);
 		}
 		return fineCriteria;
 	}

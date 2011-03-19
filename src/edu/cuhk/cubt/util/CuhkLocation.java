@@ -8,7 +8,7 @@ public class CuhkLocation extends Location{
 	private static final double longitude = 114.206904;
 	
 	public static final double CUHK_RANGE = 1000;
-	public static final double CUHK_CLOSE_RANGE = 4000;
+	public static final double CUHK_CLOSE_RANGE = 5000;
 	
 	public static final int INSIDE = 1;
 	public static final int CLOSE = 2;

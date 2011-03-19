@@ -21,6 +21,7 @@ import com.google.android.maps.Overlay;
 
 import edu.cuhk.cubt.store.RouteData;
 import edu.cuhk.cubt.ui.com.BusStopOverlay;
+import edu.cuhk.cubt.ui.com.LocationHistoryOverlay;
 import edu.cuhk.cubt.util.CuhkLocation;
 import edu.cuhk.ie.cubt.R;
 
@@ -44,11 +45,16 @@ public class CubtMapView extends MapActivity {
 	    mapView.getController().setZoom(16);
 	    
 	    List<Overlay> mapOverlays = mapView.getOverlays();
-	    Drawable drawable = this.getResources().getDrawable(android.R.drawable.star_on);
+	    Drawable drawable;
+	    drawable = this.getResources().getDrawable(android.R.drawable.star_on);
 	    
-	    stopOverlay = new BusStopOverlay(drawable,this);
-	    
+	    stopOverlay = new BusStopOverlay(drawable,this);	    
 	    mapOverlays.add(stopOverlay);
+	    
+
+	    drawable = this.getResources().getDrawable(android.R.drawable.stat_sys_upload);
+	    LocationHistoryOverlay locationOverlay = new LocationHistoryOverlay(drawable,this);
+	    mapOverlays.add(locationOverlay);
 	    
 	    Location location = CuhkLocation.getInstance();
 	    
@@ -115,7 +121,7 @@ public class CubtMapView extends MapActivity {
 		}else{
 			stopOverlay.setRoute((String)item.getTitle());
 		}
-		mapView.postInvalidate();
+		mapView.invalidate();
 		return super.onContextItemSelected(item);
 	}
 

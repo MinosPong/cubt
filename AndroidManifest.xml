@@ -7,15 +7,23 @@
 
     <uses-library android:name="com.google.android.maps"></uses-library>
 
-<activity android:name="edu.cuhk.cubt.ui.CubtMapView" android:theme="@android:style/Theme.NoTitleBar" android:label="@string/app_name"><intent-filter><category android:name="android.intent.category.LAUNCHER"></category>
-
-</intent-filter>
-</activity>
-<activity android:name="edu.cuhk.cubt.ui.Settings" android:label="@string/app_name"></activity>
-<activity android:name="edu.cuhk.cubt.ui.TestUserStateActivity" android:label="CUBT_TEST_US" android:launchMode="singleInstance"><intent-filter><category android:name="android.intent.category.LAUNCHER"></category>
+    
+<activity android:name="edu.cuhk.cubt.ui.TestUserStateActivity" android:label="CUBT_TEST_US" android:launchMode="singleInstance">
+<intent-filter>
+<category android:name="android.intent.category.LAUNCHER"></category>
 <action android:name="android.intent.action.MAIN"></action>
 </intent-filter>
 </activity>
+
+<activity android:name="edu.cuhk.cubt.ui.CubtMapView" android:theme="@android:style/Theme.NoTitleBar" android:label="CUBT_MAP">
+<intent-filter>
+<category android:name="android.intent.category.LAUNCHER"></category>
+<action android:name="android.intent.action.MAIN"></action>
+</intent-filter>
+</activity>    
+
+<activity android:name="edu.cuhk.cubt.ui.Settings" android:label="@string/app_name"></activity>
+
 <service android:name="edu.cuhk.cubt.ui.CubtService" android:label="@string/app_name"></service>
 </application>
     <uses-sdk android:minSdkVersion="5" android:targetSdkVersion="8"/>
