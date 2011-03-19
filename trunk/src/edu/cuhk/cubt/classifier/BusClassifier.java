@@ -13,7 +13,7 @@ public class BusClassifier extends AbstractClassifier<BusState>
 	implements Classifier{
 	
 	private static final int MSG_STOP_LEAVE_DELAY = 13101;
-	private static int STOP_LEAVE_DELAY_TIME = 15 * 1000;
+	private static int STOP_LEAVE_DELAY_TIME = 20 * 1000;
 	
 	private Time stopLeaveTime = new Time();
 	private Time stopEnterTime = new Time();

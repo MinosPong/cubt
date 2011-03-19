@@ -7,10 +7,10 @@ import java.util.List;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.ItemizedOverlay;
-import com.google.android.maps.MapView;
 import com.google.android.maps.OverlayItem;
 
 import edu.cuhk.cubt.bus.Poi;
@@ -20,6 +20,8 @@ import edu.cuhk.cubt.store.RouteData;
 
 public class BusStopOverlay extends ItemizedOverlay<OverlayItem> {
 
+	private static final String Tag = "BusStopOverlay";
+	
 	private Context mContext;
 	
 	private List<Poi> mOverlays = new ArrayList<Poi>();
@@ -63,11 +65,13 @@ public class BusStopOverlay extends ItemizedOverlay<OverlayItem> {
 
 	@Override
 	public int size() {
+		Log.i(Tag, "Overlays Size:" + mOverlays.size());
 		return mOverlays.size();
 	}
 	
 	@Override
 	protected boolean onTap(int index){
+		Log.d(Tag,"TAP : (" + index + "/" +size() + ")");
 		Poi poi= mOverlays.get(index);
 		AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
 		dialog.setCancelable(true);

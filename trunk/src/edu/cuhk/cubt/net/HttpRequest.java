@@ -45,7 +45,4 @@ public class HttpRequest {
 	
 		httpClient.close();
 	}
-	
-	
-	
 }

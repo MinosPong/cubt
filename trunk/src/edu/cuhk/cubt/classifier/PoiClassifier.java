@@ -15,7 +15,6 @@ public class PoiClassifier extends AbstractClassifier<PoiState> {
 
 	ClassifierManager manager;
 	
-	LocationHistory locationHistory;
 	LocationSensor locationSensor;
 	
 	Location location;
