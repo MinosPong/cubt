@@ -3,6 +3,7 @@ package edu.cuhk.cubt.ui.com;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.util.Log;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.ItemizedOverlay;
@@ -13,6 +14,8 @@ import edu.cuhk.cubt.store.LocationHistory;
 
 public class LocationHistoryOverlay extends ItemizedOverlay<OverlayItem> {
 
+	private static final String tag = "LocationHistoryOverlay";
+	
 	private Context mContext;
 	private LocationHistory locationHistory;
 	
@@ -27,6 +30,14 @@ public class LocationHistoryOverlay extends ItemizedOverlay<OverlayItem> {
 		populate();
 	}
 	
+	
+	
+	@Override
+	protected int getIndexToDraw(int drawingOrder) {
+		populate();
+		return super.getIndexToDraw(drawingOrder);
+	}
+
 	@Override
 	protected OverlayItem createItem(int i) {
 		Location location = locationHistory.getLast(i);

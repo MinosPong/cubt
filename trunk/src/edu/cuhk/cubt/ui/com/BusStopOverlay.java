@@ -65,7 +65,6 @@ public class BusStopOverlay extends ItemizedOverlay<OverlayItem> {
 
 	@Override
 	public int size() {
-		Log.i(Tag, "Overlays Size:" + mOverlays.size());
 		return mOverlays.size();
 	}
 	

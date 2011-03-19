@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
@@ -19,6 +21,8 @@ import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
 
+import edu.cuhk.cubt.CubtApplication;
+import edu.cuhk.cubt.store.LocationHistory;
 import edu.cuhk.cubt.store.RouteData;
 import edu.cuhk.cubt.ui.com.BusStopOverlay;
 import edu.cuhk.cubt.ui.com.LocationHistoryOverlay;
@@ -64,8 +68,18 @@ public class CubtMapView extends MapActivity {
 	    
 	    registerForContextMenu(mapView);
 	    
+	    setHandler();
 	}
 	
+
+
+	@Override
+	protected void onDestroy() {
+		unsetHandler();
+		super.onDestroy();
+	}
+
+
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -76,6 +90,8 @@ public class CubtMapView extends MapActivity {
 		menu.add(0, MENU_EXIT, i++, R.string.menu_exit).setIcon(android.R.drawable.ic_menu_close_clear_cancel);
 		return super.onCreateOptionsMenu(menu);
 	}
+
+
 
 
 
@@ -130,5 +146,27 @@ public class CubtMapView extends MapActivity {
 		// TODO Auto-generated method stub
 		return false;
 	}
+	
+
+	private void setHandler() {
+		((CubtApplication)getApplication()).getLocationHistory().addHandler(handler);		
+	}
+	
+	private void unsetHandler(){
+		((CubtApplication)getApplication()).getLocationHistory().removeHandler(handler);
+	}
+	
+	Handler handler = new Handler(){
+		@Override
+		public void handleMessage(Message msg) {
+			switch(msg.what){
+				case LocationHistory.MSG_LOCATION_HISTORY_UPDATE:
+					mapView.invalidate();
+					break;
+			}
+			super.handleMessage(msg);
+		}	
+		
+	};
 
 }
