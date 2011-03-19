@@ -35,9 +35,23 @@ public class LocationSensor {
 	public static final int STATE_INSIDE = 3;
 	public static final int STATE_HOT = 4;
 	
+	private int capturingState = 0;
+	
 	LocationManager locationManager;
 	SCCMEngine engine;
 	Location lastLocation = null;
+	
+	private boolean isStart = false;
+	
+	private boolean isVirtual = false;
+	
+	public void setVirtual(boolean b){
+		Log.d(tag, "Virtual sensor? " + b);
+		if(b == isVirtual) return;
+		isVirtual = b;
+		stop();
+		start();
+	}
 
 	private List<Handler> handlers = new Vector<Handler>();;
 	
@@ -69,25 +83,36 @@ public class LocationSensor {
 	}
 	
 	public void start(){
+		if(isStart) return;
+		isStart = true;
 		setCapturingState(STATE_UNKNOWN);
 	}
 	
 	public void stop(){
-		locationManager.removeUpdates(locationListener);		
+		if(!isStart) return;
+		isStart = false;
+		
+		locationManager.removeUpdates(locationListener);
+		VirtualLocationSensor.getInstance().removeListener(locationListener);
 	}
 	
 	public void setCapturingState(LocationState state){
 		if(state == null || state == LocationState.UNKNOWN) setCapturingState(STATE_UNKNOWN);
 		else if(state == LocationState.INSIDE_CUHK) setCapturingState(STATE_INSIDE);
 		else if(state == LocationState.CLOSE_TO_CUHK) setCapturingState(STATE_CLOSE);
-		else if(state == LocationState.FAR_FROM_CUHK) setCapturingState(STATE_FAR);
-			
+		else if(state == LocationState.FAR_FROM_CUHK) setCapturingState(STATE_FAR);			
 	}
 	
 	
 	public void setCapturingState(int state){
+		if(isVirtual){
+			setVirtualLocationListener();
+			return;
+		}
+		
 		long minTime = 0;
 		float minDistance = 0;
+		capturingState = state;
 		String provider = "";
 		if (state == 0 || state == STATE_UNKNOWN){
 			provider = getCoarseProvider();
@@ -104,8 +129,7 @@ public class LocationSensor {
 		}else if(state == STATE_FAR){
 			provider = getCoarseProvider();	
 			minTime = 10 * 60 * 1000;			
-		}	
-		
+		}			
 
 		Log.i(tag,"Provdier Changed:" + provider + ", minTime:" + minTime);
 		fireMessageToHandlers(MSG_PROVIDER_STATUS_CHANGE,"Provider Change " + provider + ",minTime:" + minTime);
@@ -117,11 +141,16 @@ public class LocationSensor {
 				locationListener);
 	}
 	
-	private void fireNewLocation(Location location){
+	private void setVirtualLocationListener(){
+		VirtualLocationSensor.getInstance().setListener(locationListener);
+		fireMessageToHandlers(MSG_PROVIDER_STATUS_CHANGE,"Provider Change: Virtual Sensor");
+	}
+	
+	protected void fireNewLocation(Location location){
 		fireMessageToHandlers(MSG_NEW_LOCATION,location);
 	}
 
-	private void fireMessageToHandlers(int what, Object obj){
+	protected void fireMessageToHandlers(int what, Object obj){
 		Iterator<Handler> handlers;
 		synchronized(this.handlers){
 			handlers = 

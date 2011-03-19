@@ -17,6 +17,7 @@ import edu.cuhk.cubt.state.PoiState;
 import edu.cuhk.cubt.state.State;
 import edu.cuhk.cubt.state.event.StateChangeEvent;
 import edu.cuhk.cubt.store.LocationHistory;
+import edu.cuhk.cubt.ui.Settings;
 public class SCCMEngine {
 	
 	
@@ -59,6 +60,10 @@ public class SCCMEngine {
 		locationClassifier.addHandler(mHandler);
 		poiClassifier.addHandler(mHandler);
 		busClassifier.addHandler(mHandler);
+		
+		locationSensor.setVirtual(
+				mContext.getSharedPreferences(Settings.sharedPreferenceFile,0).
+				getBoolean(Settings.PREF_VIRTUAL_SENSOR, false));
 		
 		locationClassifier.start();
 		locationSensor.start();
