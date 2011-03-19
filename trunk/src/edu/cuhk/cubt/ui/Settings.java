@@ -9,16 +9,17 @@ public class Settings extends PreferenceActivity {
 
 	private static SharedPreferences settings;
 	
-	private static String sharedPreferenceFile = "edu.cuhk.cubt.cubt_pref";
+	public static String sharedPreferenceFile = "edu.cuhk.cubt.cubt_pref";
 	
-	public static String PREF_VIRTUAL = "virtual";
+	public static String PREF_VIRTUAL_SENSOR = "key_virtual_sensor";
 
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		addPreferencesFromResource(R.xml.preferences);
+		getPreferenceManager().setSharedPreferencesName(sharedPreferenceFile);
 		settings = getSharedPreferences(sharedPreferenceFile, MODE_PRIVATE);
+		addPreferencesFromResource(R.xml.preferences);
 	}
 	
 	
