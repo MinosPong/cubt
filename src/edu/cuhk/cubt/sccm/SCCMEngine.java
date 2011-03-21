@@ -28,13 +28,16 @@ public class SCCMEngine {
 	LocationClassifier locationClassifier;
 	PoiClassifier poiClassifier;
 	BusClassifier busClassifier;
-	SpeedClassifier speedClasiifier;
+	SpeedClassifier speedClasifier;
 	LocationManager locationManager;
 	LocationSensor locationSensor;
+	
+	BusChangeMonitor busChangeMonitor;
 	
 	public SCCMEngine(Context context){
 		mContext = context;
 		locationHistory = ((CubtApplication)context.getApplicationContext()).getLocationHistory();
+		busChangeMonitor = new BusChangeMonitor(this);
 		//TODO		
 	}
 	
@@ -54,7 +57,7 @@ public class SCCMEngine {
 		locationClassifier = classifierManager.getClassifier(LocationClassifier.class);
 		poiClassifier      = classifierManager.getClassifier(PoiClassifier.class);
 		busClassifier      = classifierManager.getClassifier(BusClassifier.class);
-		speedClasiifier    = classifierManager.getClassifier(SpeedClassifier.class);
+		speedClasifier    = classifierManager.getClassifier(SpeedClassifier.class);
 
 		locationSensor.addHandler(mHandler);
 		locationClassifier.addHandler(mHandler);
@@ -66,7 +69,9 @@ public class SCCMEngine {
 				getBoolean(Settings.PREF_VIRTUAL_SENSOR, false));
 		
 		locationClassifier.start();
-		locationSensor.start();
+		locationSensor.start();		
+		busChangeMonitor.start();
+		
 		return true;
 	}
 	
@@ -80,6 +85,10 @@ public class SCCMEngine {
 		poiClassifier.removeHandler(mHandler);
 		busClassifier.removeHandler(mHandler);		
 		return true;
+	}
+	
+	public BusChangeMonitor getBusChangeMonitor(){
+		return busChangeMonitor;
 	}
 	
 	public LocationSensor getLocationSensor(){
@@ -114,11 +123,11 @@ public class SCCMEngine {
 					locationSensor.setCapturingState(locationState);
 					if(locationState == LocationState.INSIDE_CUHK){
 						busClassifier.start();
-						speedClasiifier.start();
+						speedClasifier.start();
 						poiClassifier.start();
 					}else{
 						poiClassifier.stop();
-						speedClasiifier.stop();
+						speedClasifier.stop();
 						busClassifier.stop();
 					}
 					break;
