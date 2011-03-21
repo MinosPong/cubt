@@ -3,6 +3,7 @@ package edu.cuhk.cubt.classifier;
 import android.os.Handler;
 import android.os.Message;
 import android.text.format.Time;
+import edu.cuhk.cubt.bus.Stop;
 import edu.cuhk.cubt.state.BusState;
 import edu.cuhk.cubt.state.PoiState;
 import edu.cuhk.cubt.state.SpeedState;
@@ -17,6 +18,8 @@ public class BusClassifier extends AbstractClassifier<BusState>
 	
 	private Time stopLeaveTime = new Time();
 	private Time stopEnterTime = new Time();
+	
+	private Stop busStop;
 	
 	private boolean isInStop = false;
 	private boolean isActivePeriod = false;
@@ -66,6 +69,7 @@ public class BusClassifier extends AbstractClassifier<BusState>
 		stopEnterTime.setToNow();
 		isInStop = true;
 		if(getState() != BusState.ONBUS){
+			busStop = (Stop) poiClassifier.getPoi();
 			setState(BusState.WAITBUS);
 		}
 	}
