@@ -57,10 +57,10 @@ public class LocationHistory extends CircularBuffer<Location>{
 			}
 			
 			//Calculate the speed if it is not exist in the location point
-			if(!location.hasSpeed()){
+			/*if(!location.hasSpeed()){
 				location.setSpeed(location.distanceTo(lastLocation) * 1000 / 
 						(location.getTime() - lastLocation.getTime() ));
-			}
+			}*/
 		}
 	}
 

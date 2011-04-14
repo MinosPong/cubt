@@ -71,26 +71,26 @@ public class PoiData {
 		if(pois == null){	
 			pois = new Hashtable<String, Poi>();
 			
-			poisInitHelper(pois, STOP_MTR, 22.414361, 114.210292, 50, TYPE_STOP);
-			poisInitHelper(pois, STOP_SPU, 22.417778, 114.210284, 30, TYPE_STOP);
-			poisInitHelper(pois, STOP_SPD, 22.417793, 114.211290, 30, TYPE_STOP);
-			poisInitHelper(pois, STOP_SRR, 22.419737, 114.206974, 50, TYPE_STOP);
-			poisInitHelper(pois, STOP_FKH, 22.419784, 114.203401, 50, TYPE_STOP);
-			poisInitHelper(pois, STOP_UCS, 22.420463, 114.205311, 50, TYPE_STOP);
+			poisInitHelper(pois, STOP_MTR, 22.414670, 114.210292, 50, TYPE_STOP);
+			poisInitHelper(pois, STOP_SPU, 22.417740, 114.210734, 30, TYPE_STOP);
+			poisInitHelper(pois, STOP_SPD, 22.417773, 114.211350, 30, TYPE_STOP);
+			poisInitHelper(pois, STOP_SRR, 22.419830, 114.207024, 50, TYPE_STOP);
+			poisInitHelper(pois, STOP_FKH, 22.419860, 114.203270, 50, TYPE_STOP);
+			poisInitHelper(pois, STOP_UCS, 22.420363, 114.205180, 50, TYPE_STOP);
 			poisInitHelper(pois, STOP_NAS, 22.421279, 114.207486, 50, TYPE_STOP);
-			poisInitHelper(pois, STOP_ADM, 22.418663, 114.205284, 50, TYPE_STOP);
-			poisInitHelper(pois, STOP_P5H, 22.418358, 114.209289, 30, TYPE_STOP);
-			poisInitHelper(pois, STOP_R34, 22.421604, 114.203136, 30, TYPE_STOP);
+			poisInitHelper(pois, STOP_ADM, 22.418780, 114.205260, 50, TYPE_STOP);
+			poisInitHelper(pois, STOP_P5H, 22.418520, 114.208750, 30, TYPE_STOP);
+			poisInitHelper(pois, STOP_R34, 22.421340, 114.203450, 30, TYPE_STOP);
 			poisInitHelper(pois, STOP_SCS, 22.422397, 114.201395, 50, TYPE_STOP);
 			poisInitHelper(pois, STOP_R11, 22.425152, 114.207891, 30, TYPE_STOP);
 			poisInitHelper(pois, STOP_R15, 22.423766, 114.206700, 30, TYPE_STOP);
 			poisInitHelper(pois, STOP_RUC, 22.423364, 114.205308, 30, TYPE_STOP);
-			poisInitHelper(pois, STOP_CCH, 22.421966, 114.204946, 30, TYPE_STOP);
-			poisInitHelper(pois, STOP_PGH, 22.420002, 114.212384, 40, TYPE_STOP);
-			poisInitHelper(pois, STOP_CCS, 22.415306, 114.208428, 50, TYPE_STOP);
+			poisInitHelper(pois, STOP_CCH, 22.421850, 114.204600, 30, TYPE_STOP);
+			poisInitHelper(pois, STOP_PGH, 22.420360, 114.212200, 40, TYPE_STOP);
+			poisInitHelper(pois, STOP_CCS, 22.415541, 114.208218, 50, TYPE_STOP);
 			//Checkpoints
 			poisInitHelper(pois, CHECKPOINT_CJC, 22.417852, 114.212770, 50, TYPE_CHECKPOINT);
-			poisInitHelper(pois, CHECKPOINT_CCC, 22.416107, 114.210815, 50, TYPE_CHECKPOINT);
+			poisInitHelper(pois, CHECKPOINT_CCC, 22.416067, 114.210625, 50, TYPE_CHECKPOINT);
 			poisInitHelper(pois, CHECKPOINT_CAB, 22.419779, 114.204453, 50, TYPE_CHECKPOINT);
 			poisInitHelper(pois, CHECKPOINT_CNA, 22.420037, 114.206287, 50, TYPE_CHECKPOINT);
 			poisInitHelper(pois, CHECKPOINT_CSC, 22.421792, 114.203315, 50, TYPE_CHECKPOINT);

@@ -22,34 +22,35 @@ public class SCCMEngine {
 	
 	
 	Context mContext;
-	ClassifierManager classifierManager = new ClassifierManager(this);
-	LocationHistory locationHistory;
+	
+	final ClassifierManager classifierManager;
+	final BusChangeMonitor busChangeMonitor;
 	
 	LocationClassifier locationClassifier;
 	PoiClassifier poiClassifier;
 	BusClassifier busClassifier;
 	SpeedClassifier speedClasifier;
-	LocationManager locationManager;
 	LocationSensor locationSensor;
 	
-	BusChangeMonitor busChangeMonitor;
 	
 	public SCCMEngine(Context context){
 		mContext = context;
-		locationHistory = ((CubtApplication)context.getApplicationContext()).getLocationHistory();
+		
+		classifierManager = new ClassifierManager(this);
 		busChangeMonitor = new BusChangeMonitor(this);
-		//TODO		
 	}
 	
 	public boolean startEngine(){
-		//TODO
-		//init Location Manager
-		locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
+		//init Location Manager and Location Sensor
+		LocationManager locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
 		if(locationManager == null){
 			throw new UnsupportedOperationException("Location serivce not exist");
 		}
-		
 		locationSensor = new LocationSensor(locationManager);
+		
+		locationSensor.setVirtual(
+				mContext.getSharedPreferences(Settings.sharedPreferenceFile,0).
+				getBoolean(Settings.PREF_VIRTUAL_SENSOR, false));
 		
 		//Initialize Classifiers
 		classifierManager.initialize();
@@ -57,33 +58,31 @@ public class SCCMEngine {
 		locationClassifier = classifierManager.getClassifier(LocationClassifier.class);
 		poiClassifier      = classifierManager.getClassifier(PoiClassifier.class);
 		busClassifier      = classifierManager.getClassifier(BusClassifier.class);
-		speedClasifier    = classifierManager.getClassifier(SpeedClassifier.class);
+		speedClasifier     = classifierManager.getClassifier(SpeedClassifier.class);
 
 		locationSensor.addHandler(mHandler);
+		
 		locationClassifier.addHandler(mHandler);
 		poiClassifier.addHandler(mHandler);
 		busClassifier.addHandler(mHandler);
 		
-		locationSensor.setVirtual(
-				mContext.getSharedPreferences(Settings.sharedPreferenceFile,0).
-				getBoolean(Settings.PREF_VIRTUAL_SENSOR, false));
-		
 		locationClassifier.start();
 		locationSensor.start();		
-		busChangeMonitor.start();
-		
+		busChangeMonitor.start();		
 		return true;
 	}
 	
 	public boolean stopEngine(){
 
-		locationClassifier.stop();
+		busChangeMonitor.stop();	
 		locationSensor.stop();	
+		locationClassifier.stop();
 
-		locationSensor.removeHandler(mHandler);
-		locationClassifier.removeHandler(mHandler);
+		busClassifier.removeHandler(mHandler);	
 		poiClassifier.removeHandler(mHandler);
-		busClassifier.removeHandler(mHandler);		
+		locationClassifier.removeHandler(mHandler);
+
+		locationSensor.removeHandler(mHandler);		
 		return true;
 	}
 	
@@ -93,17 +92,16 @@ public class SCCMEngine {
 	
 	public LocationSensor getLocationSensor(){
 		return locationSensor;
-	}
-	
+	}	
 
 	public ClassifierManager getClassifierManager(){
 		return classifierManager;
-	}
-	
+	}	
 	
 	private void newLocation(Location location){
 		try{
-		locationHistory.add(location);
+			LocationHistory locationHistory = ((CubtApplication)mContext.getApplicationContext()).getLocationHistory();
+			locationHistory.add(location);
 		}catch(Exception e){
 			
 		}

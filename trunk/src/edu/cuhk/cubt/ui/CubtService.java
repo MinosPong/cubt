@@ -36,26 +36,37 @@ public class CubtService extends Service{
     }
 	
 	
-
+    /**
+     * onCreate() is called when the Service is create
+     */
 	@Override
-	public void onCreate() {
-		
+	public void onCreate() {		
 		super.onCreate();
 		createNotification();
 	}
 
+    /**
+     * onDestory() is called when the Service is destory
+     */
 	@Override
 	public void onDestroy() {
-		mSccmEngine.stopEngine();
-		mSccmEngine = null;
+		if(mSccmEngine != null){
+			mSccmEngine.stopEngine();
+			mSccmEngine = null;
+		}
 		clearNotification();
 		super.onDestroy();
 	}
 
+	
 
 
 	private static final int NOTIFICATION = 1;
 	
+	
+	/**
+	 * Create Service Started Notification 
+	 */
 	private void createNotification(){
 		
 		String ns = Context.NOTIFICATION_SERVICE;
@@ -76,6 +87,9 @@ public class CubtService extends Service{
 		mNotificationManager.notify(NOTIFICATION, notification);
 	}
 	
+	/**
+	 * Clear Service Started Notification
+	 */
 	private void clearNotification(){
     	NotificationManager mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
     	mNotificationManager.cancel(NOTIFICATION);		

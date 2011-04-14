@@ -98,7 +98,7 @@ public abstract class AbstractClassifier<T extends State> implements Classifier 
 		while(handlers.hasNext()){
 			Handler handler = handlers.next();
 			
-			Log.i(this.getClass().getName(), "Handler: " + handler.getClass().getName() + 
+			Log.d(this.getClass().getName(), "Handler: " + handler.getClass().getName() + 
 					", State Change : " + oldState.getStateString() + " > " + newState.getStateString());
 			
 			Message msg = handler.obtainMessage(newState.getTypeID() , evt);

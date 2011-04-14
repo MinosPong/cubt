@@ -10,7 +10,7 @@ public class ClassifierManager {
     private final Map<String, Classifier> classifiers
         = new Hashtable<String, Classifier>();
 	
-    private SCCMEngine engine;
+    private final SCCMEngine engine;
     
     public ClassifierManager(SCCMEngine engine){
     	this.engine = engine;
