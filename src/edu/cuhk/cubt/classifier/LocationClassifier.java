@@ -15,10 +15,9 @@ import android.os.Message;
 public class LocationClassifier extends AbstractClassifier<LocationState>
 	implements Classifier{
 
-	ClassifierManager manager;
+	final ClassifierManager manager;
 	
-	//LocationHistory locationHistory;
-	LocationSensor locationSensor;
+	final LocationSensor locationSensor;
 	
 	Location location;
 	

@@ -2,7 +2,6 @@ package edu.cuhk.cubt.sccm;
 
 import edu.cuhk.cubt.classifier.BusClassifier;
 import edu.cuhk.cubt.net.BusLocationUploader;
-import edu.cuhk.cubt.net.HttpRequest;
 import edu.cuhk.cubt.state.BusState;
 import edu.cuhk.cubt.state.State;
 import edu.cuhk.cubt.state.event.StateChangeEvent;
@@ -18,8 +17,6 @@ public class BusChangeMonitor {
 	SCCMEngine engine;
 	LocationSensor locationSensor;
 	
-	String postId = "";
-	
 	boolean isOnBus = false;
 	
 	public BusChangeMonitor(SCCMEngine engine){
@@ -28,16 +25,15 @@ public class BusChangeMonitor {
 	
 	public void start(){
 		locationSensor = engine.getLocationSensor();
-		locationSensor.addHandler(handler);
 		busClassifier = engine.getClassifierManager().getClassifier(BusClassifier.class);
 		busClassifier.addHandler(handler);		
 	}
 	
-	@Override
-	protected void finalize(){
+	public void stop(){
 		locationSensor.removeHandler(handler);
-		busClassifier.removeHandler(handler);
+		busClassifier.removeHandler(handler);		
 	}
+	
 	
 	protected void busLocationChange(Location location){
 		uploader.updateLocation(location.getLatitude(), location.getLongitude());
@@ -45,11 +41,14 @@ public class BusChangeMonitor {
 	
 	protected void busEnterEvent(){
 		Location location = locationSensor.getLastLocation();
+		locationSensor.addHandler(handler);
+		
 		uploader = new BusLocationUploader();
 		uploader.updateLocation(location.getLatitude() , location.getLongitude());		
 	}
 	
 	protected void busExitEvent(){
+		locationSensor.removeHandler(handler);
 		uploader.remove();
 		uploader = null;
 	}

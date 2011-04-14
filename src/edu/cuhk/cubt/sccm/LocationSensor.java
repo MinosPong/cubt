@@ -36,6 +36,8 @@ public class LocationSensor {
 	public static final int STATE_HOT = 4;
 	
 	private int capturingState = 0;
+
+	private String provider = "";
 	
 	LocationManager locationManager;
 	SCCMEngine engine;
@@ -44,6 +46,10 @@ public class LocationSensor {
 	private boolean isStart = false;
 	
 	private boolean isVirtual = false;
+
+	public LocationSensor(LocationManager locationManager) {
+		this.locationManager = locationManager;
+	}
 	
 	public void setVirtual(boolean b){
 		Log.d(tag, "Virtual sensor? " + b);
@@ -55,9 +61,6 @@ public class LocationSensor {
 
 	private List<Handler> handlers = new Vector<Handler>();;
 	
-	public LocationSensor(LocationManager locationManager) {
-		this.locationManager = locationManager;
-	}
 
 	public void addHandler(Handler handler){
 		if(handler == null)
@@ -113,7 +116,6 @@ public class LocationSensor {
 		long minTime = 0;
 		float minDistance = 0;
 		capturingState = state;
-		String provider = "";
 		if (state == 0 || state == STATE_UNKNOWN){
 			provider = getCoarseProvider();
 			minTime = 3000;
@@ -194,6 +196,11 @@ public class LocationSensor {
 		return fineCriteria;
 	}
 	
+	private boolean fromValidProvider(Location location){
+		if(!provider.equals(location.getProvider()))
+			Log.i(tag, "Location from invalid provider");
+		return provider.equals(location.getProvider());
+	}
 	
 	LocationListener locationListener = new LocationListener(){
 		//TODO
@@ -201,8 +208,10 @@ public class LocationSensor {
 		@Override
 		public void onLocationChanged(Location location) {
 			if(lastLocation != location){
-				lastLocation = location;
-				fireNewLocation(location);
+				if(isVirtual || fromValidProvider(location)){
+					lastLocation = location;
+					fireNewLocation(location);
+				}
 			}
 		}
 

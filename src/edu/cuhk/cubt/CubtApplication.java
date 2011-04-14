@@ -16,14 +16,14 @@ public class CubtApplication extends Application {
 	}
 	
 	
-	public void start(){
+	public void startService(){
 		if(serviceStarted) return;
 		Intent intent = new Intent(this, CubtService.class);
 		startService(intent);
 		serviceStarted = true;		
 	}
 	
-	public void stop(){
+	public void stopService(){
 		if(!serviceStarted) return;
 		Intent intent = new Intent(this, CubtService.class);
 		stopService(intent);

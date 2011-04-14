@@ -7,7 +7,6 @@ import edu.cuhk.cubt.bus.Poi;
 import edu.cuhk.cubt.bus.Stop;
 import edu.cuhk.cubt.sccm.LocationSensor;
 import edu.cuhk.cubt.state.PoiState;
-import edu.cuhk.cubt.store.LocationHistory;
 import edu.cuhk.cubt.store.PoiData;
 
 public class PoiClassifier extends AbstractClassifier<PoiState> {

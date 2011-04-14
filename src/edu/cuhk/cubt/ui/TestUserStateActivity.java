@@ -66,12 +66,12 @@ public class TestUserStateActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch(item.getItemId()){
 			case MENU_START:
-				((CubtApplication)getApplication()).start();
+				((CubtApplication)getApplication()).startService();
 				doBindService();
 				return true;
 			case MENU_STOP:
 				doUnbindService();
-				((CubtApplication)getApplication()).stop();
+				((CubtApplication)getApplication()).stopService();
 				return true;
 			case MENU_OPTION:
 				Intent intent = new Intent(this, Settings.class);
@@ -88,7 +88,7 @@ public class TestUserStateActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		((CubtApplication)getApplication()).start();
+		((CubtApplication)getApplication()).startService();
 		
 		doBindService();	
 		

@@ -59,6 +59,8 @@ public class VirtualLocationSensor {
 	}
 
 
+	private Location lastLocation = null;
+	
 	private Runnable sendGPSPoint = new Runnable(){
 		public void run(){
 			String buffer;
@@ -70,6 +72,11 @@ public class VirtualLocationSensor {
 					location.setTime(Long.parseLong(buf[0]));
 					location.setLatitude(Double.parseDouble(buf[1]));
 					location.setLongitude(Double.parseDouble(buf[2]));
+					if(lastLocation!= null && location.getTime() > lastLocation.getTime()){
+						location.setSpeed(location.distanceTo(lastLocation) * 1000 / 
+								(location.getTime() - lastLocation.getTime() ));
+					}
+					lastLocation = location;
 					listener.onLocationChanged(location);
 					virtualGPSrunning = true;
 					period = 1000;	//Virtual GPS set period to 3s
