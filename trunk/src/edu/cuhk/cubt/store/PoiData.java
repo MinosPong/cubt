@@ -72,7 +72,7 @@ public class PoiData {
 			pois = new Hashtable<String, Poi>();
 			
 			poisInitHelper(pois, STOP_MTR, 22.414670, 114.210292, 50, TYPE_STOP);
-			poisInitHelper(pois, STOP_SPU, 22.417740, 114.210734, 30, TYPE_STOP);
+			poisInitHelper(pois, STOP_SPU, 22.417830, 114.210280, 30, TYPE_STOP);
 			poisInitHelper(pois, STOP_SPD, 22.417773, 114.211350, 30, TYPE_STOP);
 			poisInitHelper(pois, STOP_SRR, 22.419830, 114.207024, 50, TYPE_STOP);
 			poisInitHelper(pois, STOP_FKH, 22.419860, 114.203270, 50, TYPE_STOP);
