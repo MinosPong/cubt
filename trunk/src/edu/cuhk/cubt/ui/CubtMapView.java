@@ -22,12 +22,12 @@ import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
 
 import edu.cuhk.cubt.CubtApplication;
+import edu.cuhk.cubt.R;
 import edu.cuhk.cubt.store.LocationHistory;
 import edu.cuhk.cubt.store.RouteData;
 import edu.cuhk.cubt.ui.com.BusStopOverlay;
 import edu.cuhk.cubt.ui.com.LocationHistoryOverlay;
 import edu.cuhk.cubt.util.CuhkLocation;
-import edu.cuhk.ie.cubt.R;
 
 public class CubtMapView extends MapActivity {
 

@@ -1,6 +1,6 @@
 package edu.cuhk.cubt.ui;
 
-import edu.cuhk.ie.cubt.R;
+import edu.cuhk.cubt.R;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
