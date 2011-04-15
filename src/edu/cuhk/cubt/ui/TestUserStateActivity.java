@@ -10,7 +10,7 @@ import edu.cuhk.cubt.sccm.SCCMEngine;
 import edu.cuhk.cubt.state.PoiState;
 import edu.cuhk.cubt.state.State;
 import edu.cuhk.cubt.state.event.StateChangeEvent;
-import edu.cuhk.ie.cubt.R;
+import edu.cuhk.cubt.R;
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Intent;
