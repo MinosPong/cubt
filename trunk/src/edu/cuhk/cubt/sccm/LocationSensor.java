@@ -37,7 +37,7 @@ public class LocationSensor {
 	
 	private int capturingState = 0;
 
-	private String provider = "";
+	private String providerName = "";
 	
 	LocationManager locationManager;
 	SCCMEngine engine;
@@ -117,27 +117,27 @@ public class LocationSensor {
 		float minDistance = 0;
 		capturingState = state;
 		if (state == 0 || state == STATE_UNKNOWN){
-			provider = getCoarseProvider();
+			providerName = getCoarseProvider();
 			minTime = 3000;
 	    }else if(state == STATE_HOT){
-			provider = getFineProvider();
+			providerName = getFineProvider();
 			minTime = 1000;		
 	    }else if(state == STATE_INSIDE){
-			provider = getFineProvider();
+			providerName = getFineProvider();
 			minTime = 15 * 1000;			
 		}else if(state == STATE_CLOSE){
-			provider = getCoarseProvider();
+			providerName = getCoarseProvider();
 			minTime = 60 * 1000;						
 		}else if(state == STATE_FAR){
-			provider = getCoarseProvider();	
+			providerName = getCoarseProvider();	
 			minTime = 10 * 60 * 1000;			
 		}			
 
-		Log.i(tag,"Provdier Changed:" + provider + ", minTime:" + minTime);
-		fireMessageToHandlers(MSG_PROVIDER_STATUS_CHANGE,"Provider Change " + provider + ",minTime:" + minTime);
+		Log.i(tag,"Provdier Changed:" + providerName + ", minTime:" + minTime);
+		fireMessageToHandlers(MSG_PROVIDER_STATUS_CHANGE,"Provider Change " + providerName + ",minTime:" + minTime);
 		//locationManager.removeUpdates(locationListener);
 		locationManager.requestLocationUpdates(
-				provider, 
+				providerName, 
 				minTime, 
 				minDistance, 
 				locationListener);
@@ -196,10 +196,10 @@ public class LocationSensor {
 		return fineCriteria;
 	}
 	
-	private boolean fromValidProvider(Location location){
-		if(!provider.equals(location.getProvider()))
+	private final boolean fromValidProvider(Location location){
+		if(!providerName.equals(location.getProvider()))
 			Log.i(tag, "Location from invalid provider");
-		return provider.equals(location.getProvider());
+		return providerName.equals(location.getProvider());
 	}
 	
 	LocationListener locationListener = new LocationListener(){

@@ -18,13 +18,16 @@ public class VirtualLocationSensor {
 	File file;
 	DataInputStream is;
 	private Handler handler = new Handler();
+
+	private String tag = "VirtualLocationSensor";
+	
 	boolean virtualGPSrunning = false;
 	
 	LocationListener listener;
 
 	int period = 0;
 	
-	private final String provideName = "CUBusVirtualGPS";
+	public final String provideName = "CUBusVirtualGPS";
 
 	private boolean isStart = false;
 	
@@ -91,10 +94,9 @@ public class VirtualLocationSensor {
 		}		
 	};
 	
-	private void Start() {
-		if(isStart) return;
+	private boolean Start() {
+		if(isStart) return true;
 		
-		isStart = true;
 		if(mExternalStorageAvailable){
 		    try{
 		    	//demoPath = service.getExternalFilesDir(null);
@@ -105,8 +107,9 @@ public class VirtualLocationSensor {
 		    	virtualGPSrunning = true;
 				listener.onStatusChanged(provideName,  LocationProvider.AVAILABLE, null);
 		    	handler.postDelayed(sendGPSPoint, period);
+				isStart = true;
 		    }catch(IOException e){
-		        Log.w("ExternalStorage", "Error writing " + file, e);
+		        Log.w(tag, "Error reading " + file, e);
 				listener.onProviderDisabled(this.provideName);
 				listener.onStatusChanged(provideName,  LocationProvider.OUT_OF_SERVICE, null);
 		    }
@@ -114,6 +117,7 @@ public class VirtualLocationSensor {
 			listener.onProviderDisabled(this.provideName);
 			listener.onStatusChanged(provideName,  LocationProvider.OUT_OF_SERVICE, null);
 		}
+		return isStart;
 	}
 
 	private void stop() {

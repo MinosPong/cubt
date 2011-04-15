@@ -103,10 +103,13 @@ public class TestUserStateActivity extends Activity {
 	}
 	
 	void doBindService(){
-		bindService(new Intent(TestUserStateActivity.this, CubtService.class), 
-				mConnection , 0);
-		mIsBound = true;
-		Toast.makeText(TestUserStateActivity.this, "Binding..." , Toast.LENGTH_SHORT).show();
+		boolean bindResult = bindService(new Intent(TestUserStateActivity.this, CubtService.class), mConnection , 0);
+		if(bindResult){
+			mIsBound = true;
+			Toast.makeText(TestUserStateActivity.this, "Binding..." , Toast.LENGTH_SHORT).show();
+		}else{
+			Toast.makeText(TestUserStateActivity.this, "Failed to bind..." , Toast.LENGTH_SHORT).show();
+		}
 	}
 	
 	void doUnbindService(){
