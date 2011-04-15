@@ -15,7 +15,6 @@ public class CubtApplication extends Application {
 		
 	}
 	
-	
 	public void startService(){
 		if(serviceStarted) return;
 		Intent intent = new Intent(this, CubtService.class);

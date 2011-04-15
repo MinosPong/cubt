@@ -203,8 +203,6 @@ public class LocationSensor {
 	}
 	
 	LocationListener locationListener = new LocationListener(){
-		//TODO
-
 		@Override
 		public void onLocationChanged(Location location) {
 			if(lastLocation != location){
