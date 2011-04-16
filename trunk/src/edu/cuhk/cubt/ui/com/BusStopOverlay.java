@@ -7,13 +7,16 @@ import java.util.List;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.text.format.Time;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.ItemizedOverlay;
 import com.google.android.maps.OverlayItem;
 
 import edu.cuhk.cubt.bus.Poi;
+import edu.cuhk.cubt.bus.Prediction;
 import edu.cuhk.cubt.bus.Route;
 import edu.cuhk.cubt.store.PoiData;
 import edu.cuhk.cubt.store.RouteData;
@@ -29,7 +32,7 @@ public class BusStopOverlay extends ItemizedOverlay<OverlayItem> {
 	
 	public BusStopOverlay(Drawable defaultMarker, Context context){
 		super(boundCenterBottom(defaultMarker));
-		mContext = context;
+		mContext = context; //handle touch event
 		updateDisplay();		
 	}
 
@@ -76,6 +79,13 @@ public class BusStopOverlay extends ItemizedOverlay<OverlayItem> {
 		dialog.setCancelable(true);
 		dialog.setTitle(poi.getName());
 		String msg = "Possible Route:\n";
+		String last = poi.getName();
+		String next = poi.getName();
+		int dir = 0; //direction=> up:0 down:1
+		String dir2 = "";
+		Prediction next2;
+		long millis;
+		//String next2s = next2.theNextStop(millis, location);
 		
 		Route route;
 		Iterator<Route> routes = RouteData.getRoutes().values().iterator();
@@ -86,12 +96,17 @@ public class BusStopOverlay extends ItemizedOverlay<OverlayItem> {
 				msg += i + ". " + route.getName() +"\n"; 
 				i++;
 			}
-		}		
-		dialog.setMessage(msg);
-		dialog.show();		
+		}
+		
+		if(dir == 0)
+			dir2 = "up";
+		else if(dir == 1)
+			dir2 = "down";
+		Toast.makeText(mContext, "Last Stop: "+last+"\nNext Stop :"+next+"\nDirection :"+dir2+"\nPredicted Bus Route: ", Toast.LENGTH_SHORT).show();
+		//no need for the nextstop?
+		//dialog.setMessage(msg);
+		//dialog.show();		
 		return true;
 	}
-	
-	
 	
 }
