@@ -15,6 +15,7 @@ import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
@@ -31,8 +32,11 @@ import edu.cuhk.cubt.util.CuhkLocation;
 
 public class CubtMapView extends MapActivity {
 
+	//GeoPoint realbus = new GeoPoint(22, 114);
+	
 	MapView mapView;
 	BusStopOverlay stopOverlay;
+	LocationHistoryOverlay locationOverlay;
 
 	static final int MENU_ROUTE = Menu.FIRST ;
 	static final int MENU_OPTION = Menu.FIRST + 1;
@@ -40,8 +44,8 @@ public class CubtMapView extends MapActivity {
 	
 	
 	@Override
-	protected void onCreate(Bundle bundle) {
-		super.onCreate(bundle);
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 		setContentView(R.layout.mapview);
 		
 	    mapView = (MapView) findViewById(R.id.mapview);
@@ -50,14 +54,14 @@ public class CubtMapView extends MapActivity {
 	    
 	    List<Overlay> mapOverlays = mapView.getOverlays();
 	    Drawable drawable;
-	    drawable = this.getResources().getDrawable(android.R.drawable.star_on);
+	    drawable = this.getResources().getDrawable(android.R.drawable.ic_delete); //bus stop star
 	    
 	    stopOverlay = new BusStopOverlay(drawable,this);	    
 	    mapOverlays.add(stopOverlay);
 	    
 
-	    drawable = this.getResources().getDrawable(android.R.drawable.stat_sys_upload);
-	    LocationHistoryOverlay locationOverlay = new LocationHistoryOverlay(drawable,this);
+	    drawable = this.getResources().getDrawable(android.R.drawable.star_on); //stat_sys_upload
+	    locationOverlay = new LocationHistoryOverlay(drawable,this);
 	    mapOverlays.add(locationOverlay);
 	    
 	    Location location = CuhkLocation.getInstance();
@@ -69,10 +73,13 @@ public class CubtMapView extends MapActivity {
 	    registerForContextMenu(mapView);
 	    
 	    setHandler();
+	    
+	    Toast.makeText(getBaseContext(), 
+                "Bus Stop" , 
+                Toast.LENGTH_SHORT).show();
 	}
 	
-
-
+	
 	@Override
 	protected void onDestroy() {
 		unsetHandler();
@@ -115,7 +122,7 @@ public class CubtMapView extends MapActivity {
 	}
 
 
-
+//Menu Route list, need to change
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v,
 			ContextMenuInfo menuInfo) {
