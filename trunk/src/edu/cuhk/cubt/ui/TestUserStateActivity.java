@@ -183,6 +183,7 @@ public class TestUserStateActivity extends Activity {
 		@SuppressWarnings("unchecked")
 		@Override
 		public void handleMessage(Message msg){
+			if(engine == null) return;
 			Time time = new Time();
 			time.setToNow();
 			textTime.setText(time.toString());

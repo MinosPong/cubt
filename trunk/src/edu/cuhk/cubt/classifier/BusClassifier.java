@@ -66,6 +66,7 @@ public class BusClassifier extends AbstractClassifier<BusState>
 	}
 
 	private void onStopEnteredEvent() {
+		isActivePeriod = false;
 		stopEnterTime.setToNow();
 		isInStop = true;
 		if(getState() != BusState.ONBUS){

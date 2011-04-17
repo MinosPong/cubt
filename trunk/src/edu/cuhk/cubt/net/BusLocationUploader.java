@@ -60,7 +60,6 @@ public class BusLocationUploader {
 	}
 	
 	private void postHelper(int action,String value){
-		Log.i(tag, value);
 		List<NameValuePair> postParam = new ArrayList<NameValuePair>();
 		postParam.add(new BasicNameValuePair(NAME_CMSG, value));	
 		fireRequest(action,postParam);		
@@ -101,7 +100,6 @@ public class BusLocationUploader {
 				httpClient.close();
 			}
 		}	
-		Log.i(tag, response);	
 		return response;
 	}
 	
