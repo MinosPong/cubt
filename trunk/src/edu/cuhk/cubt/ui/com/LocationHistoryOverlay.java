@@ -1,8 +1,5 @@
 package edu.cuhk.cubt.ui.com;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
@@ -13,15 +10,14 @@ import com.google.android.maps.ItemizedOverlay;
 import com.google.android.maps.OverlayItem;
 
 import edu.cuhk.cubt.CubtApplication;
-import edu.cuhk.cubt.bus.Poi;
 import edu.cuhk.cubt.store.LocationHistory;
 
 public class LocationHistoryOverlay extends ItemizedOverlay<OverlayItem> {
 
 	private static final String tag = "LocationHistoryOverlay";
 	
-	private Context mContext;
-	private LocationHistory locationHistory;
+	private final Context mContext;
+	private final LocationHistory locationHistory;
 	
 	public LocationHistoryOverlay(Drawable defaultMarker, Context context) {
 		super(boundCenterBottom(defaultMarker));
@@ -46,8 +42,7 @@ public class LocationHistoryOverlay extends ItemizedOverlay<OverlayItem> {
 	protected OverlayItem createItem(int i) {
 		Location location = locationHistory.getLast(i);
 		return new OverlayItem(
-				//new GeoPoint((int)(location.getLatitude() * 1E6), (int)(location.getLongitude() *1E6)), 
-				new GeoPoint(22419880, 114205510),
+				new GeoPoint((int)(location.getLatitude() * 1E6), (int)(location.getLongitude() *1E6)), 
 				String.valueOf(location.getTime()),  
 				String.valueOf(location.getTime()));
 	}
