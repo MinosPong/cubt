@@ -4,6 +4,7 @@ import edu.cuhk.cubt.store.LocationHistory;
 import edu.cuhk.cubt.ui.CubtService;
 import android.app.Application;
 import android.content.Intent;
+import android.util.Log;
 
 public class CubtApplication extends Application {
 
@@ -18,8 +19,11 @@ public class CubtApplication extends Application {
 	public void startService(){
 		if(serviceStarted) return;
 		Intent intent = new Intent(this, CubtService.class);
-		startService(intent);
-		serviceStarted = true;		
+		if(startService(intent) != null){
+			serviceStarted = true;							
+		}else{
+			Log.e(TAG, "Failed to start service");
+		}
 	}
 	
 	public void stopService(){

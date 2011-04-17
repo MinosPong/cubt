@@ -32,6 +32,7 @@ public class SCCMEngine {
 	SpeedClassifier speedClasifier;
 	LocationSensor locationSensor;
 	
+	private boolean isStarted = false;
 	
 	public SCCMEngine(Context context){
 		mContext = context;
@@ -41,6 +42,8 @@ public class SCCMEngine {
 	}
 	
 	public boolean startEngine(){
+		if(isStarted) return false;
+		
 		//init Location Manager and Location Sensor
 		LocationManager locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
 		if(locationManager == null){
@@ -68,11 +71,15 @@ public class SCCMEngine {
 		
 		locationClassifier.start();
 		locationSensor.start();		
-		busChangeMonitor.start();		
-		return true;
+		busChangeMonitor.start();	
+
+		isStarted = true;
+		
+		return isStarted;
 	}
 	
 	public boolean stopEngine(){
+		if(!isStarted) return true;
 
 		busChangeMonitor.stop();	
 		locationSensor.stop();	
@@ -83,11 +90,8 @@ public class SCCMEngine {
 		locationClassifier.removeHandler(mHandler);
 
 		locationSensor.removeHandler(mHandler);		
+		isStarted = false;
 		return true;
-	}
-	
-	public BusChangeMonitor getBusChangeMonitor(){
-		return busChangeMonitor;
 	}
 	
 	public LocationSensor getLocationSensor(){
@@ -106,6 +110,7 @@ public class SCCMEngine {
 			
 		}
 	}
+	
 	
 	
 	Handler mHandler = new Handler(){

@@ -34,7 +34,6 @@ public class BusChangeMonitor {
 		busClassifier.removeHandler(handler);		
 	}
 	
-	
 	protected void busLocationChange(Location location){
 		uploader.updateLocation(location.getLatitude(), location.getLongitude());
 	}
