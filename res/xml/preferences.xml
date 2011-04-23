@@ -1,7 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen
   xmlns:android="http://schemas.android.com/apk/res/android">
-	
-<PreferenceCategory android:title="SCCM"><CheckBoxPreference android:title="@string/settings_virtual" android:key="key_virtual_sensor">
-	</CheckBoxPreference></PreferenceCategory>
+  
+<CheckBoxPreference 
+	android:key="virtual" 
+	android:title="@string/settings_virtual">
+</CheckBoxPreference>
+
+<CheckBoxPreference 
+	android:key="Activation enable" 
+	android:title="Activation"
+	android:summary="Enable the activation">
+</CheckBoxPreference>
+
+<ListPreference
+	android:key="Actpref"
+	android:title="Activation Settings"
+	android:summary="Set the activation preference"
+	android:entries="@array/entries_list_preference"  
+    android:entryValues="@array/entriesvalue_list_preference"  >
+</ListPreference>
+
+
 </PreferenceScreen>

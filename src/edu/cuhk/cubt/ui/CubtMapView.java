@@ -21,6 +21,7 @@ import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
+import com.google.android.maps.OverlayItem;
 
 import edu.cuhk.cubt.CubtApplication;
 import edu.cuhk.cubt.R;
@@ -28,14 +29,14 @@ import edu.cuhk.cubt.store.LocationHistory;
 import edu.cuhk.cubt.store.RouteData;
 import edu.cuhk.cubt.ui.com.BusStopOverlay;
 import edu.cuhk.cubt.ui.com.LocationHistoryOverlay;
+import edu.cuhk.cubt.ui.com.busOverlay;
 import edu.cuhk.cubt.util.CuhkLocation;
 
 public class CubtMapView extends MapActivity {
-
-	//GeoPoint realbus = new GeoPoint(22, 114);
 	
 	MapView mapView;
 	BusStopOverlay stopOverlay;
+	busOverlay realOverlay;
 	LocationHistoryOverlay locationOverlay;
 
 	static final int MENU_ROUTE = Menu.FIRST ;
@@ -54,15 +55,25 @@ public class CubtMapView extends MapActivity {
 	    
 	    List<Overlay> mapOverlays = mapView.getOverlays();
 	    Drawable drawable;
-	    drawable = this.getResources().getDrawable(android.R.drawable.ic_delete); //bus stop star
+	    //drawable = this.getResources().getDrawable(android.R.drawable.ic_delete); //bus stop star
 	    
-	    stopOverlay = new BusStopOverlay(drawable,this);	    
-	    mapOverlays.add(stopOverlay);
 	    
+	    //stopOverlay = new BusStopOverlay(drawable,this);	    
+	    //mapOverlays.add(stopOverlay);
+	    
+	    drawable = this.getResources().getDrawable(R.drawable.bus);
+	    realOverlay = new busOverlay(drawable, this);
+	    GeoPoint point = new GeoPoint((int)(22.41988*1e6),(int)(114.20551*1e6));
+	    OverlayItem overlayitem = new OverlayItem(point, "Hola, Mundo!", "I'm in Mexico City!");
+	    realOverlay.addOverlay(overlayitem);
+	    mapOverlays.add(realOverlay);
 
-	    drawable = this.getResources().getDrawable(android.R.drawable.star_on); //stat_sys_upload
-	    locationOverlay = new LocationHistoryOverlay(drawable,this);
-	    mapOverlays.add(locationOverlay);
+
+	    
+	    //drawable = this.getResources().getDrawable(android.R.drawable.star_on); //stat_sys_upload
+	    //locationOverlay = new LocationHistoryOverlay(drawable,this);
+	    
+	    //mapOverlays.add(locationOverlay);
 	    
 	    Location location = CuhkLocation.getInstance();
 	    
