@@ -1,6 +1,7 @@
 package edu.cuhk.cubt.ui.com;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -108,5 +109,6 @@ public class BusStopOverlay extends ItemizedOverlay<OverlayItem> {
 		//dialog.show();		
 		return true;
 	}
-	
+
+
 }
