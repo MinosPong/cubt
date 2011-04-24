@@ -38,6 +38,7 @@ public class CubtMapView extends MapActivity {
 	BusStopOverlay stopOverlay;
 	busOverlay realOverlay;
 	LocationHistoryOverlay locationOverlay;
+	String pRoute, dir, lStop;
 
 	static final int MENU_ROUTE = Menu.FIRST ;
 	static final int MENU_OPTION = Menu.FIRST + 1;
@@ -54,17 +55,15 @@ public class CubtMapView extends MapActivity {
 	    mapView.getController().setZoom(16);
 	    
 	    List<Overlay> mapOverlays = mapView.getOverlays();
-	    Drawable drawable;
-	    //drawable = this.getResources().getDrawable(android.R.drawable.ic_delete); //bus stop star
-	    
-	    
-	    //stopOverlay = new BusStopOverlay(drawable,this);	    
-	    //mapOverlays.add(stopOverlay);
+	    Drawable drawableStop, drawable;
+	    drawableStop = this.getResources().getDrawable(android.R.drawable.ic_delete); //bus stop star
+	    stopOverlay = new BusStopOverlay(drawableStop,this);	    
+	    mapOverlays.add(stopOverlay);
 	    
 	    drawable = this.getResources().getDrawable(R.drawable.bus);
 	    realOverlay = new busOverlay(drawable, this);
 	    GeoPoint point = new GeoPoint((int)(22.41988*1e6),(int)(114.20551*1e6));
-	    OverlayItem overlayitem = new OverlayItem(point, "Hola, Mundo!", "I'm in Mexico City!");
+	    OverlayItem overlayitem = new OverlayItem(point, "Last Stop", "Predicted Route:"+ pRoute + "\nDirection: " + dir + "\nLast Stop:"+ lStop +"\nNext Stop");
 	    realOverlay.addOverlay(overlayitem);
 	    mapOverlays.add(realOverlay);
 
