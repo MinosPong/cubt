@@ -1,15 +1,24 @@
-package edu.cuhk.cubt.sccm;
+package edu.cuhk.cubt.service;
 
-import edu.cuhk.cubt.classifier.BusClassifier;
 import edu.cuhk.cubt.net.BusLocationUploader;
+import edu.cuhk.cubt.sccm.LocationSensor;
+import edu.cuhk.cubt.sccm.SCCMEngine;
+import edu.cuhk.cubt.sccm.classifier.BusClassifier;
 import edu.cuhk.cubt.state.BusState;
 import edu.cuhk.cubt.state.State;
 import edu.cuhk.cubt.state.event.StateChangeEvent;
+import edu.cuhk.cubt.ui.CubtService;
 import android.location.Location;
 import android.os.Handler;
 import android.os.Message;
 
-public class BusChangeMonitor {
+/**
+ * The Bus Change Monitor Track the bus event and change of bus location.
+ * Upload the Bus Location information to the server 
+ * @author PKM
+ *
+ */
+public class BusChangeMonitor implements IServiceMonitor{
 
 	BusLocationUploader uploader;
 	
@@ -18,18 +27,15 @@ public class BusChangeMonitor {
 	LocationSensor locationSensor;
 	
 	boolean isOnBus = false;
-	
-	public BusChangeMonitor(SCCMEngine engine){
-		this.engine = engine;
-	}
-	
-	public void start(){
+		
+	public void start(CubtService service){
+		this.engine = service.getSCCMEngine();
 		locationSensor = engine.getLocationSensor();
 		busClassifier = engine.getClassifierManager().getClassifier(BusClassifier.class);
 		busClassifier.addHandler(handler);		
 	}
 	
-	public void stop(){
+	public void stop(CubtService service){
 		locationSensor.removeHandler(handler);
 		busClassifier.removeHandler(handler);		
 	}

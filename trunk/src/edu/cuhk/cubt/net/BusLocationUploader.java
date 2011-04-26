@@ -17,7 +17,7 @@ import android.util.Log;
 public class BusLocationUploader {
 
 	private static final String tag = "BusLocationUploader";
-	private static final String URL = "http://14.136.104.206:8080/servlet/FYPServer";
+	private static final String URL = "http://137.189.97.174:8080/servlet/FYPServer";
 	private static final String HTTP_AGENT = "CUBT_HTTP_AGENT";
 	private static final String NAME_CMSG = "cmsg";
 	
@@ -70,6 +70,7 @@ public class BusLocationUploader {
 	}
 	
 	
+	@SuppressWarnings("unchecked")
 	public void fireRequest(int action, List<NameValuePair> postParam){
 		new HttpTask(action).execute(postParam);
 	}

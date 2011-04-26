@@ -12,7 +12,7 @@ import android.provider.BaseColumns;
 import android.text.TextUtils;
 import android.util.Log;
 
-public class StopPassed {
+public class DbStopPassed {
 
 	private static final String TAG = "StopPassedRecord";
 	
@@ -31,7 +31,7 @@ public class StopPassed {
     public static final int ACTION_TYPE_PASSBYWALK = 3;
     public static final int ACTION_TYPE_PASSBYBUS = 4;
     
-    public StopPassed(Context context){
+    public DbStopPassed(Context context){
     	mDatabaseOpenHelper = new DatabaseOpenHelper(context);
     }   
     
@@ -46,10 +46,18 @@ public class StopPassed {
 		return map; 	
     }
     
-    
-    public long insert(long enter_time, long leave_time, String stop, int action_type){
+    /**
+     * Insert a new stop passed record
+     * @param enter_time
+     * @param leave_time
+     * @param stop
+     * @param action_type
+     * @return the id of record
+     */
+    public long insert(String stop, long enter_time, long leave_time, int action_type){
     	ContentValues values = new ContentValues();
-    	long stay_period = leave_time - enter_time;
+    	long stay_period = (leave_time > enter_time) ? leave_time - enter_time : 0;
+    	
     	values.put(StopPassedColumns.ENTER_TIME, enter_time);
     	values.put(StopPassedColumns.LEAVE_TIME, leave_time);
     	values.put(StopPassedColumns.STAY_PERIOD, stay_period);
@@ -58,7 +66,7 @@ public class StopPassed {
     	
     	SQLiteDatabase db = mDatabaseOpenHelper.getWritableDatabase();
     	long rowId = db.insert(TABLE_NAME, StopPassedColumns.ENTER_TIME, values);
-    	
+    	db.close();
     	return rowId;    	
     }  
     
@@ -66,7 +74,7 @@ public class StopPassed {
      * 
      * @param from, the start time of history, or -1 
      * @param to, the end time of history, or -1 
-     * @return
+     * @return the cursor to retrive data
      */
     public Cursor getStopPassed(String[] projection, long from, long to){
     	String selection = "";
@@ -85,13 +93,16 @@ public class StopPassed {
     	qb.setTables(TABLE_NAME);
     	qb.setProjectionMap(mColumnMap);
 
-        Cursor cursor = qb.query(mDatabaseOpenHelper.getReadableDatabase(),
+    	SQLiteDatabase db = mDatabaseOpenHelper.getReadableDatabase();
+        Cursor cursor = qb.query(db,
                 projection, selection, selectionArgs, null, null, StopPassedColumns.DEFAULT_SORT_ORDER);
 
         if (cursor == null) {
+            db.close();
             return null;
         } else if (!cursor.moveToFirst()) {
             cursor.close();
+            db.close();
             return null;
         }
         return cursor;
@@ -100,7 +111,7 @@ public class StopPassed {
     
     private static final String TABLE_CREATE_STRING = 
     	"CREATE TABLE " + TABLE_NAME + " ("
-    	+ StopPassedColumns._ID + "INTEGER PRIMARY KEY,"
+    	+ StopPassedColumns._ID + " INTEGER PRIMARY KEY,"
     	+ StopPassedColumns.ENTER_TIME + " INTEGER,"
     	+ StopPassedColumns.LEAVE_TIME + " INTEGER,"
     	+ StopPassedColumns.STAY_PERIOD + " INTEGER,"
@@ -108,8 +119,19 @@ public class StopPassed {
     	+ StopPassedColumns.ACTION_TYPE + " INTEGER"
     	+ ");";  
     
-    public static final void createTable(SQLiteDatabase db){
+    protected static final void createTable(SQLiteDatabase db){
 		db.execSQL(TABLE_CREATE_STRING);
+    }
+        
+    protected static final void deleteTable(SQLiteDatabase db){
+    	String TABLE_DELETE_STRING = "DROP TABLE " + TABLE_NAME + ";";
+    	db.execSQL(TABLE_DELETE_STRING);
+    }
+    
+    public final void resetTable(){
+    	SQLiteDatabase db = mDatabaseOpenHelper.getWritableDatabase();
+    	deleteTable(db);
+    	createTable(db);
     }
     
     public static final class StopPassedColumns implements BaseColumns {

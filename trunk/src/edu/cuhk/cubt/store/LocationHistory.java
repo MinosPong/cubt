@@ -16,12 +16,20 @@ public class LocationHistory extends CircularBuffer<Location>{
 	public static final int DEFAULT_LOCATION_HISTORY_SIZE_LIMIT = 20;	//buffer size
 	public static final int MSG_LOCATION_HISTORY_UPDATE = 25101;
 	
+	private static LocationHistory locationHistory = null;
 		
-	public LocationHistory(){
+	public static LocationHistory getInstance(){
+		if(locationHistory == null){
+			locationHistory = new LocationHistory();
+		}
+		return locationHistory;		
+	}
+	
+	private LocationHistory(){
 		this(DEFAULT_LOCATION_HISTORY_SIZE_LIMIT);
 	}
 	
-	public LocationHistory(int bufferSize) {
+	private LocationHistory(int bufferSize) {
 		super(bufferSize);
 	}	
 	
@@ -88,6 +96,10 @@ public class LocationHistory extends CircularBuffer<Location>{
 
 	private List<Handler> handlers = new Vector<Handler>();
 	
+	/**
+	 * 
+	 * @param handler location history changed handler
+	 */
 	public void addHandler(Handler handler){
 		if(handler == null)
 			throw new NullPointerException("handler");

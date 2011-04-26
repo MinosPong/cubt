@@ -166,11 +166,11 @@ public class CubtMapView extends MapActivity {
 	
 
 	private void setHandler() {
-		((CubtApplication)getApplication()).getLocationHistory().addHandler(handler);		
+		LocationHistory.getInstance().addHandler(handler);		
 	}
 	
 	private void unsetHandler(){
-		((CubtApplication)getApplication()).getLocationHistory().removeHandler(handler);
+		LocationHistory.getInstance().removeHandler(handler);
 	}
 	
 	Handler handler = new Handler(){

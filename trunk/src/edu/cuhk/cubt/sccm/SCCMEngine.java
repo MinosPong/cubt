@@ -1,22 +1,19 @@
 package edu.cuhk.cubt.sccm;
 
 import android.content.Context;
-import android.location.Location;
 import android.location.LocationManager;
 import android.os.Handler;
 import android.os.Message;
-import edu.cuhk.cubt.CubtApplication;
-import edu.cuhk.cubt.classifier.BusClassifier;
-import edu.cuhk.cubt.classifier.ClassifierManager;
-import edu.cuhk.cubt.classifier.LocationClassifier;
-import edu.cuhk.cubt.classifier.PoiClassifier;
-import edu.cuhk.cubt.classifier.SpeedClassifier;
+import edu.cuhk.cubt.sccm.classifier.BusClassifier;
+import edu.cuhk.cubt.sccm.classifier.ClassifierManager;
+import edu.cuhk.cubt.sccm.classifier.LocationClassifier;
+import edu.cuhk.cubt.sccm.classifier.PoiClassifier;
+import edu.cuhk.cubt.sccm.classifier.SpeedClassifier;
 import edu.cuhk.cubt.state.BusState;
 import edu.cuhk.cubt.state.LocationState;
 import edu.cuhk.cubt.state.PoiState;
 import edu.cuhk.cubt.state.State;
 import edu.cuhk.cubt.state.event.StateChangeEvent;
-import edu.cuhk.cubt.store.LocationHistory;
 import edu.cuhk.cubt.ui.Settings;
 public class SCCMEngine {
 	
@@ -24,7 +21,6 @@ public class SCCMEngine {
 	Context mContext;
 	
 	final ClassifierManager classifierManager;
-	final BusChangeMonitor busChangeMonitor;
 	
 	LocationClassifier locationClassifier;
 	PoiClassifier poiClassifier;
@@ -37,8 +33,7 @@ public class SCCMEngine {
 	public SCCMEngine(Context context){
 		mContext = context;
 		
-		classifierManager = new ClassifierManager(this);
-		busChangeMonitor = new BusChangeMonitor(this);
+		classifierManager = new ClassifierManager();
 	}
 	
 	public boolean startEngine(){
@@ -69,9 +64,12 @@ public class SCCMEngine {
 		poiClassifier.addHandler(mHandler);
 		busClassifier.addHandler(mHandler);
 		
+		
+		locationSensor.addHandler(locationClassifier.getInboxHandler());
+		
+		
 		locationClassifier.start();
-		locationSensor.start();		
-		busChangeMonitor.start();	
+		locationSensor.start();			
 
 		isStarted = true;
 		
@@ -80,9 +78,10 @@ public class SCCMEngine {
 	
 	public boolean stopEngine(){
 		if(!isStarted) return true;
+	
+		locationSensor.stop();			
 
-		busChangeMonitor.stop();	
-		locationSensor.stop();	
+		locationSensor.removeHandler(locationClassifier.getInboxHandler());
 		locationClassifier.stop();
 
 		busClassifier.removeHandler(mHandler);	
@@ -100,21 +99,9 @@ public class SCCMEngine {
 
 	public ClassifierManager getClassifierManager(){
 		return classifierManager;
-	}	
-	
-	private void newLocation(Location location){
-		try{
-			LocationHistory locationHistory = ((CubtApplication)mContext.getApplicationContext()).getLocationHistory();
-			locationHistory.add(location);
-		}catch(Exception e){
-			
-		}
-	}
-	
-	
+	}		
 	
 	Handler mHandler = new Handler(){
-		//TODO
 		@SuppressWarnings("unchecked")
 		public void handleMessage(Message msg){
 			switch(msg.what)
@@ -126,11 +113,16 @@ public class SCCMEngine {
 					locationSensor.setCapturingState(locationState);
 					if(locationState == LocationState.INSIDE_CUHK){
 						busClassifier.start();
+
+						locationSensor.addHandler(speedClasifier.getInboxHandler());
+						locationSensor.addHandler(poiClassifier.getInboxHandler());
 						speedClasifier.start();
 						poiClassifier.start();
 					}else{
 						poiClassifier.stop();
 						speedClasifier.stop();
+						locationSensor.removeHandler(speedClasifier.getInboxHandler());
+						locationSensor.removeHandler(poiClassifier.getInboxHandler());
 						busClassifier.stop();
 					}
 					break;
@@ -147,9 +139,6 @@ public class SCCMEngine {
 					if(busState == BusState.OFFBUS){
 						locationSensor.setCapturingState(LocationSensor.STATE_INSIDE);
 					}
-					break;
-				case LocationSensor.MSG_NEW_LOCATION:
-					newLocation((Location) msg.obj);
 					break;
 			}
 		}		

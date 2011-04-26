@@ -1,12 +1,12 @@
 package edu.cuhk.cubt.ui;
 
 import edu.cuhk.cubt.CubtApplication;
-import edu.cuhk.cubt.classifier.BusClassifier;
-import edu.cuhk.cubt.classifier.LocationClassifier;
-import edu.cuhk.cubt.classifier.PoiClassifier;
-import edu.cuhk.cubt.classifier.SpeedClassifier;
 import edu.cuhk.cubt.sccm.LocationSensor;
 import edu.cuhk.cubt.sccm.SCCMEngine;
+import edu.cuhk.cubt.sccm.classifier.BusClassifier;
+import edu.cuhk.cubt.sccm.classifier.LocationClassifier;
+import edu.cuhk.cubt.sccm.classifier.PoiClassifier;
+import edu.cuhk.cubt.sccm.classifier.SpeedClassifier;
 import edu.cuhk.cubt.state.PoiState;
 import edu.cuhk.cubt.state.State;
 import edu.cuhk.cubt.state.event.StateChangeEvent;
@@ -34,7 +34,8 @@ public class TestUserStateActivity extends Activity {
 	private static final int MENU_START = Menu.FIRST;
 	private static final int MENU_STOP = Menu.FIRST + 1;
 	private static final int MENU_OPTION = Menu.FIRST + 2;
-	private static final int MENU_EXIT = Menu.FIRST + 3;
+	private static final int MENU_STOP_HISTORY = Menu.FIRST + 3;
+	private static final int MENU_EXIT = Menu.FIRST + 4;
 	
 	TextView textTime;
 	TextView textGpsStatus;
@@ -58,6 +59,7 @@ public class TestUserStateActivity extends Activity {
 		menu.add(0, MENU_START, i++, R.string.menu_start).setIcon(android.R.drawable.ic_menu_add);
 		menu.add(0, MENU_STOP, i++, R.string.menu_stop).setIcon(android.R.drawable.ic_menu_close_clear_cancel);
 		menu.add(0, MENU_OPTION, i++, R.string.menu_settings).setIcon(android.R.drawable.ic_menu_edit);
+		menu.add(0, MENU_STOP_HISTORY, i++, R.string.menu_stop_histroy);
 		menu.add(0, MENU_EXIT, i++, R.string.menu_exit).setIcon(android.R.drawable.ic_menu_revert);
 		return super.onCreateOptionsMenu(menu);
 	}
@@ -76,6 +78,9 @@ public class TestUserStateActivity extends Activity {
 			case MENU_OPTION:
 				Intent intent = new Intent(this, Settings.class);
 				startActivity(intent);
+				return true;
+			case MENU_STOP_HISTORY:				
+				startActivity(new Intent(this, StopPassedHistoryActivity.class));
 				return true;
 			case MENU_EXIT:
 				finish();
@@ -177,7 +182,12 @@ public class TestUserStateActivity extends Activity {
 		textBusState = (TextView) findViewById(R.id.busText);
 	}
 
-
+	protected void onSaveInstanceState(Bundle outState){
+		
+		
+		super.onSaveInstanceState(outState);
+	}
+	
 
 	Handler mHandler = new Handler(){
 		@SuppressWarnings("unchecked")
