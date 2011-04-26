@@ -1,31 +1,28 @@
-package edu.cuhk.cubt.classifier;
+package edu.cuhk.cubt.sccm.classifier;
 
 import java.util.Hashtable;
 import java.util.Map;
 
-import edu.cuhk.cubt.sccm.SCCMEngine;
 
 public class ClassifierManager {
 
+	
     private final Map<String, Classifier> classifiers
         = new Hashtable<String, Classifier>();
-	
-    private final SCCMEngine engine;
-    
-    public ClassifierManager(SCCMEngine engine){
-    	this.engine = engine;
+	    
+    public ClassifierManager(){
     }
    
 	public void initialize()
 		throws UnsupportedOperationException{
 		
-			LocationClassifier locationClassifier = new LocationClassifier(this, engine.getLocationSensor());
+			LocationClassifier locationClassifier = new LocationClassifier(this);
 			addClassifier(LocationClassifier.class, locationClassifier);
 
-			PoiClassifier poiClassifier = new PoiClassifier(this, engine.getLocationSensor());
+			PoiClassifier poiClassifier = new PoiClassifier(this);
 			addClassifier(PoiClassifier.class, poiClassifier);
 			
-			SpeedClassifier speedClassifier = new SpeedClassifier(this, engine.getLocationSensor());
+			SpeedClassifier speedClassifier = new SpeedClassifier(this);
 			addClassifier(SpeedClassifier.class, speedClassifier);	
 			
 			BusClassifier busClassifier = new BusClassifier(poiClassifier, speedClassifier);

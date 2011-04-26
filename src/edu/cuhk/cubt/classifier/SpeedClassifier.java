@@ -1,7 +1,6 @@
-package edu.cuhk.cubt.classifier;
+package edu.cuhk.cubt.sccm.classifier;
 
 import android.location.Location;
-import android.os.Handler;
 import android.os.Message;
 import edu.cuhk.cubt.sccm.LocationSensor;
 import edu.cuhk.cubt.state.SpeedState;
@@ -12,16 +11,14 @@ public class SpeedClassifier extends AbstractClassifier<SpeedState> {
 	
 	private float speed = 0;
 	
-	LocationSensor locationSensor;
 	ClassifierManager manager;
 	
 	private Location lastLocation = null;
 	private Location newLocation = null;
+	private Location capturedLocation;
 	
-	public SpeedClassifier(ClassifierManager manager, 
-			LocationSensor locationSensor) {
+	SpeedClassifier(ClassifierManager manager) {
 		super(SpeedState.UNKNOWN);
-		this.locationSensor = locationSensor;
 		this.manager = manager;
 	}
 
@@ -31,11 +28,12 @@ public class SpeedClassifier extends AbstractClassifier<SpeedState> {
 	
 	@Override
 	protected void processClassification() {
-		if(locationSensor.getLastLocation() == null ||
-				locationSensor.getLastLocation() == newLocation) return;
+		if(capturedLocation == null ||
+				this.newLocation == capturedLocation ) return;
+		
 		
 		lastLocation = newLocation;
-		newLocation = locationSensor.getLastLocation();
+		this.newLocation = capturedLocation;
 		
 		if(lastLocation == null) return;
 	
@@ -66,23 +64,20 @@ public class SpeedClassifier extends AbstractClassifier<SpeedState> {
 
 	@Override
 	protected void onStart() {
-		locationSensor.addHandler(mHandler);
 		processClassification();
 	}
 
 	@Override
 	protected void onStop() {
-		locationSensor.removeHandler(mHandler);
 	}
 	
-	Handler mHandler = new Handler(){
-		@Override
-		public void handleMessage(Message msg){
-			switch(msg.what){
-			case LocationSensor.MSG_NEW_LOCATION:
-				processClassification();
-				break;
-			}
+	@Override
+	void handleMessage(Message msg){
+		switch(msg.what){
+		case LocationSensor.MSG_NEW_LOCATION:
+			capturedLocation = (Location)msg.obj;
+			processClassification();
+			break;
 		}
 	};
 }
