@@ -1,4 +1,4 @@
-package edu.cuhk.cubt.classifier;
+package edu.cuhk.cubt.sccm.classifier;
 
 /**
  * interface of classifier

@@ -1,10 +1,9 @@
-package edu.cuhk.cubt.classifier;
+package edu.cuhk.cubt.sccm.classifier;
 
 import edu.cuhk.cubt.sccm.LocationSensor;
 import edu.cuhk.cubt.state.LocationState;
 import edu.cuhk.cubt.util.CuhkLocation;
 import android.location.Location;
-import android.os.Handler;
 import android.os.Message;
 
 /**
@@ -17,24 +16,22 @@ public class LocationClassifier extends AbstractClassifier<LocationState>
 
 	final ClassifierManager manager;
 	
-	final LocationSensor locationSensor;
 	
-	Location location;
+	private Location location;
+	private Location capturedLocation;
 	
-	public LocationClassifier(ClassifierManager manager, 
-			LocationSensor locationSensor) 
+	LocationClassifier(ClassifierManager manager) 
 	{
 		super(LocationState.UNKNOWN);
-		this.locationSensor = locationSensor;
 		this.manager = manager;
 	}
 	
 	@Override
 	protected void processClassification(){
-		if(locationSensor.getLastLocation() == null ||
-				this.location == locationSensor.getLastLocation() ) return;
+		if(capturedLocation == null ||
+				this.location == capturedLocation ) return;
 		
-		this.location = locationSensor.getLastLocation();
+		this.location = capturedLocation;
 		
 		
 		CuhkLocation cuhkLocation = CuhkLocation.getInstance();
@@ -57,22 +54,19 @@ public class LocationClassifier extends AbstractClassifier<LocationState>
 	
 	@Override
 	protected void onStart() {
-		locationSensor.addHandler(mHandler);
 	}
 
 	@Override
 	protected void onStop() {
-		locationSensor.removeHandler(mHandler);
 	}
 	
-	Handler mHandler = new Handler(){
-		@Override
-		public void handleMessage(Message msg){
-			switch(msg.what){
-			case LocationSensor.MSG_NEW_LOCATION:
-				processClassification();
-				break;
-			}
+	@Override
+	void handleMessage(Message msg){
+		switch(msg.what){
+		case LocationSensor.MSG_NEW_LOCATION:
+			capturedLocation = (Location)msg.obj;
+			processClassification();
+			break;
 		}
 	};
 	

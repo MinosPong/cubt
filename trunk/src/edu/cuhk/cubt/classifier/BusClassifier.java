@@ -1,11 +1,9 @@
-package edu.cuhk.cubt.classifier;
+package edu.cuhk.cubt.sccm.classifier;
 
-import android.os.Handler;
 import android.os.Message;
 import android.text.format.Time;
 import edu.cuhk.cubt.bus.Stop;
 import edu.cuhk.cubt.state.BusState;
-import edu.cuhk.cubt.state.PoiState;
 import edu.cuhk.cubt.state.SpeedState;
 import edu.cuhk.cubt.state.State;
 import edu.cuhk.cubt.state.event.StateChangeEvent;
@@ -13,11 +11,13 @@ import edu.cuhk.cubt.state.event.StateChangeEvent;
 public class BusClassifier extends AbstractClassifier<BusState>
 	implements Classifier{
 	
+	public static final int BUS_ENTER_EVENT = 10701;
+	public static final int BUS_LEAVE_EVENT = 10702;
+	
 	private static final int MSG_STOP_LEAVE_DELAY = 13101;
-	private static int STOP_LEAVE_DELAY_TIME = 20 * 1000;
+	private static final int STOP_LEAVE_DELAY_TIME = 20 * 1000;
 	
 	private Time stopLeaveTime = new Time();
-	private Time stopEnterTime = new Time();
 	
 	private Stop busStop;
 	
@@ -27,7 +27,7 @@ public class BusClassifier extends AbstractClassifier<BusState>
 	PoiClassifier poiClassifier;
 	SpeedClassifier speedClassifier;
 	
-	public BusClassifier(PoiClassifier poiClassifier, SpeedClassifier speedClassifier){
+	BusClassifier(PoiClassifier poiClassifier, SpeedClassifier speedClassifier){
 		super(BusState.UNKNOWN);
 		
 		this.speedClassifier = speedClassifier;
@@ -53,7 +53,8 @@ public class BusClassifier extends AbstractClassifier<BusState>
 		}
 	}
 
-	private void onStopLeavedEvent() {
+	private void onStopLeave() {
+		if(!isInStop)return;
 		stopLeaveTime.setToNow();
 		isInStop = false;
 		if(speedClassifier.getState() == SpeedState.NORMAL){
@@ -65,9 +66,9 @@ public class BusClassifier extends AbstractClassifier<BusState>
 		}
 	}
 
-	private void onStopEnteredEvent() {
+	private void onStopEnter() {
+		if(isInStop) return;
 		isActivePeriod = false;
-		stopEnterTime.setToNow();
 		isInStop = true;
 		if(getState() != BusState.ONBUS){
 			busStop = (Stop) poiClassifier.getPoi();
@@ -75,34 +76,40 @@ public class BusClassifier extends AbstractClassifier<BusState>
 		}
 	}
 	
-	Handler mHandler = new Handler(){
-		@SuppressWarnings("unchecked")
-		@Override
-		public void handleMessage(Message msg){
-			switch(msg.what){
-			case State.TYPE_SPEED:
-				StateChangeEvent<SpeedState> evt = (StateChangeEvent<SpeedState>) msg.obj;
-				SpeedState state = evt.getNewState();
-				if(state == SpeedState.NORMAL){
-					processClassification();
-				}
-				break;
+	@SuppressWarnings("unchecked")
+	@Override
+	void handleMessage(Message msg){
+		switch(msg.what){
+		case State.TYPE_SPEED:
+			StateChangeEvent<SpeedState> evt = (StateChangeEvent<SpeedState>) msg.obj;
+			SpeedState state = evt.getNewState();
+			if(state == SpeedState.NORMAL){
+				processClassification();
+			}
+			break;
 
-			case State.TYPE_POI:
-				StateChangeEvent<PoiState> poiState = (StateChangeEvent<PoiState>) msg.obj;
-				if(poiState.getNewState() == PoiState.INSIDE_BUS_STOP){
-					onStopEnteredEvent();
-				}
-				if(poiState.getOldState() == PoiState.INSIDE_BUS_STOP){
-					onStopLeavedEvent();
-				}
-				break;
-				
-			case MSG_STOP_LEAVE_DELAY:
-				processClassification();				
-				break;
-			}			
-		}
+		case State.TYPE_POI:
+			/*StateChangeEvent<PoiState> poiState = (StateChangeEvent<PoiState>) msg.obj;
+			if(poiState.getNewState() == PoiState.INSIDE_BUS_STOP){
+				onStopEnter();
+			}
+			if(poiState.getOldState() == PoiState.INSIDE_BUS_STOP){
+				onStopLeave();
+			}*/
+			break;
+			
+		case PoiClassifier.STOP_ENTER_EVENT:
+			onStopEnter();
+			break;
+			
+		case PoiClassifier.STOP_LEAVE_EVENT:
+			onStopLeave();			
+			break;
+			
+		case MSG_STOP_LEAVE_DELAY:
+			processClassification();				
+			break;
+		}	
 	};
 
 	@Override

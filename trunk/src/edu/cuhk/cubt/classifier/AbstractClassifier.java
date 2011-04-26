@@ -1,4 +1,4 @@
-package edu.cuhk.cubt.classifier;
+package edu.cuhk.cubt.sccm.classifier;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -31,11 +31,12 @@ public abstract class AbstractClassifier<T extends State> implements Classifier 
 	
 	private List<Handler> handlers = new Vector<Handler>();;
 	
+	
 	/**
 	 * Constructor of the Abstract Classifier
 	 * @param initState define the initialise State
 	 */
-	public AbstractClassifier(T initState){
+	protected AbstractClassifier(T initState){
 		this.state = initState;
 	}
 	
@@ -43,13 +44,31 @@ public abstract class AbstractClassifier<T extends State> implements Classifier 
 		T oldState = this.state;
 		if(oldState != newState){
 			this.state = newState;
-			fireStateChangeEvent(oldState, newState);
+			onStateChange(oldState, newState);
 		}
 	}
 	
+	protected void onStateChange(T oldState, T newState) {
+		fireStateChangeEvent(oldState, newState);
+	}
+
 	public T getState(){
 		return state;
+	}	
+
+	public Handler getInboxHandler(){
+		return mHandler;
 	}
+	
+	Handler mHandler = new Handler(){
+		@Override
+		public void handleMessage(Message msg){
+			AbstractClassifier.this.handleMessage(msg);
+		}		
+	};
+
+	abstract void handleMessage(Message msg);
+
 	
 	public void addHandler(Handler handler){
 		if(handler == null)
@@ -81,11 +100,25 @@ public abstract class AbstractClassifier<T extends State> implements Classifier 
 		
 		//TODO Create Event - Done
 		//TODO call state change listener / Message Handler
-		Log.i("State Changed", "State Change : " + oldState.getStateString() + " > " + newState.getStateString());
-		
+		Log.i(this.getClass().getName(), "State Changed : " + oldState.getStateString() + " > " + newState.getStateString());
+
 		StateChangeEvent<T> evt = 
-			new StateChangeEvent<T>(this, oldState, newState);
-		
+			new StateChangeEvent<T>(this, oldState, newState);		
+
+		notifyOutgoingHandlers(newState.getTypeID() , evt);
+	}
+
+	/**
+	 * Send the Message to every registered event Handler
+	 */
+	protected void notifyOutgoingHandlers(int what, Object obj){
+		notifyOutgoingHandlers(what,0 ,0,obj);
+	}
+
+	/**
+	 * Send the Message to every registered event Handler
+	 */
+	protected void notifyOutgoingHandlers(int what, int arg1, int arg2, Object obj){
 		Iterator<Handler> handlers;
 		synchronized(this.handlers){
 			handlers = 
@@ -98,13 +131,11 @@ public abstract class AbstractClassifier<T extends State> implements Classifier 
 		while(handlers.hasNext()){
 			Handler handler = handlers.next();
 			
-			Log.d(this.getClass().getName(), "Handler: " + handler.getClass().getName() + 
-					", State Change : " + oldState.getStateString() + " > " + newState.getStateString());
-			
-			Message msg = handler.obtainMessage(newState.getTypeID() , evt);
+			Message msg = handler.obtainMessage(what , arg1, arg2, obj);
 			handler.sendMessage(msg);
 		}
 	}
+	
 
 	public synchronized void start(){
 		if(bStarted) return;

@@ -1,7 +1,6 @@
-package edu.cuhk.cubt.classifier;
+package edu.cuhk.cubt.sccm.classifier;
 
 import android.location.Location;
-import android.os.Handler;
 import android.os.Message;
 import edu.cuhk.cubt.bus.Poi;
 import edu.cuhk.cubt.bus.Stop;
@@ -11,19 +10,36 @@ import edu.cuhk.cubt.store.PoiData;
 
 public class PoiClassifier extends AbstractClassifier<PoiState> {
 
-
+	public class PoiChangeEventObject{
+		PoiChangeEventObject(int event, Poi poi, Location cause){
+			this.event = event;
+			this.poi = poi;
+			this.cause = cause;			
+		}
+		private final int event;
+		private final Poi poi;
+		private final Location cause;
+		
+		public int getEvent(){return event;}
+		public Poi getPoi(){return poi;}
+		public Location getCause(){return cause;}
+	};
+	
+	public static final int CHECKPOINT_ENTER_EVENT = 10611;
+	public static final int CHECKPOINT_LEAVE_EVENT = 10612;
+	public static final int STOP_ENTER_EVENT = 10621;
+	public static final int STOP_LEAVE_EVENT = 10622;
+	
 	ClassifierManager manager;
 	
-	LocationSensor locationSensor;
+	private Location location;
+	private Location capturedLocation;
 	
-	Location location;
 	
 	Poi poi;
 	
-	public PoiClassifier(ClassifierManager manager, 
-			LocationSensor locationSensor) {
+	PoiClassifier(ClassifierManager manager) {
 		super(PoiState.UNKNOWN);
-		this.locationSensor = locationSensor;
 		this.manager = manager;
 	}
 	
@@ -37,41 +53,69 @@ public class PoiClassifier extends AbstractClassifier<PoiState> {
 
 	@Override
 	protected void processClassification() {
-		if(this.location == locationSensor.getLastLocation() ) return;
+		if(capturedLocation == null ||
+				this.location == capturedLocation ) return;
 		
-		this.location = locationSensor.getLastLocation();
+		this.location = capturedLocation;
 		
-		poi = PoiData.getPoiByLocation(location);
-		
-		if(poi==null){
-			this.setState(PoiState.OUTSIDE_POI);
-		}else if(poi instanceof Stop){
-			this.setState(PoiState.INSIDE_BUS_STOP);
-		}else{
-			this.setState(PoiState.INSIDE_CHECKPOINT);
-		}
+		setPoi(PoiData.getPoiByLocation(location));
 		
 	}
 	
+	/**
+	 * Set the new Poi and fire Poi change event
+	 * @param newPoi new Poi
+	 */
+	private void setPoi(Poi newPoi){
+		if(poi == newPoi) return;
+		
+		
+		if(poi == null){
+
+		}else if(poi instanceof Stop){
+			
+			this.notifyOutgoingHandlers(STOP_LEAVE_EVENT, 
+					new PoiChangeEventObject(STOP_LEAVE_EVENT, poi, capturedLocation));
+			
+		}else{
+
+			this.notifyOutgoingHandlers(CHECKPOINT_LEAVE_EVENT, 
+					new PoiChangeEventObject(CHECKPOINT_LEAVE_EVENT, poi, capturedLocation));
+		}
+
+		poi = newPoi;
+		
+		if(newPoi == null){
+
+			this.setState(PoiState.OUTSIDE_POI);
+		}else if(newPoi instanceof Stop){
+			this.setState(PoiState.INSIDE_BUS_STOP);
+			this.notifyOutgoingHandlers(STOP_ENTER_EVENT, 
+					new PoiChangeEventObject(STOP_ENTER_EVENT, newPoi, capturedLocation));
+		}else{
+			this.setState(PoiState.INSIDE_CHECKPOINT);
+			this.notifyOutgoingHandlers(CHECKPOINT_ENTER_EVENT,
+					new PoiChangeEventObject(CHECKPOINT_ENTER_EVENT, newPoi, capturedLocation));					
+		}		
+		
+	}
+
 	@Override
 	protected void onStart() {
-		locationSensor.addHandler(mHandler);
 		processClassification();
 	}
 
 	@Override
 	protected void onStop() {
-		locationSensor.removeHandler(mHandler);
 	}
 	
-	Handler mHandler = new Handler(){
-		@Override
-		public void handleMessage(Message msg){
-			switch(msg.what){
-			case LocationSensor.MSG_NEW_LOCATION:
-				processClassification();
-				break;
-			}
+	@Override
+	void handleMessage(Message msg){
+		switch(msg.what){
+		case LocationSensor.MSG_NEW_LOCATION:
+			capturedLocation = (Location)msg.obj;
+			processClassification();
+			break;
 		}
 	};
 
