@@ -15,6 +15,7 @@ import android.location.LocationProvider;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.format.Time;
 import android.util.Log;
 
 public class LocationSensor {
@@ -47,7 +48,7 @@ public class LocationSensor {
 	
 	private boolean isVirtual = false;
 
-	public LocationSensor(LocationManager locationManager) {
+	protected LocationSensor(LocationManager locationManager) {
 		this.locationManager = locationManager;
 	}
 	
@@ -68,8 +69,12 @@ public class LocationSensor {
 		
 		synchronized(handlers)
 		{
-			if(!handlers.contains(handler))
+			if(!handlers.contains(handler)){
 				handlers.add(handler);
+				Time time = new Time();
+				if(lastLocation!=null && (time.toMillis(false) - lastLocation.getTime() > 500)) 
+					handler.sendMessage(handler.obtainMessage(MSG_NEW_LOCATION, lastLocation));
+			}
 		}
 	}
 	
@@ -135,7 +140,7 @@ public class LocationSensor {
 
 		Log.i(tag,"Provdier Changed:" + providerName + ", minTime:" + minTime);
 		fireMessageToHandlers(MSG_PROVIDER_STATUS_CHANGE,"Provider Change " + providerName + ",minTime:" + minTime);
-		//locationManager.removeUpdates(locationListener);
+		locationManager.removeUpdates(locationListener);
 		locationManager.requestLocationUpdates(
 				providerName, 
 				minTime, 

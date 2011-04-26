@@ -22,7 +22,7 @@ public class LocationHistoryOverlay extends ItemizedOverlay<OverlayItem> {
 	public LocationHistoryOverlay(Drawable defaultMarker, Context context) {
 		super(boundCenterBottom(defaultMarker));
 		mContext = context;
-		locationHistory = ((CubtApplication)context.getApplicationContext()).getLocationHistory();
+		locationHistory = LocationHistory.getInstance();
 		updateDisplay();
 	}
 
