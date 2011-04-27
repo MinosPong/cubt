@@ -63,9 +63,10 @@ public class CubtMapView extends MapActivity {
 	    drawable = this.getResources().getDrawable(R.drawable.bus);
 	    realOverlay = new busOverlay(drawable, this);
 	    GeoPoint point = new GeoPoint((int)(22.41988*1e6),(int)(114.20551*1e6));
-	    OverlayItem overlayitem = new OverlayItem(point, "Last Stop", "Predicted Route:"+ pRoute + "\nDirection: " + dir + "\nLast Stop:"+ lStop +"\nNext Stop");
+	    OverlayItem overlayitem = new OverlayItem(point, "Last Stop", "Predicted Route:"+ pRoute + "\nDirection: " + dir + "\nLast Stop:"+ lStop);
 	    realOverlay.addOverlay(overlayitem);
 	    mapOverlays.add(realOverlay);
+	    
 
 
 	    
@@ -166,11 +167,11 @@ public class CubtMapView extends MapActivity {
 	
 
 	private void setHandler() {
-		LocationHistory.getInstance().addHandler(handler);		
+		((CubtApplication)getApplication()).getLocationHistory().addHandler(handler);		
 	}
 	
 	private void unsetHandler(){
-		LocationHistory.getInstance().removeHandler(handler);
+		((CubtApplication)getApplication()).getLocationHistory().removeHandler(handler);
 	}
 	
 	Handler handler = new Handler(){
