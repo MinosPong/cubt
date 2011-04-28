@@ -62,6 +62,7 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
 	@Override
     public void draw(Canvas canvas, MapView mapView, boolean shadow) {        
         super.draw(canvas, mapView, shadow);
+        /*
         Collection<GeoPoint> busLine = new ArrayList<GeoPoint>();
         busLine.add(point);
         busLine.add(point2);
@@ -72,8 +73,9 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
         	drawBasic(canvas, prePoint, currentPoint);
         	prePoint = currentPoint;
         }
-        //drawBasic(canvas, point, point2);   
-        //drawBasic(canvas, point2, point3); 
+        */
+        drawBasic(canvas, point, point2);   
+        drawBasic(canvas, point2, point3); 
     }
 	//setOnFocusChangeListener()??
 	
