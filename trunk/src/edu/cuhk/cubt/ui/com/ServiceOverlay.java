@@ -8,14 +8,15 @@ import android.graphics.drawable.Drawable;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.ItemizedOverlay;
+import com.google.android.maps.MapView;
 import com.google.android.maps.OverlayItem;
 
-public class busOverlay extends ItemizedOverlay<OverlayItem> {
+public class ServiceOverlay extends ItemizedOverlay<OverlayItem> {
 
 	private ArrayList<OverlayItem> mOverlays = new ArrayList<OverlayItem>();
 	private Context mContext;
 	
-	public busOverlay(Drawable defaultMarker, Context context) {
+	public ServiceOverlay(Drawable defaultMarker, Context context) {
 		super(boundCenterBottom(defaultMarker));
 		mContext = context;
 		// TODO Auto-generated constructor stub

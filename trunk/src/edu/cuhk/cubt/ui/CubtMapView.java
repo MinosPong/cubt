@@ -29,14 +29,14 @@ import edu.cuhk.cubt.store.LocationHistory;
 import edu.cuhk.cubt.store.RouteData;
 import edu.cuhk.cubt.ui.com.BusStopOverlay;
 import edu.cuhk.cubt.ui.com.LocationHistoryOverlay;
-import edu.cuhk.cubt.ui.com.busOverlay;
+import edu.cuhk.cubt.ui.com.ServiceOverlay;
 import edu.cuhk.cubt.util.CuhkLocation;
 
 public class CubtMapView extends MapActivity {
 	
 	MapView mapView;
 	BusStopOverlay stopOverlay;
-	busOverlay realOverlay;
+	ServiceOverlay realOverlay;
 	LocationHistoryOverlay locationOverlay;
 	String pRoute, dir, lStop;
 
@@ -61,7 +61,7 @@ public class CubtMapView extends MapActivity {
 	    mapOverlays.add(stopOverlay);
 	    
 	    drawable = this.getResources().getDrawable(R.drawable.bus);
-	    realOverlay = new busOverlay(drawable, this);
+	    realOverlay = new ServiceOverlay(drawable, this);
 	    GeoPoint point = new GeoPoint((int)(22.41988*1e6),(int)(114.20551*1e6));
 	    OverlayItem overlayitem = new OverlayItem(point, "Last Stop", "Predicted Route:"+ pRoute + "\nDirection: " + dir + "\nLast Stop:"+ lStop);
 	    realOverlay.addOverlay(overlayitem);

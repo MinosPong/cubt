@@ -7,6 +7,12 @@ import java.util.List;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.Point;
+import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.text.format.Time;
 import android.util.Log;
@@ -14,7 +20,9 @@ import android.widget.Toast;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.ItemizedOverlay;
+import com.google.android.maps.MapView;
 import com.google.android.maps.OverlayItem;
+import com.google.android.maps.Projection;
 
 import edu.cuhk.cubt.bus.Poi;
 import edu.cuhk.cubt.bus.Prediction;
@@ -30,7 +38,7 @@ public class BusStopOverlay extends ItemizedOverlay<OverlayItem> {
 	
 	private List<Poi> mOverlays = new ArrayList<Poi>();
 	private String routeName = null;
-	
+	    
 	public BusStopOverlay(Drawable defaultMarker, Context context){
 		super(boundCenterBottom(defaultMarker));
 		mContext = context; //handle touch event
@@ -109,6 +117,4 @@ public class BusStopOverlay extends ItemizedOverlay<OverlayItem> {
 		//dialog.show();		
 		return true;
 	}
-
-
 }
