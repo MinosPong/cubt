@@ -38,7 +38,7 @@ public class CubtMapView extends MapActivity {
 	MapView mapView;
 	BusStopOverlay stopOverlay;
 	ServiceOverlay realOverlay;
-	LocationHistoryOverlay locationOverlay;
+	LocationHistoryOverlay locationHistoryOverlay;
 	PathOverlay routeOverlay;
 	String pRoute, dir, lStop;
 
@@ -58,6 +58,7 @@ public class CubtMapView extends MapActivity {
 	    
 	    List<Overlay> mapOverlays = mapView.getOverlays();
 	    Drawable drawableStop, drawable;
+	    
 	    drawableStop = this.getResources().getDrawable(android.R.drawable.ic_delete); //bus stop star
 	    stopOverlay = new BusStopOverlay(drawableStop,this);	    
 	    mapOverlays.add(stopOverlay);
@@ -69,14 +70,16 @@ public class CubtMapView extends MapActivity {
 	    realOverlay.addOverlay(overlayitem);
 	    mapOverlays.add(realOverlay);
 	    
-	    routeOverlay = new PathOverlay(drawable ,mapView, this);
-	    mapOverlays.add(routeOverlay);
+	    
+	    //Commented with bug, to be solved
+	    //routeOverlay = new PathOverlay(drawable ,mapView, this);
+	    //mapOverlays.add(routeOverlay);
 
 	    
-	    //drawable = this.getResources().getDrawable(android.R.drawable.star_on); //stat_sys_upload
-	    //locationOverlay = new LocationHistoryOverlay(drawable,this);
-	    
-	    //mapOverlays.add(locationOverlay);
+	    /* Location Histoy Overlay */
+	    drawable = this.getResources().getDrawable(android.R.drawable.star_on); //stat_sys_upload
+	    locationHistoryOverlay = new LocationHistoryOverlay(drawable,this);	    
+	    mapOverlays.add(locationHistoryOverlay);
 	    
 	    Location location = CuhkLocation.getInstance();
 	    

@@ -1,28 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       package="edu.cuhk.cubt"
-      android:versionCode="1" android:versionName="0.1" android:installLocation="auto">
+      android:versionCode="2" android:versionName="0.2" android:installLocation="auto">
     <application android:icon="@drawable/icon" android:label="@string/app_name" android:name="edu.cuhk.cubt.CubtApplication">
    
-
-<uses-library android:name="com.google.android.maps"></uses-library>
-<activity android:name="edu.cuhk.cubt.ui.CubtMapView" android:theme="@android:style/Theme.NoTitleBar" android:label="CUBT_MAP">
-<intent-filter>
-<category android:name="android.intent.category.LAUNCHER"></category>
-<action android:name="android.intent.action.MAIN"></action>
-</intent-filter>
-</activity>    
-<activity android:name="edu.cuhk.cubt.ui.TestUserStateActivity" android:label="CUBT_TEST_US" android:launchMode="singleInstance">
-</activity>
-<activity android:name="edu.cuhk.cubt.ui.Settings" android:label="@string/app_name"></activity>
-<service android:name="edu.cuhk.cubt.ui.CubtService" android:label="@string/app_name"></service>
-</application>
-<uses-permission android:name="android.permission.INTERNET" />
-
-
-<uses-sdk android:minSdkVersion="5" android:targetSdkVersion="8"/>
-
-<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
-<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"></uses-permission>
-<uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION"></uses-permission>
+		
+		<uses-library android:name="com.google.android.maps"></uses-library>
+		<activity android:name="edu.cuhk.cubt.ui.CubtMapView" android:theme="@android:style/Theme.NoTitleBar" android:label="CUBT_MAP">
+			<intent-filter>
+				<category android:name="android.intent.category.LAUNCHER"></category>
+				<action android:name="android.intent.action.MAIN"></action>
+			</intent-filter>
+		</activity>    
+		<activity android:name="edu.cuhk.cubt.ui.TestUserStateActivity" android:label="CUBT_TEST_US" android:launchMode="singleInstance">
+			<intent-filter>
+				<category android:name="android.intent.category.LAUNCHER"></category>
+				<action android:name="android.intent.action.MAIN"></action>
+			</intent-filter>
+		</activity>
+		<activity android:name="edu.cuhk.cubt.ui.Settings" android:label="@string/app_name"></activity>
+		<activity android:name="edu.cuhk.cubt.ui.StopPassedHistoryActivity" android:label="@string/app_name"></activity>
+		<service android:name="edu.cuhk.cubt.ui.CubtService" android:label="@string/app_name"></service>
+	</application>
+	
+	
+	<uses-sdk android:minSdkVersion="5" android:targetSdkVersion="8"/>
+	
+	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
+	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"></uses-permission>
+	<uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION"></uses-permission>
+	<uses-permission android:name="android.permission.INTERNET"></uses-permission>
 </manifest> 
