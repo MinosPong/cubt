@@ -29,6 +29,7 @@ import edu.cuhk.cubt.store.LocationHistory;
 import edu.cuhk.cubt.store.RouteData;
 import edu.cuhk.cubt.ui.com.BusStopOverlay;
 import edu.cuhk.cubt.ui.com.LocationHistoryOverlay;
+import edu.cuhk.cubt.ui.com.PathOverlay;
 import edu.cuhk.cubt.ui.com.ServiceOverlay;
 import edu.cuhk.cubt.util.CuhkLocation;
 
@@ -38,6 +39,7 @@ public class CubtMapView extends MapActivity {
 	BusStopOverlay stopOverlay;
 	ServiceOverlay realOverlay;
 	LocationHistoryOverlay locationOverlay;
+	PathOverlay routeOverlay;
 	String pRoute, dir, lStop;
 
 	static final int MENU_ROUTE = Menu.FIRST ;
@@ -67,7 +69,8 @@ public class CubtMapView extends MapActivity {
 	    realOverlay.addOverlay(overlayitem);
 	    mapOverlays.add(realOverlay);
 	    
-
+	    routeOverlay = new PathOverlay(drawable ,mapView, this);
+	    mapOverlays.add(routeOverlay);
 
 	    
 	    //drawable = this.getResources().getDrawable(android.R.drawable.star_on); //stat_sys_upload
