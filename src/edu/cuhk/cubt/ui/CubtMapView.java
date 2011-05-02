@@ -5,6 +5,9 @@ import java.util.List;
 
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Point;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
@@ -59,17 +62,24 @@ public class CubtMapView extends MapActivity {
 	    List<Overlay> mapOverlays = mapView.getOverlays();
 	    Drawable drawableStop, drawable;
 	    
-	    drawableStop = this.getResources().getDrawable(android.R.drawable.ic_delete); //bus stop star
-	    stopOverlay = new BusStopOverlay(drawableStop,this);	    
-	    mapOverlays.add(stopOverlay);
+	    //drawableStop = this.getResources().getDrawable(android.R.drawable.ic_delete); //bus stop star
+	    //stopOverlay = new BusStopOverlay(drawableStop,this);	    
+	    //mapOverlays.add(stopOverlay);
 	    
 	    drawable = this.getResources().getDrawable(R.drawable.bus);
 	    realOverlay = new ServiceOverlay(drawable, this);
 	    GeoPoint point = new GeoPoint((int)(22.41988*1e6),(int)(114.20551*1e6));
 	    OverlayItem overlayitem = new OverlayItem(point, "Last Stop", "Predicted Route:"+ pRoute + "\nDirection: " + dir + "\nLast Stop:"+ lStop);
 	    realOverlay.addOverlay(overlayitem);
-	    mapOverlays.add(realOverlay);
-	    
+	    mapOverlays.add(realOverlay); 
+
+	    Bitmap bmp = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888);
+	    Drawable drawableBmp = new BitmapDrawable(bmp);
+	    routeOverlay = new PathOverlay(drawableBmp ,mapView, this);
+	    GeoPoint pointTmp = new GeoPoint((int)(22.4266*1e6),(int)(114.2109*1e6));
+	    OverlayItem overlayitem2 = new OverlayItem(pointTmp, "Test","point");
+	    routeOverlay.addOverlay(overlayitem2);
+	    mapOverlays.add(routeOverlay);
 	    
 	    //Commented with bug, to be solved
 	    //routeOverlay = new PathOverlay(drawable ,mapView, this);
