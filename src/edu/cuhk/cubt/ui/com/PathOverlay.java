@@ -93,45 +93,146 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
 	
 	public void drawRoute (Canvas canvas, String RouteName){
 		if(true){
-			//MTR=>NA
+			//MTR=>NA && //MTR=>10+11 &&//CC=>SHAW &&//MTR=>10+11(Sun)
 			if(RouteName == RouteData.ROUTE_1){ 
 				drawPortion(canvas, getPortion("MTRtoUGym").iterator());
-				drawPortion(canvas, getPortion("UGymtoTCW").iterator());
+				drawPortion(canvas, getPortion("UGymtoSRR").iterator());
+				drawPortion(canvas, getPortion("SRRtoUlib").iterator());
+				drawPortion(canvas, getPortion("UlibtoTCW").iterator());
 				drawPortion(canvas, getPortion("TCWtoNA").iterator());
+				drawPortion(canvas, getPortion("NAStop").iterator());
+				//MTR=>10+11
+				if(RouteName == RouteData.ROUTE_1){
+					drawPortion(canvas, getPortion("SHAWrightcircle").iterator());
+					drawPortion(canvas, getPortion("SHAW11").iterator());
+					drawPortion(canvas, getPortion("Ihouse").iterator());					
+				}
+				//MTR=>10+11(Sun)
+				if(RouteName == RouteData.ROUTE_1){
+					drawPortion(canvas, getPortion("SHAWrightcircle").iterator());
+					drawPortion(canvas, getPortion("SHAW11").iterator());
+					drawPortion(canvas, getPortion("TCWtoSHAW").iterator());
+					drawPortion(canvas, getPortion("SHAWsmallcircle").iterator());
+				}
+				//CC=>SHAW
+				if(RouteName == RouteData.ROUTE_1){
+					drawPortion(canvas, getPortion("TCWtoSHAW").iterator());
+					drawPortion(canvas, getPortion("SHAWsmallcircle").iterator());
+					drawPortion(canvas, getPortion("CCdown").iterator());
+				}
 			}
-			//NA=>MTR
+			
+			//NA=>CC && SHAW=>CC
 			if(RouteName == RouteData.ROUTE_1){
-				drawPortion(canvas, getPortion("MTRtoUGym").iterator());
-				drawPortion(canvas, getPortion("TCWtoUGym").iterator());
+				drawPortion(canvas, getPortion("CCup").iterator());
+				drawPortion(canvas, getPortion("UlibtoUGym").iterator());
+				drawPortion(canvas, getPortion("UlibtoTCW").iterator());
 				drawPortion(canvas, getPortion("TCWtoNA").iterator());
+				drawPortion(canvas, getPortion("NAStop").iterator());
+				//SHAW=>CC
+				if(RouteName == RouteData.ROUTE_1){
+					drawPortion(canvas, getPortion("TCWtoSHAW").iterator());
+				}
 			}
+			
+			//NA=>MTR && //SHAW=>MTR && //10+11=>MTR
+			if(RouteName == RouteData.ROUTE_0){
+				drawPortion(canvas, getPortion("MTRtoUGym").iterator());
+				drawPortion(canvas, getPortion("UlibtoUGym").iterator());
+				drawPortion(canvas, getPortion("UlibtoTCW").iterator());
+				drawPortion(canvas, getPortion("TCWtoNA").iterator());
+				drawPortion(canvas, getPortion("NAStop").iterator());
+				//SHAW=>MTR && SHAE=>MTR(Sun)<same>
+				if(RouteName == RouteData.ROUTE_1){
+					drawPortion(canvas, getPortion("TCWtoSHAW").iterator());
+				}
+				//10+11=>MTR && 10+11=>MTR(Sun)
+				if(RouteName == RouteData.ROUTE_0){
+					drawPortion(canvas, getPortion("SHAWrightcircle").iterator());
+					drawPortion(canvas, getPortion("SHAW11").iterator());
+					if(RouteName == RouteData.ROUTE_1) //10+11=>MTR (not Sun)
+						drawPortion(canvas, getPortion("Ihouse").iterator());
+					drawPortion(canvas, getPortion("TCWtoSHAW").iterator());
+					drawPortion(canvas, getPortion("SHAWsmallcircle").iterator());
+				}
+			}
+			
 			//MTR=>SRR=>MTR
 			if(RouteName == RouteData.ROUTE_1){        		
 				drawPortion(canvas, getPortion("MTRtoUGym").iterator());
-				drawPortion(canvas, getPortion("UGymtoTCW").iterator());
-				drawPortion(canvas, getPortion("TCWtoUGym").iterator());
+				drawPortion(canvas, getPortion("UGymtoSRR").iterator());
+				drawPortion(canvas, getPortion("SRRtoUlib").iterator());
+				drawPortion(canvas, getPortion("UlibtoUGym").iterator());
 			}
+			
 			//MTR=>SHAW=>MTR
-			if(RouteName == RouteData.ROUTE_0){
+			if(RouteName == RouteData.ROUTE_1){
 				drawPortion(canvas, getPortion("MTRtoUGym").iterator());
-				drawPortion(canvas, getPortion("UGymtoTCW").iterator());
-				drawPortion(canvas, getPortion("TCWtoUGym").iterator());
+				drawPortion(canvas, getPortion("UGymtoSRR").iterator());
+				drawPortion(canvas, getPortion("SRRtoUlib").iterator());
+				drawPortion(canvas, getPortion("UlibtoUGym").iterator());
+				drawPortion(canvas, getPortion("UlibtoTCW").iterator());
 				drawPortion(canvas, getPortion("TCWtoSHAW").iterator());
-				drawPortion(canvas, getPortion("SHAWcircle").iterator());
+				drawPortion(canvas, getPortion("SHAWleftcircle").iterator());
+				drawPortion(canvas, getPortion("SHAWrightcircle").iterator());
+			}
+			
+			//LHC=>SHAW=>LHC && SHAW=>ADMIN=>SHAW<same>
+			if(RouteName == RouteData.ROUTE_1){
+				drawPortion(canvas, getPortion("UGymtoSRR").iterator());
+				drawPortion(canvas, getPortion("SRRtoNA").iterator());
+				drawPortion(canvas, getPortion("TCWtoNA").iterator());
+				drawPortion(canvas, getPortion("UlibtoUGym").iterator());
+				drawPortion(canvas, getPortion("UlibtoTCW").iterator());
+				drawPortion(canvas, getPortion("TCWtoSHAW").iterator());
+				drawPortion(canvas, getPortion("SHAWsmallcircle").iterator());
+			}
+			
+			//MTR=>SHAW && MTR=>SHAW(Sun)<same>
+			if(RouteName == RouteData.ROUTE_1){
+				drawPortion(canvas, getPortion("MTRtoUGym").iterator());
+				drawPortion(canvas, getPortion("UGymtoSRR").iterator());
+				drawPortion(canvas, getPortion("SRRtoNA").iterator());
+				drawPortion(canvas, getPortion("TCWtoNA").iterator());
+				drawPortion(canvas, getPortion("TCWtoSHAW").iterator());
+				drawPortion(canvas, getPortion("SHAWsmallcircle").iterator());
 			}
 		}
 	}
 	Collection<GeoPoint> getPortion(String portion){
 		Collection<GeoPoint> busLine = new ArrayList<GeoPoint>();
-		if(portion == "MTRtoUGym"){
-			busLine.add(new GeoPoint((int)(22.41482*1e6),(int)(114.21041*1e6)));
-	        busLine.add(new GeoPoint((int)(22.41428*1e6),(int)(114.21010*1e6)));
-	        busLine.add(new GeoPoint((int)(22.41425*1e6),(int)(114.21004*1e6)));
-	        busLine.add(new GeoPoint((int)(22.41430*1e6),(int)(114.20995*1e6)));
-	        busLine.add(new GeoPoint((int)(22.41496*1e6),(int)(114.21027*1e6)));
-	        busLine.add(new GeoPoint((int)(22.41529*1e6),(int)(114.21046*1e6)));
-	        busLine.add(new GeoPoint((int)(22.41544*1e6),(int)(114.21056*1e6)));
-	        busLine.add(new GeoPoint((int)(22.41699*1e6),(int)(114.21220*1e6)));
+		if(portion == "CCdown"){
+			busLine.add(new GeoPoint((int)(22.41430*1e6),(int)(114.20995*1e6)));
+			busLine.add(new GeoPoint((int)(22.41419*1e6),(int)(114.20989*1e6)));
+			busLine.add(new GeoPoint((int)(22.41386*1e6),(int)(114.20969*1e6)));
+			busLine.add(new GeoPoint((int)(22.41373*1e6),(int)(114.20955*1e6)));
+			busLine.add(new GeoPoint((int)(22.41370*1e6),(int)(114.20938*1e6)));
+			busLine.add(new GeoPoint((int)(22.41376*1e6),(int)(114.20919*1e6)));
+			busLine.add(new GeoPoint((int)(22.41389*1e6),(int)(114.20908*1e6)));
+			busLine.add(new GeoPoint((int)(22.41406*1e6),(int)(114.20897*1e6)));
+			busLine.add(new GeoPoint((int)(22.41425*1e6),(int)(114.20875*1e6)));
+			busLine.add(new GeoPoint((int)(22.41456*1e6),(int)(114.20838*1e6)));
+			busLine.add(new GeoPoint((int)(22.41505*1e6),(int)(114.20818*1e6)));
+			busLine.add(new GeoPoint((int)(22.41528*1e6),(int)(114.20818*1e6)));
+			busLine.add(new GeoPoint((int)(22.41560*1e6),(int)(114.20823*1e6)));
+		}		
+		else if(portion == "MTRtoUGym" || portion == "CCup"){
+			if(portion == "MTRtoUGym"){
+		        busLine.add(new GeoPoint((int)(22.41430*1e6),(int)(114.20995*1e6)));
+		        busLine.add(new GeoPoint((int)(22.41496*1e6),(int)(114.21027*1e6)));
+		        busLine.add(new GeoPoint((int)(22.41529*1e6),(int)(114.21046*1e6)));
+		        busLine.add(new GeoPoint((int)(22.41544*1e6),(int)(114.21056*1e6)));		        
+			}
+			if(portion == "CCup"){
+				busLine.add(new GeoPoint((int)(22.41560*1e6),(int)(114.20823*1e6)));
+				busLine.add(new GeoPoint((int)(22.41604*1e6),(int)(114.2085*1e6)));
+				busLine.add(new GeoPoint((int)(22.41636*1e6),(int)(114.2090*1e6)));
+				busLine.add(new GeoPoint((int)(22.41644*1e6),(int)(114.2096*1e6)));
+				busLine.add(new GeoPoint((int)(22.41637*1e6),(int)(114.2101*1e6)));
+				busLine.add(new GeoPoint((int)(22.41618*1e6),(int)(114.2104*1e6)));
+				busLine.add(new GeoPoint((int)(22.41578*1e6),(int)(114.2109*1e6)));
+			}
+			busLine.add(new GeoPoint((int)(22.41699*1e6),(int)(114.21220*1e6)));
 	        busLine.add(new GeoPoint((int)(22.41710*1e6),(int)(114.21228*1e6)));
 	        busLine.add(new GeoPoint((int)(22.41725*1e6),(int)(114.21232*1e6)));
 	        busLine.add(new GeoPoint((int)(22.41755*1e6),(int)(114.21235*1e6)));
@@ -143,7 +244,7 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
 	        busLine.add(new GeoPoint((int)(22.41857*1e6),(int)(114.20855*1e6)));
 	        busLine.add(new GeoPoint((int)(22.41860*1e6),(int)(114.20843*1e6)));
 		}
-		else if(portion == "UGymtoTCW"){
+		else if(portion == "UGymtoSRR"){
 			busLine.add(new GeoPoint((int)(22.41857*1e6),(int)(114.20855*1e6)));
 			busLine.add(new GeoPoint((int)(22.41860*1e6),(int)(114.20843*1e6)));
 	        busLine.add(new GeoPoint((int)(22.41856*1e6),(int)(114.20799*1e6)));
@@ -161,9 +262,22 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
 	        busLine.add(new GeoPoint((int)(22.41966*1e6),(int)(114.20881*1e6)));
 	        busLine.add(new GeoPoint((int)(22.41981*1e6),(int)(114.20860*1e6)));
 	        busLine.add(new GeoPoint((int)(22.41984*1e6),(int)(114.20854*1e6)));	  
+	        busLine.add(new GeoPoint((int)(22.41981*1e6),(int)(114.2061*1e6)));
+		}
+		else if(portion == "SRRtoUlib"){
+			busLine.add(new GeoPoint((int)(22.41981*1e6),(int)(114.2061*1e6)));
 	        busLine.add(new GeoPoint((int)(22.41983*1e6),(int)(114.2043*1e6)));
 		}
-		else if(portion == "TCWtoNA"){
+		else if(portion == "UlibtoUGym"){
+	        busLine.add(new GeoPoint((int)(22.41983*1e6),(int)(114.2043*1e6)));
+	        busLine.add(new GeoPoint((int)(22.41873*1e6),(int)(114.2043*1e6)));
+	        busLine.add(new GeoPoint((int)(22.41872*1e6),(int)(114.2054*1e6)));
+	        busLine.add(new GeoPoint((int)(22.41856*1e6),(int)(114.2061*1e6)));
+	        busLine.add(new GeoPoint((int)(22.41843*1e6),(int)(114.2076*1e6)));
+	        busLine.add(new GeoPoint((int)(22.41844*1e6),(int)(114.2080*1e6)));
+	        busLine.add(new GeoPoint((int)(22.41860*1e6),(int)(114.20843*1e6)));
+		}
+		else if(portion == "UlibtoTCW"){
 			busLine.add(new GeoPoint((int)(22.41983*1e6),(int)(114.2043*1e6)));
 			busLine.add(new GeoPoint((int)(22.41982*1e6),(int)(114.2033*1e6)));
 			busLine.add(new GeoPoint((int)(22.41987*1e6),(int)(114.20327*1e6)));
@@ -173,6 +287,11 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
 	        busLine.add(new GeoPoint((int)(22.42029*1e6),(int)(114.20304*1e6)));
 	        busLine.add(new GeoPoint((int)(22.42036*1e6),(int)(114.20308*1e6)));
 	        busLine.add(new GeoPoint((int)(22.42044*1e6),(int)(114.20319*1e6)));
+	        busLine.add(new GeoPoint((int)(22.42050*1e6),(int)(114.20330*1e6)));
+	        busLine.add(new GeoPoint((int)(22.42053*1e6),(int)(114.20339*1e6)));
+		}
+		else if(portion == "TCWtoNA"){           
+			
 	        busLine.add(new GeoPoint((int)(22.42050*1e6),(int)(114.20330*1e6)));
 	        busLine.add(new GeoPoint((int)(22.42053*1e6),(int)(114.20339*1e6)));
 	        busLine.add(new GeoPoint((int)(22.42051*1e6),(int)(114.20348*1e6)));
@@ -187,28 +306,13 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
 	        busLine.add(new GeoPoint((int)(22.42069*1e6),(int)(114.20607*1e6)));
 	        busLine.add(new GeoPoint((int)(22.42100*1e6),(int)(114.20697*1e6)));
 	        busLine.add(new GeoPoint((int)(22.42116*1e6),(int)(114.20730*1e6)));
+		}	
+		else if(portion == "NAStop"){
+			busLine.add(new GeoPoint((int)(22.42116*1e6),(int)(114.20730*1e6)));
 	        busLine.add(new GeoPoint((int)(22.42156*1e6),(int)(114.20732*1e6)));
 		}
-		else if(portion == "TCWtoUGym"){
-	        busLine.add(new GeoPoint((int)(22.41983*1e6),(int)(114.2043*1e6)));
-	        busLine.add(new GeoPoint((int)(22.41873*1e6),(int)(114.2043*1e6)));
-	        busLine.add(new GeoPoint((int)(22.41872*1e6),(int)(114.2054*1e6)));
-	        busLine.add(new GeoPoint((int)(22.41856*1e6),(int)(114.2061*1e6)));
-	        busLine.add(new GeoPoint((int)(22.41843*1e6),(int)(114.2076*1e6)));
-	        busLine.add(new GeoPoint((int)(22.41844*1e6),(int)(114.2080*1e6)));
-	        busLine.add(new GeoPoint((int)(22.41860*1e6),(int)(114.20843*1e6)));
-		}
 		else if(portion == "TCWtoSHAW"){
-			busLine.add(new GeoPoint((int)(22.41983*1e6),(int)(114.2043*1e6)));
-			busLine.add(new GeoPoint((int)(22.41987*1e6),(int)(114.20327*1e6)));
-	        busLine.add(new GeoPoint((int)(22.41992*1e6),(int)(114.20314*1e6)));
-	        busLine.add(new GeoPoint((int)(22.42000*1e6),(int)(114.20307*1e6)));
-	        busLine.add(new GeoPoint((int)(22.42011*1e6),(int)(114.20304*1e6)));
-	        busLine.add(new GeoPoint((int)(22.42029*1e6),(int)(114.20304*1e6)));
-	        busLine.add(new GeoPoint((int)(22.42036*1e6),(int)(114.20308*1e6)));
-	        busLine.add(new GeoPoint((int)(22.42044*1e6),(int)(114.20319*1e6)));
-	        busLine.add(new GeoPoint((int)(22.42050*1e6),(int)(114.20330*1e6)));
-	        busLine.add(new GeoPoint((int)(22.42053*1e6),(int)(114.20339*1e6)));	        
+			busLine.add(new GeoPoint((int)(22.42053*1e6),(int)(114.20339*1e6)));        
 	        busLine.add(new GeoPoint((int)(22.4216*1e6),(int)(114.2034*1e6)));
 	        
 	        busLine.add(new GeoPoint((int)(22.4218*1e6),(int)(114.2024*1e6)));
@@ -216,7 +320,7 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
 	        busLine.add(new GeoPoint((int)(22.4221*1e6),(int)(114.2013*1e6)));
 	        
 		}
-		else if(portion == "SHAWcircle"){
+		else if(portion == "SHAWleftcircle"){
 			busLine.add(new GeoPoint((int)(22.4221*1e6),(int)(114.2013*1e6)));
 	        busLine.add(new GeoPoint((int)(22.4220*1e6),(int)(114.2007*1e6)));
 	        busLine.add(new GeoPoint((int)(22.4222*1e6),(int)(114.2005*1e6)));
@@ -235,6 +339,9 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
 	        busLine.add(new GeoPoint((int)(22.4253*1e6),(int)(114.2035*1e6)));
 	        busLine.add(new GeoPoint((int)(22.4259*1e6),(int)(114.2046*1e6)));
 	        busLine.add(new GeoPoint((int)(22.4255*1e6),(int)(114.2076*1e6)));
+	        busLine.add(new GeoPoint((int)(22.4251*1e6),(int)(114.2076*1e6)));	        
+		}
+		else if(portion == "SHAWrightcircle"){			
 	        busLine.add(new GeoPoint((int)(22.4251*1e6),(int)(114.2076*1e6)));
 	        busLine.add(new GeoPoint((int)(22.4251*1e6),(int)(114.2072*1e6)));
 	        busLine.add(new GeoPoint((int)(22.4245*1e6),(int)(114.2066*1e6)));
@@ -249,7 +356,47 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
 	        busLine.add(new GeoPoint((int)(22.4221*1e6),(int)(114.2046*1e6)));
 	        busLine.add(new GeoPoint((int)(22.4221*1e6),(int)(114.2041*1e6)));
 	        busLine.add(new GeoPoint((int)(22.4219*1e6),(int)(114.2039*1e6)));
-	        busLine.add(new GeoPoint((int)(22.4216*1e6),(int)(114.2034*1e6))); 
+	        busLine.add(new GeoPoint((int)(22.4216*1e6),(int)(114.2034*1e6)));
+	        busLine.add(new GeoPoint((int)(22.42053*1e6),(int)(114.20339*1e6)));
+		}
+		else if(portion == "SHAW11"){
+			busLine.add(new GeoPoint((int)(22.4251*1e6),(int)(114.2076*1e6)));
+			busLine.add(new GeoPoint((int)(22.42488*1e6),(int)(114.2078*1e6)));
+			busLine.add(new GeoPoint((int)(22.42441*1e6),(int)(114.2080*1e6)));
+			
+		}
+		else if(portion == "SHAWsmallcircle"){
+			busLine.add(new GeoPoint((int)(22.42211*1e6),(int)(114.2011*1e6)));
+			busLine.add(new GeoPoint((int)(22.42233*1e6),(int)(114.2010*1e6)));
+			busLine.add(new GeoPoint((int)(22.42268*1e6),(int)(114.2015*1e6)));
+			busLine.add(new GeoPoint((int)(22.42286*1e6),(int)(114.2015*1e6)));
+			busLine.add(new GeoPoint((int)(22.42284*1e6),(int)(114.2017*1e6)));
+			busLine.add(new GeoPoint((int)(22.42271*1e6),(int)(114.2018*1e6)));
+			busLine.add(new GeoPoint((int)(22.42257*1e6),(int)(114.2017*1e6)));
+			busLine.add(new GeoPoint((int)(22.42256*1e6),(int)(114.2015*1e6)));
+			busLine.add(new GeoPoint((int)(22.42264*1e6),(int)(114.2014*1e6)));
+		}
+		else if(portion == "SRRtoNA"){
+			busLine.add(new GeoPoint((int)(22.41981*1e6),(int)(114.2061*1e6)));
+			busLine.add(new GeoPoint((int)(22.42021*1e6),(int)(114.2061*1e6)));
+			busLine.add(new GeoPoint((int)(22.42093*1e6),(int)(114.2074*1e6)));
+			busLine.add(new GeoPoint((int)(22.42089*1e6),(int)(114.2076*1e6)));
+			busLine.add(new GeoPoint((int)(22.42052*1e6),(int)(114.2080*1e6)));
+			busLine.add(new GeoPoint((int)(22.42053*1e6),(int)(114.2081*1e6)));
+			busLine.add(new GeoPoint((int)(22.42061*1e6),(int)(114.2082*1e6)));
+			busLine.add(new GeoPoint((int)(22.42086*1e6),(int)(114.2078*1e6)));
+			busLine.add(new GeoPoint((int)(22.42102*1e6),(int)(114.2076*1e6)));
+			busLine.add(new GeoPoint((int)(22.42116*1e6),(int)(114.20730*1e6)));
+		}
+		else if(portion == "Ihouse"){
+			busLine.add(new GeoPoint((int)(22.41795*1e6),(int)(114.20977*1e6)));
+			busLine.add(new GeoPoint((int)(22.4177*1e6),(int)(114.2123*1e6)));
+			busLine.add(new GeoPoint((int)(22.4184*1e6),(int)(114.2127*1e6)));
+			busLine.add(new GeoPoint((int)(22.4189*1e6),(int)(114.2128*1e6)));
+			busLine.add(new GeoPoint((int)(22.4194*1e6),(int)(114.2128*1e6)));
+			busLine.add(new GeoPoint((int)(22.4194*1e6),(int)(114.2126*1e6)));
+			busLine.add(new GeoPoint((int)(22.4196*1e6),(int)(114.2124*1e6)));
+			busLine.add(new GeoPoint((int)(22.4199*1e6),(int)(114.2125*1e6)));
 		}
 		return busLine;
 	}
