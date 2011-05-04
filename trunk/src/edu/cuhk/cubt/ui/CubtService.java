@@ -85,7 +85,7 @@ public class CubtService extends Service{
 			iterator.next().stop(this);
 		}
 		
-		serviceMonitors = null;
+		serviceMonitors.clear();
 		
 		/* stop the Sccm Engine */
 		if(mSccmEngine != null){
