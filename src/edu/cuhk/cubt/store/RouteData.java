@@ -131,7 +131,7 @@ public class RouteData {
 					PoiData.STOP_SPD,
 					PoiData.STOP_MTR});
 			
-
+/*
 			routesInitHelper(routes, ROUTE_6, 
 					"Route Weekday: after1800up; Sunday: up01", 
 					OperationDay.WEEKDAY , 0, 0, new String[]{
@@ -143,7 +143,7 @@ public class RouteData {
 					PoiData.STOP_P5H,
 					PoiData.STOP_SPD,
 					PoiData.STOP_MTR});
-			
+	*/		
 			
 
 			routesInitHelper(routes, ROUTE_7, 
@@ -187,7 +187,7 @@ public class RouteData {
 					PoiData.STOP_SPD,
 					PoiData.STOP_CCS});
 			
-
+/*
 			routesInitHelper(routes, ROUTE_9, 
 					"Route Weekday: after1800up; Sunday: up01", 
 					OperationDay.WEEKDAY , 0, 0, new String[]{
@@ -199,7 +199,7 @@ public class RouteData {
 					PoiData.STOP_P5H,
 					PoiData.STOP_SPD,
 					PoiData.STOP_CCS});
-			
+*/			
 
 			routesInitHelper(routes, ROUTE_10, 
 					"Route Weekday: after1800up; Sunday: up01", 
