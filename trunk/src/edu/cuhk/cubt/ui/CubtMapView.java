@@ -1,12 +1,13 @@
 package edu.cuhk.cubt.ui;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
@@ -28,6 +29,9 @@ import com.google.android.maps.OverlayItem;
 
 import edu.cuhk.cubt.CubtApplication;
 import edu.cuhk.cubt.R;
+import edu.cuhk.cubt.net.BusActivityRequest;
+import edu.cuhk.cubt.net.BusActivityRequest.BusActivityRecord;
+import edu.cuhk.cubt.net.BusActivityRequest.ResponseListener;
 import edu.cuhk.cubt.store.LocationHistory;
 import edu.cuhk.cubt.store.RouteData;
 import edu.cuhk.cubt.ui.com.BusStopOverlay;
@@ -39,16 +43,17 @@ import edu.cuhk.cubt.util.CuhkLocation;
 public class CubtMapView extends MapActivity {
 	
 	MapView mapView;
-	public static BusStopOverlay stopOverlay;
+	BusStopOverlay stopOverlay;
 	ServiceOverlay realOverlay;
 	LocationHistoryOverlay locationHistoryOverlay;
-	public static PathOverlay routeOverlay;
+	PathOverlay routeOverlay;
 	String pRoute, dir, lStop;
 
 	static final int MENU_ROUTE = Menu.FIRST ;
 	static final int MENU_OPTION = Menu.FIRST + 1;
 	static final int MENU_EXIT = Menu.FIRST + 2;
 	
+
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -101,13 +106,54 @@ public class CubtMapView extends MapActivity {
 	    Toast.makeText(getBaseContext(), 
                 "Bus Stop" , 
                 Toast.LENGTH_SHORT).show();
+	    
+	    startServiceUpdate(3000);
 	}
 	
 	
 	@Override
 	protected void onDestroy() {
+		stopServiceUpdate();
 		unsetHandler();
 		super.onDestroy();
+	}
+	
+
+	public void setDisplayRoute(String routeName){
+		  routeOverlay.setPath(routeName); //show predicted path
+		  stopOverlay.setRoute(routeName); //show predicted stops
+	}
+	
+	
+	private long updatePeriod;
+	private long minPeriod = 3000;
+	
+	private static final int MSG_REQUEST_UPDATE = 28011;
+	
+	ResponseListener callback = new ResponseListener(){
+		@Override
+		public void onDataReceive(List<BusActivityRecord> buses) {
+			if(updatePeriod>0){
+				Collection<GeoPoint> points = new ArrayList<GeoPoint>();
+				Iterator<BusActivityRecord> busesIter = buses.iterator();
+				while(busesIter.hasNext()){
+					BusActivityRecord bus = busesIter.next();
+					points.add(new GeoPoint((int)(bus.getLatitude()*1e6) , (int)(bus.getLongitude()*1e6)));			
+				}
+				realOverlay.updateDisplay(points.iterator());
+				mapView.invalidate();
+				handler.sendEmptyMessageDelayed(MSG_REQUEST_UPDATE,updatePeriod);
+			}		
+		}		
+	};
+	
+	public void startServiceUpdate(long period){
+		this.updatePeriod = (period < minPeriod ) ? minPeriod : period;
+		BusActivityRequest.sendRequest(callback);
+	}
+	
+	public void stopServiceUpdate(){
+		this.updatePeriod = 0;
 	}
 
 
@@ -195,6 +241,9 @@ public class CubtMapView extends MapActivity {
 			switch(msg.what){
 				case LocationHistory.MSG_LOCATION_HISTORY_UPDATE:
 					mapView.invalidate();
+					break;
+				case MSG_REQUEST_UPDATE:
+					BusActivityRequest.sendRequest(callback);
 					break;
 			}
 			super.handleMessage(msg);

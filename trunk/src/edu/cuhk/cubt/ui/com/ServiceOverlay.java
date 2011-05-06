@@ -10,7 +10,6 @@ import android.graphics.drawable.Drawable;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.ItemizedOverlay;
-import com.google.android.maps.MapView;
 import com.google.android.maps.OverlayItem;
 
 import edu.cuhk.cubt.store.RouteData;
@@ -22,10 +21,13 @@ public class ServiceOverlay extends ItemizedOverlay<OverlayItem> {
 	private Context mContext;
 	String routeName = RouteData.ROUTE_0;
 	String pRoute, dir, lStop;
+	CubtMapView cubtMapView;
+	
 	
 	public ServiceOverlay(Drawable defaultMarker, Context context) {
 		super(boundCenterBottom(defaultMarker));
 		mContext = context;
+		cubtMapView = (CubtMapView) context;
 		updateDisplay();
 		// TODO Auto-generated constructor stub
 	}
@@ -41,12 +43,26 @@ public class ServiceOverlay extends ItemizedOverlay<OverlayItem> {
 		}
 		populate();
 	}
+	
+	
+	public void updateDisplay(Iterator<GeoPoint> it){
+		mOverlays.clear();
+		if(it != null){
+			while(it.hasNext()){
+			GeoPoint busLoc = it.next();
+			mOverlays.add(new OverlayItem(busLoc, "Last Stop", "Predicted Route:"+ pRoute + "\nDirection: " + dir + "\nLast Stop:"+ lStop));
+			}
+		}
+		populate();		
+	}
 
 	@Override
 	protected boolean onTap(int index) {
 	  OverlayItem item = mOverlays.get(index);
-	  CubtMapView.routeOverlay.setPath(routeName); //show predicted path
-	  CubtMapView.stopOverlay.setRoute(routeName); //show predicted stops
+	  //CubtMapView.routeOverlay.setPath(routeName); //show predicted path
+	  //CubtMapView.stopOverlay.setRoute(routeName); //show predicted stops
+	  cubtMapView.setDisplayRoute(routeName);		 //Move the above action to CubtMapView, then routeOverlay and stopOverlay can pervent from static
+	  
 	  AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
 	  dialog.setTitle(item.getTitle());
 	  dialog.setMessage(item.getSnippet());
