@@ -42,7 +42,7 @@ public class RouteData {
 					"Predicted Route Weekday: 2300up; Sunday: up00", 
 					OperationDay.WEEKDAY , 0, 0, new String[]{
 					PoiData.STOP_MTR,
-					PoiData.STOP_PGH,
+					//PoiData.STOP_PGH, <<---suppose no??
 					PoiData.STOP_SPU,
 					PoiData.STOP_SRR,
 					PoiData.STOP_FKH,
