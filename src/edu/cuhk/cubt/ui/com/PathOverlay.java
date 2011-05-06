@@ -86,7 +86,7 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
         int x2=screenCoords1.x;
         int y2=screenCoords1.y;
 
-        paint.setStrokeWidth(1);
+        paint.setStrokeWidth(2);
         canvas.drawLine(x1, y1, x2, y2, paint);
 	}
 	
@@ -230,6 +230,7 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
 		else if(portion == "MTRtoUGym" || portion == "CCup"){
 			if(portion == "MTRtoUGym"){
 		        busLine.add(new GeoPoint((int)(22.41430*1e6),(int)(114.20995*1e6)));
+		        busLine.add(new GeoPoint((int)(22.41467*1e6),(int)(114.21012*1e6)));
 		        busLine.add(new GeoPoint((int)(22.41496*1e6),(int)(114.21027*1e6)));
 		        busLine.add(new GeoPoint((int)(22.41529*1e6),(int)(114.21046*1e6)));
 		        busLine.add(new GeoPoint((int)(22.41544*1e6),(int)(114.21056*1e6)));		        

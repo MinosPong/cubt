@@ -38,7 +38,8 @@ public class BusStopOverlay extends ItemizedOverlay<OverlayItem> {
 	
 	private List<Poi> mOverlays = new ArrayList<Poi>();
 	public String routeName = null;
-	    
+	MapView mapView;
+	
 	public BusStopOverlay(Drawable defaultMarker, Context context){
 		super(boundCenterBottom(defaultMarker));
 		mContext = context; //handle touch event
@@ -80,6 +81,29 @@ public class BusStopOverlay extends ItemizedOverlay<OverlayItem> {
 		return mOverlays.size();
 	}
 	
+	@Override
+    public void draw(Canvas canvas, MapView mapView, boolean shadow) {        
+        if(!shadow)
+        	super.draw(canvas, mapView, false);
+        //GeoPoint busPoint = new GeoPoint((int)(22.41699*1e6),(int)(114.21220*1e6));
+        //Poi poi;
+        //GeoPoint busPoint = new GeoPoint((int)(poi.getLatitude()*1E6), (int)(poi.getLongitude()*1E6));
+        //drawBasic(canvas, mapView, busPoint);      
+    }
+/*	
+	public void drawBasic(Canvas canvas, MapView mapView, GeoPoint busPoint){
+		Paint paint = new Paint();
+        paint.setAntiAlias(true);
+        paint.setColor(Color.RED);
+        Point screenCoords=new Point();        
+        
+		mapView.getProjection().toPixels(busPoint, screenCoords);
+        int x = screenCoords.x;
+        int y = screenCoords.y;
+        
+        canvas.drawCircle(x, y, 5, paint);
+	}
+*/	
 	@Override
 	protected boolean onTap(int index){
 		Log.d(Tag,"TAP : (" + index + "/" +size() + ")");
