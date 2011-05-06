@@ -67,7 +67,7 @@ public class CubtMapView extends MapActivity {
 	    List<Overlay> mapOverlays = mapView.getOverlays();
 	    Drawable drawableStop, drawable;
 	    
-	    drawableStop = this.getResources().getDrawable(android.R.drawable.presence_busy); //bus stop star
+	    drawableStop = this.getResources().getDrawable(R.drawable.stop); //bus stop star
 	    stopOverlay = new BusStopOverlay(drawableStop,this);	    
 	    mapOverlays.add(stopOverlay);
 	    
@@ -107,7 +107,7 @@ public class CubtMapView extends MapActivity {
                 "Bus Stop" , 
                 Toast.LENGTH_SHORT).show();
 	    
-	    startServiceUpdate(3000);
+	    //startServiceUpdate(3000); //run in real time
 	}
 	
 	

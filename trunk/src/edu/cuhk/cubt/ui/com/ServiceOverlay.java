@@ -7,6 +7,7 @@ import java.util.Iterator;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.text.format.Time;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.ItemizedOverlay;
@@ -20,7 +21,8 @@ public class ServiceOverlay extends ItemizedOverlay<OverlayItem> {
 	private ArrayList<OverlayItem> mOverlays = new ArrayList<OverlayItem>();
 	private Context mContext;
 	String routeName = RouteData.ROUTE_0;
-	String pRoute, dir, lStop;
+	String pRoute, dir = "Down Route", lStop;
+	Time ptime;
 	CubtMapView cubtMapView;
 	
 	
@@ -38,7 +40,7 @@ public class ServiceOverlay extends ItemizedOverlay<OverlayItem> {
 		if(it != null){
 			while(it.hasNext()){
 			GeoPoint busLoc = it.next();
-			mOverlays.add(new OverlayItem(busLoc, "Last Stop", "Predicted Route:"+ pRoute + "\nDirection: " + dir + "\nLast Stop:"+ lStop));
+			mOverlays.add(new OverlayItem(busLoc, dir, "\nLast Stop:"+ lStop + "\nArrived time:" + ptime + "\nPredicted Route:"+ pRoute));
 			}
 		}
 		populate();
