@@ -39,10 +39,10 @@ import edu.cuhk.cubt.util.CuhkLocation;
 public class CubtMapView extends MapActivity {
 	
 	MapView mapView;
-	BusStopOverlay stopOverlay;
+	public static BusStopOverlay stopOverlay;
 	ServiceOverlay realOverlay;
 	LocationHistoryOverlay locationHistoryOverlay;
-	PathOverlay routeOverlay;
+	public static PathOverlay routeOverlay;
 	String pRoute, dir, lStop;
 
 	static final int MENU_ROUTE = Menu.FIRST ;

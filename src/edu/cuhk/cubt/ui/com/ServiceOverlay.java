@@ -11,10 +11,14 @@ import com.google.android.maps.ItemizedOverlay;
 import com.google.android.maps.MapView;
 import com.google.android.maps.OverlayItem;
 
+import edu.cuhk.cubt.store.RouteData;
+import edu.cuhk.cubt.ui.CubtMapView;
+
 public class ServiceOverlay extends ItemizedOverlay<OverlayItem> {
 
 	private ArrayList<OverlayItem> mOverlays = new ArrayList<OverlayItem>();
 	private Context mContext;
+	String routeName = RouteData.ROUTE_0;
 	
 	public ServiceOverlay(Drawable defaultMarker, Context context) {
 		super(boundCenterBottom(defaultMarker));
@@ -30,11 +34,12 @@ public class ServiceOverlay extends ItemizedOverlay<OverlayItem> {
 	@Override
 	protected boolean onTap(int index) {
 	  OverlayItem item = mOverlays.get(index);
-	  
+	  CubtMapView.routeOverlay.setPath(routeName); //show predicted path
+	  CubtMapView.stopOverlay.setRoute(routeName); //show predicted stops
 	  AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
 	  dialog.setTitle(item.getTitle());
 	  dialog.setMessage(item.getSnippet());
-	  dialog.show();
+	  //dialog.show();
 	  return true;
 	}
 	

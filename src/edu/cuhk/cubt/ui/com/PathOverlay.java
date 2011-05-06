@@ -25,7 +25,7 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
 	MapView mapView=null;
 	Paint paint=new Paint();
 	private Context mContext;
-	private String routeName = null;
+	private String routeName = null; //RouteData.ROUTE_0
 	
 	public PathOverlay(Drawable defaultMarker,MapView mapview,Context context) {
 
