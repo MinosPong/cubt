@@ -68,9 +68,6 @@ public class CubtMapView extends MapActivity {
 	    
 	    drawable = this.getResources().getDrawable(R.drawable.bus);
 	    realOverlay = new ServiceOverlay(drawable, this);
-	    GeoPoint point = new GeoPoint((int)(22.41988*1e6),(int)(114.20551*1e6));
-	    OverlayItem overlayitem = new OverlayItem(point, "Last Stop", "Predicted Route:"+ pRoute + "\nDirection: " + dir + "\nLast Stop:"+ lStop);
-	    realOverlay.addOverlay(overlayitem);
 	    mapOverlays.add(realOverlay); 
 
 	    Bitmap bmp = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888);
