@@ -37,7 +37,7 @@ public class BusStopOverlay extends ItemizedOverlay<OverlayItem> {
 	private Context mContext;
 	
 	private List<Poi> mOverlays = new ArrayList<Poi>();
-	private String routeName = null;
+	public String routeName = null;
 	    
 	public BusStopOverlay(Drawable defaultMarker, Context context){
 		super(boundCenterBottom(defaultMarker));
@@ -48,7 +48,7 @@ public class BusStopOverlay extends ItemizedOverlay<OverlayItem> {
 	private void updateDisplay(){
 		mOverlays.clear();
 		if(routeName == null){
-			mOverlays.addAll(PoiData.getAllStops());
+			//mOverlays.addAll(PoiData.getAllStops());
 		}
 		else{
 			Route route = RouteData.getRouteByName(routeName);

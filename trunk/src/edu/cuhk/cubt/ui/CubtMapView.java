@@ -62,9 +62,9 @@ public class CubtMapView extends MapActivity {
 	    List<Overlay> mapOverlays = mapView.getOverlays();
 	    Drawable drawableStop, drawable;
 	    
-	    //drawableStop = this.getResources().getDrawable(android.R.drawable.ic_delete); //bus stop star
-	    //stopOverlay = new BusStopOverlay(drawableStop,this);	    
-	    //mapOverlays.add(stopOverlay);
+	    drawableStop = this.getResources().getDrawable(android.R.drawable.presence_busy); //bus stop star
+	    stopOverlay = new BusStopOverlay(drawableStop,this);	    
+	    mapOverlays.add(stopOverlay);
 	    
 	    drawable = this.getResources().getDrawable(R.drawable.bus);
 	    realOverlay = new ServiceOverlay(drawable, this);
@@ -168,8 +168,10 @@ public class CubtMapView extends MapActivity {
 		// TODO Auto-generated method stub
 		if(item.getItemId() == 0){
 			stopOverlay.setRoute(null);
+			routeOverlay.setPath(null);
 		}else{
 			stopOverlay.setRoute((String)item.getTitle());
+			routeOverlay.setPath((String)item.getTitle());
 		}
 		mapView.invalidate();
 		return super.onContextItemSelected(item);
