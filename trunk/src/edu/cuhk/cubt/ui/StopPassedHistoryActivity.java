@@ -26,7 +26,7 @@ public class StopPassedHistoryActivity extends Activity {
 		setContentView(R.layout.stoppassed);
 		findViews();
 		
-		DbStopPassed db = new DbStopPassed(this);
+		DbStopPassed db = DbStopPassed.getInstance(this);
 		Cursor cursor = db.getStopPassed(
 				new String[] {	
 						DbStopPassed.StopPassedColumns._ID,

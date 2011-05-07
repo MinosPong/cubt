@@ -19,7 +19,7 @@ public class StopPassingMonitor implements IServiceMonitor{
 	@Override
 	public void start(CubtService service) {
 		engine = service.getSCCMEngine();
-		db = new DbStopPassed(service.getApplicationContext());
+		db = DbStopPassed.getInstance(service);
 		poiClassifier = engine.getClassifierManager().getClassifier(PoiClassifier.class);
 		poiClassifier.addHandler(handler);
 	}
