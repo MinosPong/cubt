@@ -31,9 +31,19 @@ public class DbStopPassed {
     public static final int ACTION_TYPE_PASSBYWALK = 3;
     public static final int ACTION_TYPE_PASSBYBUS = 4;
     
-    public DbStopPassed(Context context){
+    private static DbStopPassed dbStopPassed;
+    
+    protected DbStopPassed(Context context){
     	mDatabaseOpenHelper = new DatabaseOpenHelper(context);
     }   
+    
+    public static DbStopPassed getInstance(Context context){
+    	if(dbStopPassed == null){
+    		dbStopPassed  = new DbStopPassed(context.getApplicationContext()); 
+    	}
+    	return dbStopPassed;
+    }
+    
     
     private static HashMap<String,String> buildColumnMap(){
     	HashMap<String,String> map = new HashMap<String,String>();

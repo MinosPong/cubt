@@ -53,12 +53,48 @@ public class Route{
 	}
 	
 	/**
+	 * 
+	 * @param stop
+	 * @return null if no result
+	 */
+	public Stop getNextStop(Stop input){
+		boolean matched = false;
+		Iterator<Stop> stops = getStops();
+		while(stops.hasNext()){
+			Stop stop = stops.next();
+			if(matched) return stop;
+			
+			if(input == stop){
+				matched = true;
+			}
+		}
+		return null;
+	}
+	
+	/**
 	 * Returns whether bus route pass through specific POI or STOP
 	 * @param poi
 	 * @return whether bus route pass through specific POI or STOP
 	 */
 	public boolean isPassThrough(Poi poi){
 		return pois.contains(poi);
+	}
+	
+	public boolean isMatch(Iterator<Stop> inputStops){
+		Iterator<Stop> routeStops = getStops();
+		while(inputStops.hasNext()){
+			boolean tmp = false;
+			Stop inputStop = inputStops.next();
+			while(routeStops.hasNext()){				
+				Stop routeStop = routeStops.next();
+				if(routeStop == inputStop){
+					tmp=true;
+					break;
+				}
+			}
+			if(!tmp)return false;
+		}		
+		return true;
 	}
 	
 	public Iterator<Poi> getPois(){

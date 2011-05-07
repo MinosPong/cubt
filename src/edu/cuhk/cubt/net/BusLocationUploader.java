@@ -27,8 +27,11 @@ public class BusLocationUploader {
 	private String id;
 	
 	public BusLocationUploader(){
-
 		suggest();
+	}
+	
+	public BusLocationUploader(String id){
+		this.id = id;
 	}
 	
 	public void suggest(){

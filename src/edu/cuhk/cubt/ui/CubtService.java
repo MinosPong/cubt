@@ -23,9 +23,6 @@ public class CubtService extends Service{
 	
 	private static SCCMEngine mSccmEngine;
 	
-	private BusChangeMonitor busChangeMonitor;
-	private LocationChangeMonitor locationChangeMonitor;
-	
 	private Hashtable<String,IServiceMonitor> serviceMonitors = new Hashtable<String,IServiceMonitor>();
 	
 	public SCCMEngine getSCCMEngine(){

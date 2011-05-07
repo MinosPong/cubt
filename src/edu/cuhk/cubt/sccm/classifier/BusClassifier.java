@@ -11,11 +11,31 @@ import edu.cuhk.cubt.state.event.StateChangeEvent;
 public class BusClassifier extends AbstractClassifier<BusState>
 	implements Classifier{
 	
+	public class BusEventObject{
+		public BusEventObject(int event, Stop stop, long enterTime, long leaveTime){
+			this.event = event;
+			this.stop = stop;
+			this.enterTime = enterTime;
+			this.leaveTime = leaveTime;
+		}
+		private int event;
+		private Stop stop;
+		private long enterTime;
+		private long leaveTime;
+		
+		public int getEvent() {		return event; }
+		public Stop getStop() {		return stop; }
+		public long getEnterTime() {return enterTime;}
+		public long getLeaveTime() {return leaveTime;}
+		public long getPeriod()	{	return leaveTime - enterTime;}
+	}
+	
 	public static final int BUS_ENTER_EVENT = 10701;
-	public static final int BUS_LEAVE_EVENT = 10702;
+	public static final int BUS_EXIT_EVENT = 10702;
+	public static final int BUS_STOP_PASSED_EVENT = 10703;
 	
 	private static final int MSG_STOP_LEAVE_DELAY = 13101;
-	private static final int STOP_LEAVE_DELAY_TIME = 20 * 1000;
+	private static final int STOP_LEAVE_DELAY_TIME = 20 * 1000;	//20 seconds
 	
 	private Time stopLeaveTime = new Time();
 	
@@ -23,6 +43,9 @@ public class BusClassifier extends AbstractClassifier<BusState>
 	
 	private boolean isInStop = false;
 	private boolean isActivePeriod = false;
+	
+	private PoiClassifier.PoiChangeEventObject stopEnterEvent;
+	private PoiClassifier.PoiChangeEventObject stopLeaveEvent;
 	
 	PoiClassifier poiClassifier;
 	SpeedClassifier speedClassifier;
@@ -34,6 +57,7 @@ public class BusClassifier extends AbstractClassifier<BusState>
 		this.poiClassifier =  poiClassifier;
 	}
 
+	
 	@Override
 	protected void processClassification() {
 		if(!isActivePeriod) return; //don't classify when in stop
@@ -41,31 +65,74 @@ public class BusClassifier extends AbstractClassifier<BusState>
 		Time now = new Time();
 		now.setToNow();		
 		
-		//inside delay time
+		//inside delay/checking period
 		if(now.toMillis(false) < stopLeaveTime.toMillis(false) + STOP_LEAVE_DELAY_TIME){
 			if(speedClassifier.getState() == SpeedState.NORMAL){
+				//Speed Matched, Bus Enter/ or Passed Stop
+				if(getState() == BusState.ONBUS){
+					//STOP PASSED
+					this.notifyOutgoingHandlers(BUS_STOP_PASSED_EVENT, 
+							new BusEventObject(BUS_STOP_PASSED_EVENT,
+									(Stop) stopEnterEvent.getPoi(),
+									stopEnterEvent.getCause().getTime(),
+									stopLeaveEvent.getCause().getTime()
+									));
+				}else{
+					//BUS ENTER
+					this.notifyOutgoingHandlers(BUS_ENTER_EVENT, 
+							new BusEventObject(BUS_ENTER_EVENT,
+									(Stop) stopEnterEvent.getPoi(),
+									stopEnterEvent.getCause().getTime(),
+									stopLeaveEvent.getCause().getTime()
+									));
+				}
+				
 				setState(BusState.ONBUS);			
 				isActivePeriod = false;
 			}
 		}else{
+			if(getState() == BusState.ONBUS){
+				//BUS_LEAVE_EVENT
+				this.notifyOutgoingHandlers(BUS_EXIT_EVENT, 
+						new BusEventObject(BUS_EXIT_EVENT,
+								(Stop) stopEnterEvent.getPoi(),
+								stopEnterEvent.getCause().getTime(),
+								stopLeaveEvent.getCause().getTime()
+								));
+			}			
 			setState(BusState.OFFBUS);		
 			isActivePeriod = false;		
 		}
 	}
 
+	private void onStopLeave(PoiClassifier.PoiChangeEventObject evt){
+		this.stopLeaveEvent = evt;
+		
+		onStopLeave();
+	}
 	private void onStopLeave() {
 		if(!isInStop)return;
 		stopLeaveTime.setToNow();
 		isInStop = false;
-		if(speedClassifier.getState() == SpeedState.NORMAL){
-			this.setState(BusState.ONBUS);
-		}else{
-			isActivePeriod = true;
-			mHandler.obtainMessage(MSG_STOP_LEAVE_DELAY);
-			mHandler.sendEmptyMessageDelayed(MSG_STOP_LEAVE_DELAY, STOP_LEAVE_DELAY_TIME);
-		}
+
+		//Here if the stop stay period < 15s, assume it is a noise
+		if(stopLeaveEvent.getCause().getTime() - stopEnterEvent.getCause().getTime() < 15000)
+			return;
+		
+		isActivePeriod = true;
+		processClassification();
+		mHandler.sendEmptyMessageDelayed(MSG_STOP_LEAVE_DELAY, STOP_LEAVE_DELAY_TIME);
+
 	}
 
+	private void onStopEnter(PoiClassifier.PoiChangeEventObject evt){
+		this.stopEnterEvent = evt;
+		this.stopLeaveEvent = null;
+		
+		//TODO Eliminate noise Stops
+		onStopEnter();
+	}
+	
 	private void onStopEnter() {
 		if(isInStop) return;
 		isActivePeriod = false;
@@ -99,11 +166,11 @@ public class BusClassifier extends AbstractClassifier<BusState>
 			break;
 			
 		case PoiClassifier.STOP_ENTER_EVENT:
-			onStopEnter();
+			onStopEnter((PoiClassifier.PoiChangeEventObject) msg.obj);
 			break;
 			
 		case PoiClassifier.STOP_LEAVE_EVENT:
-			onStopLeave();			
+			onStopLeave((PoiClassifier.PoiChangeEventObject) msg.obj);			
 			break;
 			
 		case MSG_STOP_LEAVE_DELAY:
