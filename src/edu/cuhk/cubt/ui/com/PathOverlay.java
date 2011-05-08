@@ -102,111 +102,118 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
 	
 	//No 12-16 (RouteData.java)
 	public void drawRoute (Canvas canvas, String routeName){
-		if(true){
-			//MTR=>NA(1) && //MTR=>10+11(17) &&//CC=>SHAW(4) &&//MTR=>10+11(Sun)(0*)
-			if(routeName == RouteData.ROUTE_1 || routeName == RouteData.ROUTE_17 || routeName == RouteData.ROUTE_4 || routeName == RouteData.ROUTE_0){ 
-				drawPortion(canvas, getPortion("MTRtoUGym").iterator());
-				drawPortion(canvas, getPortion("UGymtoSRR").iterator());
-				drawPortion(canvas, getPortion("SRRtoUlib").iterator());
-				drawPortion(canvas, getPortion("UlibtoTCW").iterator());
-				drawPortion(canvas, getPortion("TCWtoNA").iterator());
-				drawPortion(canvas, getPortion("NAStop").iterator());
-				//MTR=>10+11
-				if(routeName == RouteData.ROUTE_17){
-					drawPortion(canvas, getPortion("SHAWrightcircle").iterator());
-					drawPortion(canvas, getPortion("SHAW11").iterator());
-					drawPortion(canvas, getPortion("Ihouse").iterator());					
-				}
-				//MTR=>10+11(Sun)
-				if(routeName == RouteData.ROUTE_0){
-					drawPortion(canvas, getPortion("SHAWrightcircle").iterator());
-					drawPortion(canvas, getPortion("SHAW11").iterator());
-					drawPortion(canvas, getPortion("TCWtoSHAW").iterator());
-					drawPortion(canvas, getPortion("SHAWsmallcircle").iterator());
-				}
-				//CC=>SHAW
-				if(routeName == RouteData.ROUTE_4){
-					drawPortion(canvas, getPortion("TCWtoSHAW").iterator());
-					drawPortion(canvas, getPortion("SHAWsmallcircle").iterator());
-					drawPortion(canvas, getPortion("CCdown").iterator());
-				}
-			}
-			
-			//NA=>CC(8) && SHAW=>CC(9)
-			if(routeName == RouteData.ROUTE_8 || routeName == RouteData.ROUTE_9){
-				drawPortion(canvas, getPortion("CCup").iterator());
-				drawPortion(canvas, getPortion("UlibtoUGym").iterator());
-				drawPortion(canvas, getPortion("UlibtoTCW").iterator());
-				drawPortion(canvas, getPortion("TCWtoNA").iterator());
-				drawPortion(canvas, getPortion("NAStop").iterator());
-				//SHAW=>CC
-				if(routeName == RouteData.ROUTE_9){
-					drawPortion(canvas, getPortion("TCWtoSHAW").iterator());
-				}
-			}
-			
-			//NA=>MTR(5) && //SHAW=>MTR(6) && //10+11=>MTR(7)
-			if(routeName == RouteData.ROUTE_5 || routeName == RouteData.ROUTE_6 || routeName == RouteData.ROUTE_7){
-				drawPortion(canvas, getPortion("MTRtoUGym").iterator());
-				drawPortion(canvas, getPortion("UlibtoUGym").iterator());
-				drawPortion(canvas, getPortion("UlibtoTCW").iterator());
-				drawPortion(canvas, getPortion("TCWtoNA").iterator());
-				drawPortion(canvas, getPortion("NAStop").iterator());
-				//SHAW=>MTR && SHAE=>MTR(Sun)<same>
-				if(routeName == RouteData.ROUTE_6){
-					drawPortion(canvas, getPortion("TCWtoSHAW").iterator());
-				}
-				//10+11=>MTR && 10+11=>MTR(Sun)
-				if(routeName == RouteData.ROUTE_7){
-					drawPortion(canvas, getPortion("SHAWrightcircle").iterator());
-					drawPortion(canvas, getPortion("SHAW11").iterator());
-					if(routeName == RouteData.ROUTE_7) //10+11=>MTR (not Sun)*
-						drawPortion(canvas, getPortion("Ihouse").iterator());
-					drawPortion(canvas, getPortion("TCWtoSHAW").iterator());
-					drawPortion(canvas, getPortion("SHAWsmallcircle").iterator());
-				}
-			}
-			
-			//MTR=>SRR=>MTR(10)
-			if(routeName == RouteData.ROUTE_10){        		
-				drawPortion(canvas, getPortion("MTRtoUGym").iterator());
-				drawPortion(canvas, getPortion("UGymtoSRR").iterator());
-				drawPortion(canvas, getPortion("SRRtoUlib").iterator());
-				drawPortion(canvas, getPortion("UlibtoUGym").iterator());
-			}
-			
-			//MTR=>SHAW=>MTR(2)
-			if(routeName == RouteData.ROUTE_2){
-				drawPortion(canvas, getPortion("MTRtoUGym").iterator());
-				drawPortion(canvas, getPortion("UGymtoSRR").iterator());
-				drawPortion(canvas, getPortion("SRRtoUlib").iterator());
-				drawPortion(canvas, getPortion("UlibtoUGym").iterator());
-				drawPortion(canvas, getPortion("UlibtoTCW").iterator());
-				drawPortion(canvas, getPortion("TCWtoSHAW").iterator());
-				drawPortion(canvas, getPortion("SHAWleftcircle").iterator());
+		//MTR=>NA(1) && //MTR=>10+11(17) &&//CC=>SHAW(4) &&//MTR=>10+11(Sun)(0*)
+		if(		routeName == RouteData.RM_MTR_NA || 
+				routeName == RouteData.RD_MTR_NA || 
+				routeName == RouteData.RH_MTR_R11 || 
+				routeName == RouteData.RH_MTR_SHAW || 
+				routeName == RouteData.RE_MTR_R11){ 
+			drawPortion(canvas, getPortion("MTRtoUGym").iterator());
+			drawPortion(canvas, getPortion("UGymtoSRR").iterator());
+			drawPortion(canvas, getPortion("SRRtoUlib").iterator());
+			drawPortion(canvas, getPortion("UlibtoTCW").iterator());
+			drawPortion(canvas, getPortion("TCWtoNA").iterator());
+			drawPortion(canvas, getPortion("NAStop").iterator());
+			//MTR=>10+11
+			if(routeName == RouteData.RH_MTR_R11){
 				drawPortion(canvas, getPortion("SHAWrightcircle").iterator());
+				drawPortion(canvas, getPortion("SHAW11").iterator());
+				drawPortion(canvas, getPortion("Ihouse").iterator());					
 			}
-			
-			//LHC=>SHAW=>LHC(11) && SHAW=>ADMIN=>SHAW<same>
-			if(routeName == RouteData.ROUTE_11){
-				drawPortion(canvas, getPortion("UGymtoSRR").iterator());
-				drawPortion(canvas, getPortion("SRRtoNA").iterator());
-				drawPortion(canvas, getPortion("TCWtoNA").iterator());
-				drawPortion(canvas, getPortion("UlibtoUGym").iterator());
-				drawPortion(canvas, getPortion("UlibtoTCW").iterator());
+			//MTR=>10+11(Sun)
+			if(routeName == RouteData.RE_MTR_R11){
+				drawPortion(canvas, getPortion("SHAWrightcircle").iterator());
+				drawPortion(canvas, getPortion("SHAW11").iterator());
 				drawPortion(canvas, getPortion("TCWtoSHAW").iterator());
 				drawPortion(canvas, getPortion("SHAWsmallcircle").iterator());
 			}
-			
-			//MTR=>SHAW(3) && MTR=>SHAW(Sun)<same>
-			if(routeName == RouteData.ROUTE_3){
-				drawPortion(canvas, getPortion("MTRtoUGym").iterator());
-				drawPortion(canvas, getPortion("UGymtoSRR").iterator());
-				drawPortion(canvas, getPortion("SRRtoNA").iterator());
-				drawPortion(canvas, getPortion("TCWtoNA").iterator());
+			//CC=>SHAW
+			if(routeName == RouteData.RH_MTR_SHAW){
+				drawPortion(canvas, getPortion("TCWtoSHAW").iterator());
+				drawPortion(canvas, getPortion("SHAWsmallcircle").iterator());
+				drawPortion(canvas, getPortion("CCdown").iterator());
+			}
+		}
+		
+		//NA=>CC(8) && SHAW=>CC(9)
+		if(routeName == RouteData.RC_NA_CC || routeName == RouteData.RC_SHAW_CC){
+			drawPortion(canvas, getPortion("CCup").iterator());
+			drawPortion(canvas, getPortion("UlibtoUGym").iterator());
+			drawPortion(canvas, getPortion("UlibtoTCW").iterator());
+			drawPortion(canvas, getPortion("TCWtoNA").iterator());
+			drawPortion(canvas, getPortion("NAStop").iterator());
+			//SHAW=>CC
+			if(routeName == RouteData.RC_SHAW_CC){
+				drawPortion(canvas, getPortion("TCWtoSHAW").iterator());
+			}
+		}
+		
+		//NA=>MTR(5) && //SHAW=>MTR(6) && //10+11=>MTR(7)
+		if(		routeName == RouteData.RM_NA_MTR || 
+				routeName == RouteData.RD_NA_MTR || 
+				routeName == RouteData.RE_SHAW_MTR || 
+				routeName == RouteData.RH_SHAW_MTR || 
+				routeName == RouteData.RE_R11_MTR){
+			drawPortion(canvas, getPortion("MTRtoUGym").iterator());
+			drawPortion(canvas, getPortion("UlibtoUGym").iterator());
+			drawPortion(canvas, getPortion("UlibtoTCW").iterator());
+			drawPortion(canvas, getPortion("TCWtoNA").iterator());
+			drawPortion(canvas, getPortion("NAStop").iterator());
+			//SHAW=>MTR && SHAE=>MTR(Sun)<same>
+			if(routeName == RouteData.RE_SHAW_MTR || routeName == RouteData.RH_SHAW_MTR
+					){
+				drawPortion(canvas, getPortion("TCWtoSHAW").iterator());
+			}
+			//10+11=>MTR && 10+11=>MTR(Sun)
+			if(routeName == RouteData.RE_R11_MTR){
+				drawPortion(canvas, getPortion("SHAWrightcircle").iterator());
+				drawPortion(canvas, getPortion("SHAW11").iterator());
+				if(routeName == RouteData.RE_R11_MTR) //10+11=>MTR (not Sun)*
+					drawPortion(canvas, getPortion("Ihouse").iterator());
 				drawPortion(canvas, getPortion("TCWtoSHAW").iterator());
 				drawPortion(canvas, getPortion("SHAWsmallcircle").iterator());
 			}
+		}
+		
+		//MTR=>SRR=>MTR(10)
+		if(routeName == RouteData.RM_MTR_SRR){        		
+			drawPortion(canvas, getPortion("MTRtoUGym").iterator());
+			drawPortion(canvas, getPortion("UGymtoSRR").iterator());
+			drawPortion(canvas, getPortion("SRRtoUlib").iterator());
+			drawPortion(canvas, getPortion("UlibtoUGym").iterator());
+		}
+		
+		//MTR=>SHAW=>MTR(2)
+		if(routeName == RouteData.RD_SHAW_C){
+			drawPortion(canvas, getPortion("MTRtoUGym").iterator());
+			drawPortion(canvas, getPortion("UGymtoSRR").iterator());
+			drawPortion(canvas, getPortion("SRRtoUlib").iterator());
+			drawPortion(canvas, getPortion("UlibtoUGym").iterator());
+			drawPortion(canvas, getPortion("UlibtoTCW").iterator());
+			drawPortion(canvas, getPortion("TCWtoSHAW").iterator());
+			drawPortion(canvas, getPortion("SHAWleftcircle").iterator());
+			drawPortion(canvas, getPortion("SHAWrightcircle").iterator());
+		}
+		
+		//LHC=>SHAW=>LHC(11) && SHAW=>ADMIN=>SHAW<same>
+		if(routeName == RouteData.RM_SRR_SHAW){
+			drawPortion(canvas, getPortion("UGymtoSRR").iterator());
+			drawPortion(canvas, getPortion("SRRtoNA").iterator());
+			drawPortion(canvas, getPortion("TCWtoNA").iterator());
+			drawPortion(canvas, getPortion("UlibtoUGym").iterator());
+			drawPortion(canvas, getPortion("UlibtoTCW").iterator());
+			drawPortion(canvas, getPortion("TCWtoSHAW").iterator());
+			drawPortion(canvas, getPortion("SHAWsmallcircle").iterator());
+		}
+		
+		//MTR=>SHAW(3) && MTR=>SHAW(Sun)<same>
+		if(routeName == RouteData.RE_MTR_SHAW){
+			drawPortion(canvas, getPortion("MTRtoUGym").iterator());
+			drawPortion(canvas, getPortion("UGymtoSRR").iterator());
+			drawPortion(canvas, getPortion("SRRtoNA").iterator());
+			drawPortion(canvas, getPortion("TCWtoNA").iterator());
+			drawPortion(canvas, getPortion("TCWtoSHAW").iterator());
+			drawPortion(canvas, getPortion("SHAWsmallcircle").iterator());
 		}
 	}
 	

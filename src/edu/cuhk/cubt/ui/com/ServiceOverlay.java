@@ -20,7 +20,7 @@ public class ServiceOverlay extends ItemizedOverlay<OverlayItem> {
 
 	private ArrayList<OverlayItem> mOverlays = new ArrayList<OverlayItem>();
 	private Context mContext;
-	String routeName = RouteData.ROUTE_0;
+	String routeName = RouteData.RE_MTR_R11;
 	String pRoute, dir = "Down Route", lStop;
 	Time ptime;
 	CubtMapView cubtMapView;
