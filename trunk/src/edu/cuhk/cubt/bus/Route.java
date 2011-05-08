@@ -9,7 +9,7 @@ import android.text.format.Time;
 
 public class Route{	
 
-	public enum OperationDay{
+	public enum OperationType{
 		MORNING,
 		DAY,
 		EVENING,
@@ -17,22 +17,26 @@ public class Route{
 		HOLIDAY,
 		UNDEFINED
 	};
+
+	public static final int TYPE_UNDEFINED = 0;
+	public static final int TYPE_MORNING = 1;
+	public static final int TYPE_DAY = 2;
+	public static final int TYPE_EVENING = 3;
+	public static final int TYPE_MEETCLASS = 4;
+	public static final int TYPE_HOLIDAY = 5;
 		
 	
 	Time start;
 	Time end;
-	OperationDay operationDay;
+	int operationDay;
 	
 	private String name = "unKnown";
 	private String description = "";
 	
 	private List<Poi> pois = new LinkedList<Poi>();
-	
-	public Route(){
-		//TODO
-	}
-	
-	public Route(String name, String description,OperationDay operationDay, Time start, Time end,  List<Poi> pois){
+	private List<Stop> stops = new LinkedList<Stop>();
+		
+	public Route(String name, String description,int operationDay, Time start, Time end,  List<Poi> pois){
 		//TODO
 		this.name = name;
 		this.description = description;
@@ -40,6 +44,16 @@ public class Route{
 		this.end = end;
 		this.operationDay = operationDay;
 		this.pois = pois;
+		
+		/* init the Stops List */
+		Iterator<Poi> iter = pois.iterator();
+		Poi poi;
+		while(iter.hasNext()){
+			 poi = iter.next();
+			 if(poi instanceof Stop){
+				stops.add((Stop)poi); 				 
+			 }
+		}
 	}
 	
 	public String getName(){
@@ -58,8 +72,19 @@ public class Route{
 		return end;
 	}
 	
-	public OperationDay getOperationDay(){
+	public int getOperationDay(){
 		return operationDay;
+	}
+
+	/**
+	 * 
+	 * @param stop
+	 * @return null if no result
+	 */
+	public Stop getPreviousStop(Stop input){
+		int index =stops.indexOf(input);
+		if(index< 1 || index > stops.size()) return null;
+		return stops.listIterator(index).previous();
 	}
 	
 	/**
@@ -68,17 +93,9 @@ public class Route{
 	 * @return null if no result
 	 */
 	public Stop getNextStop(Stop input){
-		boolean matched = false;
-		Iterator<Stop> stops = getStops();
-		while(stops.hasNext()){
-			Stop stop = stops.next();
-			if(matched) return stop;
-			
-			if(input == stop){
-				matched = true;
-			}
-		}
-		return null;
+		int index =stops.indexOf(input);
+		if(index< 0 || index >= stops.size() -1) return null;
+		return stops.listIterator(index+1).next();
 	}
 	
 	/**
@@ -111,16 +128,8 @@ public class Route{
 		return pois.iterator();
 	}
 	
-	public Iterator<Stop> getStops(){
-		List<Stop> stops = new LinkedList<Stop>();
-		Iterator<Poi> iter = pois.iterator();
-		Poi poi;
-		while(iter.hasNext()){
-			 poi = iter.next();
-			 if(poi instanceof Stop){
-				stops.add((Stop)poi); 				 
-			 }
-		}
+	
+	public Iterator<Stop> getStops(){		
 		return stops.iterator();
 	}
 	
