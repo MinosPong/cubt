@@ -18,13 +18,6 @@ import android.text.format.Time;
  */
 public class Timetable {
 	
-	public enum OperationDay{
-		WEEKDAY,
-		SATURDAY,
-		SUNDAY,
-		HOLIDAY
-	};
-		
 	private enum directionIndicatior{
 		UP,DOWN,UNDEFINED
 	};

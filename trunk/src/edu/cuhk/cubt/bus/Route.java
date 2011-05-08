@@ -4,11 +4,21 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import edu.cuhk.cubt.bus.Timetable.OperationDay;
 
 import android.text.format.Time;
 
-public class Route{
+public class Route{	
+
+	public enum OperationDay{
+		MORNING,
+		DAY,
+		EVENING,
+		MEETCLASS,
+		HOLIDAY,
+		UNDEFINED
+	};
+		
+	
 	Time start;
 	Time end;
 	OperationDay operationDay;
