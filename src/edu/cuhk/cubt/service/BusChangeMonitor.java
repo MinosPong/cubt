@@ -56,7 +56,7 @@ public class BusChangeMonitor implements IServiceMonitor{
 	
 	protected void busEnterEvent(BusEventObject evt){
 		busStopList.clear();
-		addBusStop(evt.getStop());
+		addBusStop(evt);
 		
 		busEnterEvent();
 	}
@@ -72,7 +72,7 @@ public class BusChangeMonitor implements IServiceMonitor{
 	}
 	
 	protected void busExitEvent(BusEventObject evt){
-		addBusStop(evt.getStop());
+		addBusStop(evt);
 	}
 	
 	protected void busExitEvent(){	
@@ -84,14 +84,16 @@ public class BusChangeMonitor implements IServiceMonitor{
 	}
 	
 	protected void busStopPassedEvent(BusEventObject evt){
-		addBusStop(evt.getStop());
+		addBusStop(evt);
 	}
 	
-	private void addBusStop(Poi poi){
+	private void addBusStop(BusEventObject evt){
+		Poi poi = evt.getStop();
+		long time = evt.getLeaveTime();
 		busStopList.add((Stop) poi);
 		
 		Log.w("Route Prediction", "Stop Passed: " + poi.getName());
-		List<Route> routes = RoutePrediction.getRoutesByPassedStop(busStopList);
+		List<Route> routes = RoutePrediction.getRoutesByPassedStop(time,busStopList);
 		Iterator<Route> iter = routes.iterator();
 		int i = 1;
 		while(iter.hasNext()){

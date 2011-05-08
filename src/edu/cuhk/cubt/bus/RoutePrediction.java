@@ -7,7 +7,7 @@ import java.util.List;
 
 import android.text.format.Time;
 
-import edu.cuhk.cubt.bus.Route.OperationDay;
+import edu.cuhk.cubt.bus.Route.OperationType;
 import edu.cuhk.cubt.store.RouteData;
 
 public class RoutePrediction {
@@ -17,15 +17,15 @@ public class RoutePrediction {
 		Time time = new Time();
 		time.set(mtime);
 		Collection<Route> routes = new ArrayList<Route>();
-		if(time.weekDay == Time.SUNDAY){
-			routes.addAll(RouteData.getRoutesByOperationType(OperationDay.HOLIDAY));
-		}else if(time.hour < 9){
-			routes.addAll(RouteData.getRoutesByOperationType(OperationDay.MORNING));			
-		}else if(time.hour >= 18){
-			routes.addAll(RouteData.getRoutesByOperationType(OperationDay.EVENING));				
-		}else{
-			routes.addAll(RouteData.getRoutesByOperationType(OperationDay.DAY));	
-			routes.addAll(RouteData.getRoutesByOperationType(OperationDay.MEETCLASS));	
+		if(time.weekDay == Time.SUNDAY){			
+			routes.addAll(RouteData.getRoutesByOperationType(Route.TYPE_HOLIDAY));
+		}else if(time.hour < 9){		
+			routes.addAll(RouteData.getRoutesByOperationType(Route.TYPE_MORNING));			
+		}else if(time.hour >= 18){		
+			routes.addAll(RouteData.getRoutesByOperationType(Route.TYPE_EVENING));				
+		}else{		
+			routes.addAll(RouteData.getRoutesByOperationType(Route.TYPE_DAY));	
+			routes.addAll(RouteData.getRoutesByOperationType(Route.TYPE_MEETCLASS));	
 		}
 		return getPossibleRoute(routes.iterator(), input);	
 	}
@@ -57,7 +57,7 @@ public class RoutePrediction {
 	 * @param stop The stop before the return stop
 	 * @return
 	 */
-	private static List<Stop> getPossibleNextStop(Iterator<Route> routes, Stop stop){
+	public static List<Stop> getPossibleNextStop(Iterator<Route> routes, Stop stop){
 		List<Stop> results = new ArrayList<Stop>();
 		
 		while(routes.hasNext()){

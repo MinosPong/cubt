@@ -10,7 +10,7 @@ import java.util.TreeMap;
 
 import edu.cuhk.cubt.bus.Poi;
 import edu.cuhk.cubt.bus.Route;
-import edu.cuhk.cubt.bus.Route.OperationDay;
+import edu.cuhk.cubt.bus.Route.OperationType;
 
 public class RouteData {
 	
@@ -62,7 +62,7 @@ public class RouteData {
 			//Morning M
 			routesInitHelper(routes, RM_MTR_NA, 
 					"Weekday 0730-1800: University Station > NA College", 
-					OperationDay.MORNING , 0, 0, new String[]{
+					Route.TYPE_MORNING , 0, 0, new String[]{
 					PoiData.STOP_MTR,
 					PoiData.STOP_SPU,
 					PoiData.STOP_SRR,
@@ -72,7 +72,7 @@ public class RouteData {
 
 			routesInitHelper(routes, RM_NA_MTR, 
 					"Weekday 0730-1800: NA College > University Station", 
-					OperationDay.MORNING , 0, 0, new String[]{
+					Route.TYPE_MORNING , 0, 0, new String[]{
 					PoiData.STOP_NAS,
 					PoiData.STOP_UCS,
 					PoiData.STOP_ADM,
@@ -82,7 +82,7 @@ public class RouteData {
 
 			routesInitHelper(routes, RM_MTR_SRR, 
 					"Before 9:00 a.m.: University Station > Sir Run Run Shaw Hall > University Station", 
-					OperationDay.MORNING , 0, 0, new String[]{
+					Route.TYPE_MORNING , 0, 0, new String[]{
 					PoiData.STOP_MTR,
 					PoiData.STOP_SPU,
 					PoiData.STOP_SRR,
@@ -93,7 +93,7 @@ public class RouteData {
 
 			routesInitHelper(routes, RM_SRR_SHAW, 
 					"Before 9:00 a.m.: Y.C. Liang Hall > Shaw College > Y.C. Liang Hall ", 
-					OperationDay.MORNING , 0, 0, new String[]{
+					Route.TYPE_MORNING , 0, 0, new String[]{
 					PoiData.STOP_SRR,
 					PoiData.STOP_NAS,
 					PoiData.STOP_UCS,
@@ -106,7 +106,7 @@ public class RouteData {
 			//Day D
 			routesInitHelper(routes, RD_MTR_NA, 
 					"Weekday 0730-1800: University Station > NA College", 
-					OperationDay.DAY , 0, 0, new String[]{
+					Route.TYPE_DAY , 0, 0, new String[]{
 					PoiData.STOP_MTR,
 					PoiData.STOP_SPU,
 					PoiData.STOP_SRR,
@@ -116,7 +116,7 @@ public class RouteData {
 
 			routesInitHelper(routes, RD_SHAW_C, 
 					"Weekday 0900-1800: University Station > Shaw College > University Station", 
-					OperationDay.DAY , 0, 0, new String[]{
+					Route.TYPE_DAY , 0, 0, new String[]{
 					PoiData.STOP_MTR,
 					PoiData.STOP_SPU,
 					PoiData.STOP_SRR,
@@ -134,7 +134,7 @@ public class RouteData {
 
 			routesInitHelper(routes, RD_NA_MTR, 
 					"Weekday 0730-1800: NA College > University Station", 
-					OperationDay.DAY , 0, 0, new String[]{
+					Route.TYPE_DAY , 0, 0, new String[]{
 					PoiData.STOP_NAS,
 					PoiData.STOP_UCS,
 					PoiData.STOP_ADM,
@@ -146,7 +146,7 @@ public class RouteData {
 			//Evening E
 			routesInitHelper(routes, RE_MTR_R11, 
 					"Weekday 1800-2330: University Station > University Residence Nos. 10-11", 
-					OperationDay.EVENING , 0, 0, new String[]{
+					Route.TYPE_EVENING , 0, 0, new String[]{
 					PoiData.STOP_MTR,
 					PoiData.STOP_PGH, //<<---suppose no??
 					PoiData.STOP_SPU,
@@ -161,7 +161,7 @@ public class RouteData {
 			
 			routesInitHelper(routes, RE_MTR_SHAW, 
 					"Weekday 1800-2330: University Station > Shaw College", 
-					OperationDay.EVENING , 0, 0, new String[]{
+					Route.TYPE_EVENING , 0, 0, new String[]{
 					PoiData.STOP_MTR,
 					PoiData.STOP_SPU,
 					PoiData.STOP_SRR,
@@ -172,7 +172,7 @@ public class RouteData {
 
 			routesInitHelper(routes, RE_SHAW_MTR, 
 					"Weekday 1800-2330: Shaw College > University Station", 
-					OperationDay.EVENING , 0, 0, new String[]{
+					Route.TYPE_EVENING , 0, 0, new String[]{
 					PoiData.STOP_SCS,
 					PoiData.STOP_R34,
 					PoiData.STOP_NAS,
@@ -184,7 +184,7 @@ public class RouteData {
 
 			routesInitHelper(routes, RE_R11_MTR, 
 					"Weekday 2325: University Residence Nos. 10-11 > University Station", 
-					OperationDay.EVENING , 0, 0, new String[]{
+					Route.TYPE_EVENING , 0, 0, new String[]{
 					PoiData.STOP_R11,
 					PoiData.STOP_R15,
 					PoiData.STOP_RUC,
@@ -202,7 +202,7 @@ public class RouteData {
 			//Meet-Class C
 			routesInitHelper(routes, RC_NA_CC, 
 					"Meet-class: NA College > Chung Chi Teaching Blocks", 
-					OperationDay.MEETCLASS , 0, 0, new String[]{
+					Route.TYPE_MEETCLASS , 0, 0, new String[]{
 					PoiData.STOP_NAS,
 					PoiData.STOP_UCS,
 					PoiData.STOP_ADM,
@@ -212,7 +212,7 @@ public class RouteData {
 
 			routesInitHelper(routes, RC_SHAW_CC, 
 					"Meet-class: Shaw College > Chung Chi Teaching Blocks ", 
-					OperationDay.MEETCLASS , 0, 0, new String[]{
+					Route.TYPE_MEETCLASS , 0, 0, new String[]{
 					PoiData.STOP_SCS,//shaw
 					PoiData.STOP_R34,//shaw
 					PoiData.STOP_NAS,
@@ -224,7 +224,7 @@ public class RouteData {
 
 			routesInitHelper(routes, RC_SHAW_ADM, 
 					"Meet-class: Shaw College > University Administration Building > Shaw College ", 
-					OperationDay.MEETCLASS , 0, 0, new String[]{
+					Route.TYPE_MEETCLASS , 0, 0, new String[]{
 					PoiData.STOP_SCS,
 					PoiData.STOP_R34,
 					PoiData.STOP_ADM,
@@ -236,7 +236,7 @@ public class RouteData {
 
 			routesInitHelper(routes, RC_CC_SHAW, 
 					"Meet Class: CC > Shaw", 
-					OperationDay.MEETCLASS , 0, 0, new String[]{
+					Route.TYPE_MEETCLASS , 0, 0, new String[]{
 					PoiData.STOP_CCS,
 					PoiData.STOP_SPU,
 					PoiData.STOP_SRR,
@@ -250,7 +250,7 @@ public class RouteData {
 			//Holiday H
 			routesInitHelper(routes, RH_SHAW_MTR, 
 					"Holiday: Shaw College > University Station", 
-					OperationDay.HOLIDAY , 0, 0, new String[]{
+					Route.TYPE_HOLIDAY , 0, 0, new String[]{
 					PoiData.STOP_SCS,
 					PoiData.STOP_R34,
 					PoiData.STOP_NAS,
@@ -262,7 +262,7 @@ public class RouteData {
 
 			routesInitHelper(routes, RH_R11_MTR, 
 					"Holiday: University Residence Nos. 10-11 > University Station", 
-					OperationDay.HOLIDAY , 0, 0, new String[]{
+					Route.TYPE_HOLIDAY , 0, 0, new String[]{
 					PoiData.STOP_R11,
 					PoiData.STOP_R15,
 					PoiData.STOP_RUC,
@@ -277,7 +277,7 @@ public class RouteData {
 			
 			routesInitHelper(routes, RH_MTR_R11, 
 					"Holiday: University Station > University Residence Nos. 10-11", 
-					OperationDay.HOLIDAY , 0, 0, new String[]{
+					Route.TYPE_HOLIDAY , 0, 0, new String[]{
 					PoiData.STOP_MTR,
 					PoiData.STOP_PGH,
 					PoiData.STOP_SPU,
@@ -293,7 +293,7 @@ public class RouteData {
 
 			routesInitHelper(routes, RH_MTR_SHAW, 
 					"Holiday 0800-2330: University Station > Shaw College", 
-					OperationDay.HOLIDAY , 0, 0, new String[]{
+					Route.TYPE_HOLIDAY , 0, 0, new String[]{
 					PoiData.STOP_MTR,
 					PoiData.STOP_SPU,
 					PoiData.STOP_SRR,
@@ -330,7 +330,7 @@ public class RouteData {
 */						
 			routesInitHelper(routes, ROUTE_13, 
 					"", 
-					OperationDay.UNDEFINED , 0, 0, new String[]{
+					Route.TYPE_UNDEFINED , 0, 0, new String[]{
 					PoiData.STOP_SCS,
 					PoiData.STOP_R34,
 					PoiData.STOP_NAS,
@@ -343,7 +343,7 @@ public class RouteData {
 			
 			routesInitHelper(routes, ROUTE_14, 
 					"SCS -> NAS -> PGH -> MTR", 
-					OperationDay.UNDEFINED , 0, 0, new String[]{
+					Route.TYPE_UNDEFINED , 0, 0, new String[]{
 					PoiData.STOP_SCS,
 					PoiData.STOP_R34,
 					PoiData.STOP_NAS,
@@ -356,7 +356,7 @@ public class RouteData {
 
 			routesInitHelper(routes, ROUTE_15, 
 					"NA College > PGH > University Station", 
-					OperationDay.UNDEFINED , 0, 0, new String[]{
+					Route.TYPE_UNDEFINED , 0, 0, new String[]{
 					PoiData.STOP_NAS,
 					PoiData.STOP_UCS,
 					PoiData.STOP_ADM,
@@ -368,7 +368,7 @@ public class RouteData {
 			
 			routesInitHelper(routes, ROUTE_16, 
 					"University Station > PGH > NA College", 
-					OperationDay.UNDEFINED , 0, 0, new String[]{
+					Route.TYPE_UNDEFINED , 0, 0, new String[]{
 					PoiData.STOP_MTR,
 					PoiData.STOP_PGH,
 					PoiData.STOP_SPU,
@@ -389,12 +389,12 @@ public class RouteData {
 		 return getRoutes().get(routeName);
 	}
 	
-	public static Collection<Route> getRoutesByOperationType(OperationDay day){		
+	public static Collection<Route> getRoutesByOperationType(int type){		
 		Collection<Route> results = new ArrayList<Route>();
 		Iterator<Route> routes = getRoutes().values().iterator();		
 		while(routes.hasNext()){
 			Route route = routes.next();
-			if(route.getOperationDay() == day){
+			if(route.getOperationDay() == type){
 				results.add(route);
 			}
 		}
@@ -413,7 +413,7 @@ public class RouteData {
 	 * @param pois
 	 */
 	private static void routesInitHelper(Map<String, Route> routes,
-			String name, String description, OperationDay operationDay, int startTime, int endTime, String[] poisName){
+			String name, String description, int operationType, int startTime, int endTime, String[] poisName){
 		
 		//TODO Change the helper function to fit you and make it more easy to read and modify.
 		//TODO Also change the constructor of Route such that you can fit your input
@@ -424,7 +424,7 @@ public class RouteData {
 			pois.add(PoiData.getByName(poiName));
 		}
 
-		Route route = new Route(name, description, operationDay, null, null, pois);
+		Route route = new Route(name, description, operationType, null, null, pois);
 		routes.put(name, route);
 
 
