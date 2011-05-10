@@ -1,0 +1,1 @@
+keytool -list -alias "edu.cuhk.cubt" -keystore "D:\PATH_TO_KEY" -storepass PASS -keypass PASS
