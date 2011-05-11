@@ -4,21 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.http.NameValuePair;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.message.BasicNameValuePair;
 
-import android.net.http.AndroidHttpClient;
-import android.os.AsyncTask;
+import edu.cuhk.cubt.sccm.classifier.BusClassifier.BusEventObject;
+
 import android.util.Log;
 
 public class BusLocationUploader {
 
 	private static final String tag = "BusLocationUploader";
-	private static final String URL = NetSettings.URL;
-	private static final String HTTP_AGENT = "CUBT_HTTP_AGENT";
 	private static final String NAME_CMSG = "cmsg";
 	
 	private static final int SUGGEST_ID = 1; 
@@ -62,21 +56,27 @@ public class BusLocationUploader {
 		postHelper(value);
 	}
 	
+	
+	public void addStopEvent(BusEventObject evt){
+		if(id == null) return;
+		String value = "passedadd/" + id + "/" + evt.getEnterTime() + "/"
+			+ evt.getLeaveTime() + "/" + evt.getStop().getName() + "/" + evt.getEvent();
+		postHelper(value);
+	}
+	
+	
+	@SuppressWarnings("unchecked")
 	private void postHelper(int action,String value){
 		List<NameValuePair> postParam = new ArrayList<NameValuePair>();
-		postParam.add(new BasicNameValuePair(NAME_CMSG, value));	
-		fireRequest(action,postParam);		
+		postParam.add(new BasicNameValuePair(NAME_CMSG, value));
+		
+		new BusLocationUploaderHttpTask(action).execute(postParam);	
 	}
 	
 	private void postHelper(String value){		
 		postHelper(0,value);
 	}
 	
-	
-	@SuppressWarnings("unchecked")
-	public void fireRequest(int action, List<NameValuePair> postParam){
-		new HttpTask(action).execute(postParam);
-	}
 
 	private void requestCallback(int action, String response){
 		Log.i(tag, response);	
@@ -86,37 +86,12 @@ public class BusLocationUploader {
 				break;
 		}		
 	}
-
-	static String postRequest(List<NameValuePair> postParam){
-		final AndroidHttpClient httpClient = AndroidHttpClient.newInstance(HTTP_AGENT);
-	    final HttpPost post = new HttpPost(URL);
-	    
-	    String response = null;
-	    try {
-			post.setEntity(new UrlEncodedFormEntity(postParam));
-			ResponseHandler<String> responseHandler=new BasicResponseHandler();
-			response = httpClient.execute(post,responseHandler);
-		} catch (Exception e) {
-			post.abort();
-			Log.w(tag, "Error while connecting " + URL + e.toString());
-		} finally {
-			if(httpClient != null){
-				httpClient.close();
-			}
-		}	
-		return response;
-	}
 	
-	private class HttpTask extends AsyncTask<List<NameValuePair>,Void,String>{
+	private class BusLocationUploaderHttpTask extends CubtHttpTask{
 		private final int action;
 		
-		public HttpTask(int action){
+		public BusLocationUploaderHttpTask(int action){
 			this.action = action;
-		}
-		
-		@Override
-		protected String doInBackground(List<NameValuePair>... arg0) {
-			return postRequest(arg0[0]);
 		}
 		
 		@Override
