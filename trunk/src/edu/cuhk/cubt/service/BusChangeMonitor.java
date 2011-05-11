@@ -73,6 +73,7 @@ public class BusChangeMonitor implements IServiceMonitor{
 	
 	protected void busExitEvent(BusEventObject evt){
 		addBusStop(evt);
+		busExitEvent();
 	}
 	
 	protected void busExitEvent(){	
@@ -88,6 +89,8 @@ public class BusChangeMonitor implements IServiceMonitor{
 	}
 	
 	private void addBusStop(BusEventObject evt){
+		uploader.addStopEvent(evt);
+		
 		Poi poi = evt.getStop();
 		long time = evt.getLeaveTime();
 		busStopList.add((Stop) poi);
