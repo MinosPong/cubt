@@ -73,8 +73,6 @@ public class CubtService extends Service{
      */
 	@Override
 	public void onDestroy() {
-		
-
 		/* Stop service related component*/
 
 		Iterator<IServiceMonitor> iterator = serviceMonitors.values().iterator();
@@ -118,7 +116,7 @@ public class CubtService extends Service{
 		Context context = getApplicationContext();
 		CharSequence contentTitle = "CUHK Bus Tracking Service";
 		CharSequence contentText = "CUHK Bus Tracking Service is running";
-		Intent notificationIntent = new Intent(this, TestUserStateActivity.class);
+		Intent notificationIntent = new Intent(this, CubtTabActivity.class);
 		PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
 
 		notification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);

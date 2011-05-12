@@ -3,13 +3,11 @@ package edu.cuhk.cubt.service;
 import android.os.Handler;
 import android.os.Message;
 import edu.cuhk.cubt.db.DbStopPassed;
-import edu.cuhk.cubt.sccm.SCCMEngine;
 import edu.cuhk.cubt.sccm.classifier.PoiClassifier;
 import edu.cuhk.cubt.ui.CubtService;
 
 public class StopPassingMonitor implements IServiceMonitor{
 
-	private SCCMEngine engine;
 	DbStopPassed db;
 	PoiClassifier poiClassifier;
 	
@@ -18,9 +16,8 @@ public class StopPassingMonitor implements IServiceMonitor{
 	
 	@Override
 	public void start(CubtService service) {
-		engine = service.getSCCMEngine();
 		db = DbStopPassed.getInstance(service);
-		poiClassifier = engine.getClassifierManager().getClassifier(PoiClassifier.class);
+		poiClassifier = service.getSCCMEngine().getClassifierManager().getClassifier(PoiClassifier.class);
 		poiClassifier.addHandler(handler);
 	}
 
@@ -42,7 +39,7 @@ public class StopPassingMonitor implements IServiceMonitor{
 				if(enterEvent == null) break; 
 				leaveEvent = (PoiClassifier.PoiChangeEventObject)msg.obj;
 				if(enterEvent.getPoi() == null || enterEvent.getPoi() != leaveEvent.getPoi()) break;
-				db.insert(enterEvent.getPoi().getName(), enterEvent.getCause().getTime(), leaveEvent.getCause().getTime(), 0);
+				db.insert(enterEvent.getPoi().getName(), enterEvent.getTime(), leaveEvent.getTime(), 0);
 				break;
 			}
 			super.handleMessage(msg);

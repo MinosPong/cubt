@@ -31,11 +31,8 @@ public class TestUserStateActivity extends Activity {
 
 	private static final String TAG = "TestUserStateActivity";
 
-	private static final int MENU_START = Menu.FIRST;
-	private static final int MENU_STOP = Menu.FIRST + 1;
-	private static final int MENU_OPTION = Menu.FIRST + 2;
-	private static final int MENU_STOP_HISTORY = Menu.FIRST + 3;
-	private static final int MENU_EXIT = Menu.FIRST + 4;
+	private static final int MENU_START = Menu.FIRST + 101;
+	private static final int MENU_STOP = Menu.FIRST + 102;
 	
 	TextView textTime;
 	TextView textGpsStatus;
@@ -55,12 +52,8 @@ public class TestUserStateActivity extends Activity {
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		int i=0;
-		menu.add(0, MENU_START, i++, R.string.menu_start).setIcon(android.R.drawable.ic_menu_add);
-		menu.add(0, MENU_STOP, i++, R.string.menu_stop).setIcon(android.R.drawable.ic_menu_close_clear_cancel);
-		menu.add(0, MENU_OPTION, i++, R.string.menu_settings).setIcon(android.R.drawable.ic_menu_edit);
-		menu.add(0, MENU_STOP_HISTORY, i++, R.string.menu_stop_histroy);
-		menu.add(0, MENU_EXIT, i++, R.string.menu_exit).setIcon(android.R.drawable.ic_menu_revert);
+		menu.add(0, MENU_START, MENU_START, R.string.menu_start).setIcon(android.R.drawable.ic_menu_add);
+		menu.add(0, MENU_STOP, MENU_STOP, R.string.menu_stop).setIcon(android.R.drawable.ic_menu_close_clear_cancel);
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -74,16 +67,6 @@ public class TestUserStateActivity extends Activity {
 			case MENU_STOP:
 				doUnbindService();
 				((CubtApplication)getApplication()).stopService();
-				return true;
-			case MENU_OPTION:
-				Intent intent = new Intent(this, Settings.class);
-				startActivity(intent);
-				return true;
-			case MENU_STOP_HISTORY:				
-				startActivity(new Intent(this, StopPassedHistoryActivity.class));
-				return true;
-			case MENU_EXIT:
-				finish();
 				return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -108,20 +91,20 @@ public class TestUserStateActivity extends Activity {
 	}
 	
 	void doBindService(){
-		boolean bindResult = bindService(new Intent(TestUserStateActivity.this, CubtService.class), mConnection , 0);
+		boolean bindResult = getApplicationContext().bindService(new Intent(TestUserStateActivity.this, CubtService.class), mConnection , 0);
 		if(bindResult){
 			mIsBound = true;
-			Toast.makeText(TestUserStateActivity.this, "Binding..." , Toast.LENGTH_SHORT).show();
+			Toast.makeText(TestUserStateActivity.this, "Connected with Service..." , Toast.LENGTH_SHORT).show();
 		}else{
-			Toast.makeText(TestUserStateActivity.this, "Failed to bind..." , Toast.LENGTH_SHORT).show();
+			Toast.makeText(TestUserStateActivity.this, "Failed to connect with service..." , Toast.LENGTH_SHORT).show();
 		}
 	}
 	
 	void doUnbindService(){
 		if(mIsBound){
-            unbindService(mConnection);
+			getApplicationContext().unbindService(mConnection);
             mIsBound = false;
-    		Toast.makeText(TestUserStateActivity.this, "Unbinding...", Toast.LENGTH_SHORT).show();
+    		Toast.makeText(TestUserStateActivity.this, "Disconnected with Service...", Toast.LENGTH_SHORT).show();
 		}
 	}	
 	

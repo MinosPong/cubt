@@ -20,9 +20,6 @@ public class BusClassifier extends AbstractClassifier<BusState>
 	private static final int STOP_LEAVE_DELAY_TIME = 20 * 1000;	//20 seconds
 	
 	private Time stopLeaveTime = new Time();
-	
-	private Stop busStop;
-	
 	private boolean isInStop = false;
 	private boolean isActivePeriod = false;
 	
@@ -98,7 +95,7 @@ public class BusClassifier extends AbstractClassifier<BusState>
 		isInStop = false;
 
 		//Here if the stop stay period < 15s, assume it is a noise
-		if(stopLeaveEvent.getCause().getTime() - stopEnterEvent.getCause().getTime() < 15000)
+		if(stopLeaveEvent.getTime() - stopEnterEvent.getTime() < 15000)
 			return;
 		
 		isActivePeriod = true;
@@ -108,7 +105,14 @@ public class BusClassifier extends AbstractClassifier<BusState>
 	}
 
 	private void onStopEnter(PoiClassifier.PoiChangeEventObject evt){
-		this.stopEnterEvent = evt;
+		//Only remove the last event if the LeaveEventPOI EnterEventPOI are diff or the time diff is > 15s
+		if(	stopLeaveEvent == null || 
+			stopLeaveEvent.getPoi() != evt.getPoi() || 
+			evt.getTime() - stopLeaveEvent.getTime() > 15000){
+		
+			this.stopEnterEvent = evt;
+		}
+
 		this.stopLeaveEvent = null;
 		
 		//TODO Eliminate noise Stops
@@ -120,7 +124,6 @@ public class BusClassifier extends AbstractClassifier<BusState>
 		isActivePeriod = false;
 		isInStop = true;
 		if(getState() != BusState.ONBUS){
-			busStop = (Stop) poiClassifier.getPoi();
 			setState(BusState.WAITBUS);
 		}
 	}
