@@ -14,17 +14,16 @@ import edu.cuhk.cubt.ui.CubtService;
  *
  */
 public class LocationChangeMonitor implements IServiceMonitor{
-	private SCCMEngine engine;
+	LocationSensor locationSensor;
 
 	public void start(CubtService service){
-		engine = service.getSCCMEngine();		
+		locationSensor = service.getSCCMEngine().getLocationSensor();		
 		
-		engine.getLocationSensor().addHandler(mHandler);
+		locationSensor.addHandler(mHandler);
 	}
 	
 	public void stop(CubtService service){
-		engine.getLocationSensor().removeHandler(mHandler);
-		engine = null;
+		locationSensor.removeHandler(mHandler);
 	}
 	
 	Handler mHandler = new Handler(){

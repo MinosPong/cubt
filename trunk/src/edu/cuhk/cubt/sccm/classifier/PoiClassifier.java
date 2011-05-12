@@ -23,6 +23,7 @@ public class PoiClassifier extends AbstractClassifier<PoiState> {
 		public int getEvent(){return event;}
 		public Poi getPoi(){return poi;}
 		public Location getCause(){return cause;}
+		public long getTime(){return cause.getTime();}
 	};
 	
 	public static final int CHECKPOINT_ENTER_EVENT = 10611;

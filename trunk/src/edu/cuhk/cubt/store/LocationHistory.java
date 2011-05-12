@@ -9,7 +9,6 @@ import java.util.Vector;
 import android.location.Location;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 
 public class LocationHistory extends CircularBuffer<Location>{
 

@@ -5,8 +5,6 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -49,11 +47,8 @@ public class CubtMapView extends MapActivity {
 	PathOverlay routeOverlay;
 	String pRoute, dir, lStop;
 
-	static final int MENU_ROUTE = Menu.FIRST ;
-	static final int MENU_OPTION = Menu.FIRST + 1;
-	static final int MENU_EXIT = Menu.FIRST + 2;
+	static final int MENU_ROUTE = Menu.FIRST + 201;
 	
-
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -167,10 +162,7 @@ public class CubtMapView extends MapActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// TODO Auto-generated method stub
-		int i=0;
-		menu.add(0, MENU_ROUTE, i++, R.string.menu_routes).setIcon(android.R.drawable.ic_menu_search);
-		menu.add(0, MENU_OPTION, i++, R.string.menu_settings).setIcon(android.R.drawable.ic_menu_edit);
-		menu.add(0, MENU_EXIT, i++, R.string.menu_exit).setIcon(android.R.drawable.ic_menu_close_clear_cancel);
+		menu.add(0, MENU_ROUTE, MENU_ROUTE, R.string.menu_routes).setIcon(android.R.drawable.ic_menu_search);
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -184,13 +176,6 @@ public class CubtMapView extends MapActivity {
 		switch(item.getItemId()){
 			case MENU_ROUTE:
 				this.openContextMenu(mapView);
-				return true;
-			case MENU_OPTION:
-				Intent intent = new Intent(this, Settings.class);
-				startActivity(intent);
-				return true;
-			case MENU_EXIT:
-				finish();
 				return true;
 		}
 		
@@ -234,11 +219,11 @@ public class CubtMapView extends MapActivity {
 	
 
 	private void setHandler() {
-		((CubtApplication)getApplication()).getLocationHistory().addHandler(handler);		
+		LocationHistory.getInstance().addHandler(handler);		
 	}
 	
 	private void unsetHandler(){
-		((CubtApplication)getApplication()).getLocationHistory().removeHandler(handler);
+		LocationHistory.getInstance().removeHandler(handler);
 	}
 	
 	Handler handler = new Handler(){

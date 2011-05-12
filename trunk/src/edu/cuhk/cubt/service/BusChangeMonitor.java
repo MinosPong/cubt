@@ -11,7 +11,6 @@ import edu.cuhk.cubt.bus.Stop;
 import edu.cuhk.cubt.bus.BusEventObject;
 import edu.cuhk.cubt.net.BusLocationUploader;
 import edu.cuhk.cubt.sccm.LocationSensor;
-import edu.cuhk.cubt.sccm.SCCMEngine;
 import edu.cuhk.cubt.sccm.classifier.BusClassifier;
 import edu.cuhk.cubt.state.State;
 import edu.cuhk.cubt.ui.CubtService;
@@ -29,7 +28,6 @@ import android.util.Log;
 public class BusChangeMonitor implements IServiceMonitor{
 	
 	BusClassifier busClassifier;
-	SCCMEngine engine;
 	LocationSensor locationSensor;
 	
 	List<Stop> busStopList = new ArrayList<Stop>();
@@ -37,16 +35,14 @@ public class BusChangeMonitor implements IServiceMonitor{
 	boolean isOnBus = false;
 		
 	public void start(CubtService service){
-		this.engine = service.getSCCMEngine();
-		locationSensor = engine.getLocationSensor();
-		busClassifier = engine.getClassifierManager().getClassifier(BusClassifier.class);
+		locationSensor = service.getSCCMEngine().getLocationSensor();
+		busClassifier = service.getSCCMEngine().getClassifierManager().getClassifier(BusClassifier.class);
 		busClassifier.addHandler(handler);
 	}
 	
 	public void stop(CubtService service){
 		locationSensor.removeHandler(handler);
 		busClassifier.removeHandler(handler);
-	
 	}
 	
 	protected void busLocationChange(Location location){
@@ -54,37 +50,25 @@ public class BusChangeMonitor implements IServiceMonitor{
 	}
 	
 	protected void busEnterEvent(BusEventObject evt){
-		String rand = "";
-		for(int i = 0;i<6; i++){
-			rand += (int)(Math.random()*10);
-		}
 		
 		busStopList.clear();
-		BusLocationUploader.add(rand);
+		BusLocationUploader.add();
 		addBusStop(evt);
 		
-		busEnterEvent();
-	}
-	
-	protected void busEnterEvent(){
-		isOnBus = true;
-				
-		Location location = locationSensor.getLastLocation();
+		busLocationChange(locationSensor.getLastLocation());
+
 		locationSensor.addHandler(handler);
 		
-
-		BusLocationUploader.updateLocation(location.getLatitude() , location.getLongitude());		
+		isOnBus = true;
 	}
 	
 	protected void busExitEvent(BusEventObject evt){
-		addBusStop(evt);
-		busExitEvent();
-	}
-	
-	protected void busExitEvent(){	
-		isOnBus = false;
-		
+		isOnBus = false;		
+
 		locationSensor.removeHandler(handler);
+		
+		addBusStop(evt);		
+		
 		BusLocationUploader.remove();
 	}
 	

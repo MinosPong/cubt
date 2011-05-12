@@ -38,6 +38,14 @@ public class BusLocationUploader {
 		postHelper(SUGGEST_ID,value);
 	}
 	
+	public static void add(){
+		String rand = "";
+		for(int i = 0;i<6; i++){
+			rand += (int)(Math.random()*10);
+		}
+		add(rand);
+	}
+	
 	public static void add(String id){
 		add(id,0,0);
 	}
