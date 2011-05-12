@@ -24,7 +24,7 @@ public class CubtHttpTask extends AsyncTask<List<NameValuePair>,Void,String>{
 	}
 	
 
-	private static final String tag = "NetRequest";
+	protected static final String tag = "CubtHttpTask";
 	private static final String HTTP_AGENT = "CUBT_HTTP_AGENT";
 	private static final String NAME_PASSKEY = "passkey";
 	
@@ -43,7 +43,7 @@ public class CubtHttpTask extends AsyncTask<List<NameValuePair>,Void,String>{
 
 		ResponseHandler<String> responseHandler=new BasicResponseHandler();
 		
-		String response = null;
+		String response = "";
 		try {
 			response = httpClient.execute(post,responseHandler);
 			Log.i(tag, response);
@@ -56,7 +56,4 @@ public class CubtHttpTask extends AsyncTask<List<NameValuePair>,Void,String>{
 		return response;
 	}
 	
-	@Override
-    protected void onPostExecute(String response) {
-    }		
 }

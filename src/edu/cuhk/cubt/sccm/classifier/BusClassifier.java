@@ -2,6 +2,7 @@ package edu.cuhk.cubt.sccm.classifier;
 
 import android.os.Message;
 import android.text.format.Time;
+import edu.cuhk.cubt.bus.BusEventObject;
 import edu.cuhk.cubt.bus.Stop;
 import edu.cuhk.cubt.state.BusState;
 import edu.cuhk.cubt.state.SpeedState;
@@ -10,25 +11,6 @@ import edu.cuhk.cubt.state.event.StateChangeEvent;
 
 public class BusClassifier extends AbstractClassifier<BusState>
 	implements Classifier{
-	
-	public class BusEventObject{
-		public BusEventObject(int event, Stop stop, long enterTime, long leaveTime){
-			this.event = event;
-			this.stop = stop;
-			this.enterTime = enterTime;
-			this.leaveTime = leaveTime;
-		}
-		private int event;
-		private Stop stop;
-		private long enterTime;
-		private long leaveTime;
-		
-		public int getEvent() {		return event; }
-		public Stop getStop() {		return stop; }
-		public long getEnterTime() {return enterTime;}
-		public long getLeaveTime() {return leaveTime;}
-		public long getPeriod()	{	return leaveTime - enterTime;}
-	}
 	
 	public static final int BUS_ENTER_EVENT = 10701;
 	public static final int BUS_EXIT_EVENT = 10702;

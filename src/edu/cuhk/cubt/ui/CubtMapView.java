@@ -107,7 +107,15 @@ public class CubtMapView extends MapActivity {
                 "Bus Stop" , 
                 Toast.LENGTH_SHORT).show();
 	    
-	    //startServiceUpdate(3000); //run in real time
+	    long period = 3000;
+		String periodString = this.getSharedPreferences(Settings.sharedPreferenceFile,0)
+			.getString(Settings.PREF_MAPVIEW_REFRESH_PERIOD, "");
+		try{
+			period = Long.parseLong(periodString);
+		}catch(NumberFormatException e){
+			//period = 3000;
+		}
+	    startServiceUpdate(period); //run in real time
 	}
 	
 	
@@ -155,8 +163,6 @@ public class CubtMapView extends MapActivity {
 	public void stopServiceUpdate(){
 		this.updatePeriod = 0;
 	}
-
-
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
