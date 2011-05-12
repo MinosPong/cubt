@@ -93,7 +93,7 @@ public class TestUserStateActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		((CubtApplication)getApplication()).startService();
+		//((CubtApplication)getApplication()).startService();
 		
 		doBindService();	
 		
@@ -182,9 +182,8 @@ public class TestUserStateActivity extends Activity {
 		textBusState = (TextView) findViewById(R.id.busText);
 	}
 
+	@Override
 	protected void onSaveInstanceState(Bundle outState){
-		
-		
 		super.onSaveInstanceState(outState);
 	}
 	

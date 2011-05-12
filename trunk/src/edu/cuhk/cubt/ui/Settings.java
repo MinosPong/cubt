@@ -12,6 +12,7 @@ public class Settings extends PreferenceActivity {
 	public static String sharedPreferenceFile = "edu.cuhk.cubt.cubt_pref";
 	
 	public static String PREF_VIRTUAL_SENSOR = "key_virtual_sensor";
+	public static String PREF_MAPVIEW_REFRESH_PERIOD = "key_refresh_preiod";
 
 	
 	@Override

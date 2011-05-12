@@ -6,10 +6,16 @@ import java.util.List;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
-import edu.cuhk.cubt.sccm.classifier.BusClassifier.BusEventObject;
+import edu.cuhk.cubt.bus.BusEventObject;
 
 import android.util.Log;
 
+/**
+ * Upload Bus Location data to Server
+ * Static function, Cannot call by two class in the sametime
+ * @author PKM
+ *
+ */
 public class BusLocationUploader {
 
 	private static final String tag = "BusLocationUploader";
@@ -17,48 +23,43 @@ public class BusLocationUploader {
 	
 	private static final int SUGGEST_ID = 1; 
 	
-	private boolean isNew = true;
-	private String id;
+	private static String id = "";
 	
-	public BusLocationUploader(){
-		suggest();
+	public static void setId(String id){
+		BusLocationUploader.id = id;
 	}
 	
-	public BusLocationUploader(String id){
-		this.id = id;
+	public static String getId(){
+		return id;
 	}
 	
-	public void suggest(){
+	public static void suggest(){
 		String value = "suggest";
-		postHelper(SUGGEST_ID,value);	
+		postHelper(SUGGEST_ID,value);
 	}
 	
-	private void add(double latitude, double longtitude){
-		if(id == null) return;
-		isNew = false;
+	public static void add(String id){
+		add(id,0,0);
+	}
+	
+	public static void add(String id, double latitude, double longtitude){
+		setId(id);
 		String value = "add/" + id + "/" + latitude + "/" + longtitude;
-		postHelper(value);				
+		postHelper(value);
 	}
 	
-	public void updateLocation(double latitude, double longtitude){
-		if(id == null) return;
-		if(isNew){
-			add(latitude,longtitude);
-			return;
-		}
+	public static void updateLocation(double latitude, double longtitude){
 		String value = "update/" + id + "/" + latitude + "/" + longtitude;
 		postHelper(value);	
 	}
 	
-	public void remove(){
-		if(id == null) return;
+	public static void remove(){
 		String value = "delete/" + id ;	
 		postHelper(value);
-	}
+		id ="";
+	}	
 	
-	
-	public void addStopEvent(BusEventObject evt){
-		if(id == null) return;
+	public static void addStopEvent(BusEventObject evt){
 		String value = "passedadd/" + id + "/" + evt.getEnterTime() + "/"
 			+ evt.getLeaveTime() + "/" + evt.getStop().getName() + "/" + evt.getEvent();
 		postHelper(value);
@@ -66,20 +67,20 @@ public class BusLocationUploader {
 	
 	
 	@SuppressWarnings("unchecked")
-	private void postHelper(int action,String value){
+	private static void postHelper(int action,String value){
 		List<NameValuePair> postParam = new ArrayList<NameValuePair>();
 		postParam.add(new BasicNameValuePair(NAME_CMSG, value));
 		
 		new BusLocationUploaderHttpTask(action).execute(postParam);	
 	}
 	
-	private void postHelper(String value){		
+	private static void postHelper(String value){		
 		postHelper(0,value);
 	}
 	
 
-	private void requestCallback(int action, String response){
-		Log.i(tag, response);	
+	private static void requestCallback(int action, String response){
+		if(response!=null)	Log.i(tag, response);	
 		switch(action){
 			case SUGGEST_ID:
 				id = response;
@@ -87,7 +88,7 @@ public class BusLocationUploader {
 		}		
 	}
 	
-	private class BusLocationUploaderHttpTask extends CubtHttpTask{
+	private static class BusLocationUploaderHttpTask extends CubtHttpTask{
 		private final int action;
 		
 		public BusLocationUploaderHttpTask(int action){

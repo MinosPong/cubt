@@ -8,11 +8,11 @@ import edu.cuhk.cubt.bus.Poi;
 import edu.cuhk.cubt.bus.Route;
 import edu.cuhk.cubt.bus.RoutePrediction;
 import edu.cuhk.cubt.bus.Stop;
+import edu.cuhk.cubt.bus.BusEventObject;
 import edu.cuhk.cubt.net.BusLocationUploader;
 import edu.cuhk.cubt.sccm.LocationSensor;
 import edu.cuhk.cubt.sccm.SCCMEngine;
 import edu.cuhk.cubt.sccm.classifier.BusClassifier;
-import edu.cuhk.cubt.sccm.classifier.BusClassifier.BusEventObject;
 import edu.cuhk.cubt.state.State;
 import edu.cuhk.cubt.ui.CubtService;
 import android.location.Location;
@@ -27,8 +27,6 @@ import android.util.Log;
  *
  */
 public class BusChangeMonitor implements IServiceMonitor{
-
-	BusLocationUploader uploader;
 	
 	BusClassifier busClassifier;
 	SCCMEngine engine;
@@ -42,20 +40,27 @@ public class BusChangeMonitor implements IServiceMonitor{
 		this.engine = service.getSCCMEngine();
 		locationSensor = engine.getLocationSensor();
 		busClassifier = engine.getClassifierManager().getClassifier(BusClassifier.class);
-		busClassifier.addHandler(handler);		
+		busClassifier.addHandler(handler);
 	}
 	
 	public void stop(CubtService service){
 		locationSensor.removeHandler(handler);
-		busClassifier.removeHandler(handler);		
+		busClassifier.removeHandler(handler);
+	
 	}
 	
 	protected void busLocationChange(Location location){
-		uploader.updateLocation(location.getLatitude(), location.getLongitude());
+		BusLocationUploader.updateLocation(location.getLatitude(), location.getLongitude());
 	}
 	
 	protected void busEnterEvent(BusEventObject evt){
+		String rand = "";
+		for(int i = 0;i<6; i++){
+			rand += (int)(Math.random()*10);
+		}
+		
 		busStopList.clear();
+		BusLocationUploader.add(rand);
 		addBusStop(evt);
 		
 		busEnterEvent();
@@ -67,8 +72,8 @@ public class BusChangeMonitor implements IServiceMonitor{
 		Location location = locationSensor.getLastLocation();
 		locationSensor.addHandler(handler);
 		
-		uploader = new BusLocationUploader();
-		uploader.updateLocation(location.getLatitude() , location.getLongitude());		
+
+		BusLocationUploader.updateLocation(location.getLatitude() , location.getLongitude());		
 	}
 	
 	protected void busExitEvent(BusEventObject evt){
@@ -80,8 +85,7 @@ public class BusChangeMonitor implements IServiceMonitor{
 		isOnBus = false;
 		
 		locationSensor.removeHandler(handler);
-		uploader.remove();
-		uploader = null;
+		BusLocationUploader.remove();
 	}
 	
 	protected void busStopPassedEvent(BusEventObject evt){
@@ -89,7 +93,7 @@ public class BusChangeMonitor implements IServiceMonitor{
 	}
 	
 	private void addBusStop(BusEventObject evt){
-		uploader.addStopEvent(evt);
+		BusLocationUploader.addStopEvent(evt);
 		
 		Poi poi = evt.getStop();
 		long time = evt.getLeaveTime();
