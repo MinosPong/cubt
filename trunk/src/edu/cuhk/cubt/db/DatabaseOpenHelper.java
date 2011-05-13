@@ -1,5 +1,6 @@
 package edu.cuhk.cubt.db;
 
+import edu.cuhk.cubt.db.DbStopPassed.StopPassedColumns;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -11,7 +12,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper{
 	
 	public static final String DATABASE_NAME = "CUBT_DATABASE";
 	
-	public static final int DATABASE_VERSION = 3;
+	public static final int DATABASE_VERSION = 4;
 	
 	
 	public DatabaseOpenHelper(Context context) {
@@ -27,8 +28,12 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper{
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         Log.w(TAG, "Upgrading database from version " + oldVersion + " to "
                 + newVersion + ", which will destroy all old data");
-        DbStopPassed.deleteTable(db);
-		DbStopPassed.createTable(db);		
+        if(oldVersion<4){
+        	db.execSQL("ALTER TABLE " + DbStopPassed.TABLE_NAME + " ADD " + StopPassedColumns.TRAVEL_ID + " integer ");
+        }
+        if(oldVersion<5){
+        	
+        }
 	}
 
 }
