@@ -18,7 +18,7 @@ public class DbStopPassed {
 	
     private final DatabaseOpenHelper mDatabaseOpenHelper;
     
-    private static final String TABLE_NAME = "stoppassed";    
+    public static final String TABLE_NAME = "stoppassed";    
 
     private static final HashMap<String,String> mColumnMap = buildColumnMap();
     
@@ -48,12 +48,20 @@ public class DbStopPassed {
     private static HashMap<String,String> buildColumnMap(){
     	HashMap<String,String> map = new HashMap<String,String>();
     	map.put(StopPassedColumns._ID, StopPassedColumns._ID);
+    	map.put(StopPassedColumns.TRAVEL_ID, StopPassedColumns.TRAVEL_ID);
     	map.put(StopPassedColumns.ENTER_TIME, StopPassedColumns.ENTER_TIME);
     	map.put(StopPassedColumns.LEAVE_TIME, StopPassedColumns.LEAVE_TIME);
     	map.put(StopPassedColumns.STAY_PERIOD, StopPassedColumns.STAY_PERIOD);
     	map.put(StopPassedColumns.STOPS, StopPassedColumns.STOPS);
     	map.put(StopPassedColumns.ACTION_TYPE, StopPassedColumns.ACTION_TYPE);
 		return map; 	
+    }
+    
+    
+    
+
+    public long insert(String stop, long enter_time, long leave_time, int action_type){
+    	return insert(0,stop,enter_time,leave_time,action_type);
     }
     
     /**
@@ -64,10 +72,11 @@ public class DbStopPassed {
      * @param action_type
      * @return the id of record
      */
-    public long insert(String stop, long enter_time, long leave_time, int action_type){
+    public long insert(int travel_id, String stop, long enter_time, long leave_time, int action_type){
     	ContentValues values = new ContentValues();
     	long stay_period = (leave_time > enter_time) ? leave_time - enter_time : 0;
     	
+    	values.put(StopPassedColumns.TRAVEL_ID, travel_id);
     	values.put(StopPassedColumns.ENTER_TIME, enter_time);
     	values.put(StopPassedColumns.LEAVE_TIME, leave_time);
     	values.put(StopPassedColumns.STAY_PERIOD, stay_period);
@@ -79,6 +88,13 @@ public class DbStopPassed {
     	db.close();
     	return rowId;    	
     }  
+    
+    public Cursor getStopPassed(String[] projection, int travel_id){
+    	String selection = "";
+    	selection += " AND " + StopPassedColumns.TRAVEL_ID + "= " + travel_id;
+    	Log.d(TAG,selection);
+    	return query(projection,selection,null);    	
+    }
     
     /**
      * 
@@ -122,6 +138,7 @@ public class DbStopPassed {
     private static final String TABLE_CREATE_STRING = 
     	"CREATE TABLE " + TABLE_NAME + " ("
     	+ StopPassedColumns._ID + " INTEGER PRIMARY KEY,"
+    	+ StopPassedColumns.TRAVEL_ID + " INTEGER,"
     	+ StopPassedColumns.ENTER_TIME + " INTEGER,"
     	+ StopPassedColumns.LEAVE_TIME + " INTEGER,"
     	+ StopPassedColumns.STAY_PERIOD + " INTEGER,"
@@ -138,7 +155,7 @@ public class DbStopPassed {
     	db.execSQL(TABLE_DELETE_STRING);
     }
     
-    public final void resetTable(){
+    private final void resetTable(){
     	SQLiteDatabase db = mDatabaseOpenHelper.getWritableDatabase();
     	deleteTable(db);
     	createTable(db);
@@ -161,7 +178,7 @@ public class DbStopPassed {
         public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.cubt.stoppassed";
 
     	
-        
+        public static final String TRAVEL_ID = "travel_id";
         public static final String ENTER_TIME = "entertime";
         public static final String LEAVE_TIME = "leavetime";
         public static final String STAY_PERIOD = "period";

@@ -14,6 +14,7 @@ import org.apache.http.message.BasicNameValuePair;
 
 import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
+import android.text.format.Time;
 import android.util.Log;
 
 
@@ -27,6 +28,8 @@ public class CubtHttpTask extends AsyncTask<List<NameValuePair>,Void,String>{
 	protected static final String tag = "CubtHttpTask";
 	private static final String HTTP_AGENT = "CUBT_HTTP_AGENT";
 	private static final String NAME_PASSKEY = "passkey";
+	private static final String NAME_TIME = "t";
+	private static final Time time = new Time();
 	
 	@Override
 	protected String doInBackground(List<NameValuePair>... arg0) {
@@ -36,6 +39,8 @@ public class CubtHttpTask extends AsyncTask<List<NameValuePair>,Void,String>{
 		try {
 			List<NameValuePair> postParam = arg0[0];
 			postParam.add(new BasicNameValuePair(NAME_PASSKEY, NetSettings.PASS_VALUE));
+			time.setToNow();
+			postParam.add(new BasicNameValuePair(NAME_TIME, Long.toString(time.toMillis(false))));
 			post.setEntity(new UrlEncodedFormEntity(postParam));
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
