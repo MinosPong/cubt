@@ -50,7 +50,7 @@ public class BusPassedStopRequest {
 	        				obj.getInt("event"), 
 	        				(Stop) PoiData.getByName(obj.getString("stop")), 
 	        				obj.getLong("enterTime"), 
-	        				obj.getLong("leavetime")));
+	        				obj.getLong("leaveTime")));
 	        	}	        	
 	        	
 	        	callback.onDataReceive(stopEvent);
