@@ -44,7 +44,7 @@ public class CubtMapView extends MapActivity {
 	BusStopOverlay stopOverlay;
 	ServiceOverlay realOverlay;
 	LocationHistoryOverlay locationHistoryOverlay;
-	PathOverlay routeOverlay;
+	PathOverlay routeOverlay, routeOverlay2;
 	String pRoute, dir, lStop;
 
 	static final int MENU_ROUTE = Menu.FIRST + 201;
@@ -70,14 +70,27 @@ public class CubtMapView extends MapActivity {
 	    routeOverlay.addOverlay(overlayitem2);
 	    mapOverlays.add(routeOverlay);
 
-	    drawableStop = this.getResources().getDrawable(R.drawable.stop); //bus stop star
+	    /*stop: busStop2D, stop3d: busStop3D, pstop:busStop3D with base, left:busStop indicates left, right:busStop indicate right*/
+	    drawableStop = this.getResources().getDrawable(R.drawable.pstop); //bus stop
 	    stopOverlay = new BusStopOverlay(drawableStop,this);	    
 	    mapOverlays.add(stopOverlay);
 	    
+	    //testing
+	    GeoPoint plast = new GeoPoint((int)(22.419830*1e6),(int)(114.207024*1e6)); //SRR
+	    GeoPoint pnext = new GeoPoint((int)(22.419860*1e6),(int)(114.203270*1e6)); //FKH
+	    Drawable drawablelast = this.getResources().getDrawable(R.drawable.left);
+	    Drawable drawableright = this.getResources().getDrawable(R.drawable.left);
+	    routeOverlay2 = new PathOverlay(drawablelast ,mapView, this);
+	    OverlayItem overlayitem3 = new OverlayItem(plast, "Test","point");
+	    OverlayItem overlayitem4 = new OverlayItem(pnext, "Test","point");
+	    routeOverlay2.addOverlay(overlayitem3);
+	    routeOverlay2.addOverlay(overlayitem4);
+	    mapOverlays.add(routeOverlay2);
 	    
 	    drawable = this.getResources().getDrawable(R.drawable.bus2);
 	    realOverlay = new ServiceOverlay(drawable, this);
 	    mapOverlays.add(realOverlay); 
+	    
 	    
 	    //Commented with bug, to be solved
 	    //routeOverlay = new PathOverlay(drawable ,mapView, this);
@@ -124,8 +137,9 @@ public class CubtMapView extends MapActivity {
 	
 
 	public void setDisplayRoute(String routeName){
-		  routeOverlay.setPath(routeName); //show predicted path
-		  stopOverlay.setRoute(routeName); //show predicted stops
+		//since dunno the predicted route BUT stops!?  
+		//routeOverlay.setPath(routeName); //show predicted path
+		  //stopOverlay.setRoute(routeName); //show predicted stops
 	}
 	
 	
