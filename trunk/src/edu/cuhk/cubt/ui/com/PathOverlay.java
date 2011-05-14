@@ -86,7 +86,7 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
         int x2=screenCoords1.x;
         int y2=screenCoords1.y;
 
-        paint.setStrokeWidth(4);
+        paint.setStrokeWidth(5);
         canvas.drawLine(x1, y1, x2, y2, paint);
 	}
 	
@@ -120,7 +120,7 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
 				drawPortion(canvas, getPortion("R15toRUC").iterator());
 				drawPortion(canvas, getPortion("RUCtoCCH").iterator());
 				drawPortion(canvas, getPortion("CCHtoR34").iterator());
-				drawPortion(canvas, getPortion("R11toTerminal").iterator());
+				//drawPortion(canvas, getPortion("R11toTerminal").iterator());
 				drawPortion(canvas, getPortion("SPDtoPGH").iterator());					
 			}
 			//MTR=>10+11(Sun)
@@ -181,7 +181,7 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
 				drawPortion(canvas, getPortion("R15toRUC").iterator());
 				drawPortion(canvas, getPortion("RUCtoCCH").iterator());
 				drawPortion(canvas, getPortion("CCHtoR34").iterator());
-				drawPortion(canvas, getPortion("R11toTerminal").iterator());
+				//drawPortion(canvas, getPortion("R11toTerminal").iterator());
 				if(routeName == RouteData.RE_R11_MTR) //10+11=>MTR (not Sun)*
 					drawPortion(canvas, getPortion("SPDtoPGH").iterator());
 				drawPortion(canvas, getPortion("R34toSCS").iterator());
@@ -218,7 +218,7 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
 		
 		//LHC=>SHAW=>LHC(11) && SHAW=>ADMIN=>SHAW<same>
 		if(routeName == RouteData.RM_SRR_SHAW){
-			drawPortion(canvas, getPortion("LooptoSRR").iterator());
+			drawPortion(canvas, getPortion("ADMtoSRR").iterator());
 			drawPortion(canvas, getPortion("FKHtoR34").iterator());			
 			drawPortion(canvas, getPortion("FKHtoADM").iterator());
 			drawPortion(canvas, getPortion("R34toSCS").iterator());
@@ -280,7 +280,7 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
 	        busLine.add(new GeoPoint((int)(22.41984*1e6),(int)(114.20854*1e6)));	  
 	        busLine.add(new GeoPoint((int)(22.419830*1e6),(int)(114.207024*1e6))); //SRR
 		}
-		else if(portion == "LooptoSRR"){
+		else if(portion == "ADMtoSRR"){
 			busLine.add(new GeoPoint((int)(22.4187801e6),(int)(114.205260*1e6))); //ADM
 			busLine.add(new GeoPoint((int)(22.41872*1e6),(int)(114.2054*1e6)));
 	        busLine.add(new GeoPoint((int)(22.41856*1e6),(int)(114.2061*1e6)));
@@ -426,12 +426,14 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
 	        busLine.add(new GeoPoint((int)(22.4255*1e6),(int)(114.2076*1e6)));   
 	        busLine.add(new GeoPoint((int)(22.425152*1e6),(int)(114.207891*1e6)));	//R11
 		}
+		/*
 		else if(portion == "R11toTerminal"){
 			busLine.add(new GeoPoint((int)(22.4251*1e6),(int)(114.2076*1e6)));
 			busLine.add(new GeoPoint((int)(22.42488*1e6),(int)(114.2078*1e6)));
 			busLine.add(new GeoPoint((int)(22.42441*1e6),(int)(114.2080*1e6)));
 			
 		}
+		*/
 		else if(portion == "R11toR15"){
 			busLine.add(new GeoPoint((int)(22.425152*1e6),(int)(114.207891*1e6)));	//R11
 			busLine.add(new GeoPoint((int)(22.42508*1e6),(int)(114.2077*1e6)));

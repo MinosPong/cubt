@@ -22,7 +22,7 @@ public class ServiceOverlay extends ItemizedOverlay<OverlayItem> {
 	private ArrayList<OverlayItem> mOverlays = new ArrayList<OverlayItem>();
 	private Context mContext;
 	String routeName = RouteData.RE_MTR_R11;
-	String pRoute, dir = "Down Route", lStop;
+	String pStop, dir = "Down Route", lStop;
 	Time ptime;
 	CubtMapView cubtMapView;
 	
@@ -41,7 +41,7 @@ public class ServiceOverlay extends ItemizedOverlay<OverlayItem> {
 		if(it != null){
 			while(it.hasNext()){
 			GeoPoint busLoc = it.next();
-			addOverlay(new OverlayItem(busLoc, dir, "\nLast Stop:"+ lStop + "\nArrived time:" + ptime + "\nPredicted Route:"+ pRoute));
+			addOverlay(new OverlayItem(busLoc, lStop , "Last Stop:"+ lStop + "\nPredicted Stop:"+ pStop + "\nDirection: " + dir));
 			}
 		}
 	}
@@ -52,7 +52,7 @@ public class ServiceOverlay extends ItemizedOverlay<OverlayItem> {
 		if(it != null){
 			while(it.hasNext()){
 			GeoPoint busLoc = it.next();
-			addOverlay(new OverlayItem(busLoc, "Last Stop", "Predicted Route:"+ pRoute + "\nDirection: " + dir + "\nLast Stop:"+ lStop));
+			addOverlay(new OverlayItem(busLoc, lStop , "Last Stop:"+ lStop + "\nPredicted Stop:"+ pStop + "\nDirection: " + dir));
 			}
 		}
 	}

@@ -86,7 +86,8 @@ public class BusStopOverlay extends ItemizedOverlay<OverlayItem> {
     public void draw(Canvas canvas, MapView mapView, boolean shadow) {        
         if(!shadow)
         	super.draw(canvas, mapView, false);
-        //GeoPoint busPoint = new GeoPoint((int)(22.41699*1e6),(int)(114.21220*1e6));
+
+GeoPoint busPoint = new GeoPoint((int)(22.41699*1e6),(int)(114.21220*1e6));
         //Poi poi;
         //GeoPoint busPoint = new GeoPoint((int)(poi.getLatitude()*1E6), (int)(poi.getLongitude()*1E6));
         //drawBasic(canvas, mapView, busPoint);      
@@ -136,7 +137,7 @@ public class BusStopOverlay extends ItemizedOverlay<OverlayItem> {
 			dir2 = "up";
 		else if(dir == 1)
 			dir2 = "down";
-		Toast.makeText(mContext, "Last Stop: "+last+"\nNext Stop :"+next+"\nDirection :"+dir2+"\nPredicted Bus Route: ", Toast.LENGTH_SHORT).show();
+		Toast.makeText(mContext, last, Toast.LENGTH_SHORT).show();
 		//no need for the nextstop?
 		//dialog.setMessage(msg);
 		//dialog.show();		
