@@ -8,12 +8,18 @@
 </CheckBoxPreference>
 
 <EditTextPreference
+	android:key="key_virtual_file"
+	android:title="Virtual File"
+	android:summary="gps_demoN.txt"
+	android:numeric="integer"
+	android:dialogTitle="Virtual File" />
+
+<EditTextPreference
 	android:key="key_refresh_preiod"
 	android:title="Map refresh rate"
 	android:summary="Map refresh rate (in ms) "
 	android:numeric="integer"
 	android:dialogTitle="Map refresh rate" />
-
 
 <CheckBoxPreference 
 	android:key="Activation enable" 

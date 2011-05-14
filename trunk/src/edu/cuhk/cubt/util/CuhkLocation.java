@@ -4,7 +4,7 @@ import android.location.Location;
 
 public class CuhkLocation extends Location{
 	
-	private static final double altitude = 22.419005;
+	private static final double latitude = 22.419005;
 	private static final double longitude = 114.206904;
 	
 	public static final double CUHK_RANGE = 1000;
@@ -24,7 +24,7 @@ public class CuhkLocation extends Location{
 	
 	private CuhkLocation() {
 		super("CUBT");
-		this.setLatitude(altitude);
+		this.setLatitude(latitude);
 		this.setLongitude(longitude);
 	}
 

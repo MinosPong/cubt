@@ -13,8 +13,8 @@ public class VirtualLocationSensor {
 	boolean mExternalStorageAvailable = false;
 	boolean mExternalStorageWriteable = false;
 	
-	String demoPath = "/sdcard/fyptest/demo";
-	String demoFile = "gps_demo.txt";
+	private static String demoPath = "/sdcard/fyptest/demo";
+	private static String demoFile  = "gps_demo.txt";
 	File file;
 	DataInputStream is;
 	private Handler handler = new Handler();
@@ -32,6 +32,8 @@ public class VirtualLocationSensor {
 	private boolean isStart = false;
 	
 	private static VirtualLocationSensor instance= null;
+	
+	
 	private VirtualLocationSensor(){
 		Init();
 	}
@@ -41,6 +43,10 @@ public class VirtualLocationSensor {
 			instance = new VirtualLocationSensor();
 		}
 		return instance;
+	}
+	
+	public static void setFile(String id){
+		demoFile = "gps_demo" + id + ".txt";
 	}
 	
 	protected void Init() {
@@ -89,7 +95,8 @@ public class VirtualLocationSensor {
 					listener.onStatusChanged(provideName,  LocationProvider.OUT_OF_SERVICE, null);
 				}
 			} catch (IOException e) {  
-
+				listener.onProviderDisabled(provideName);
+				listener.onStatusChanged(provideName,  LocationProvider.OUT_OF_SERVICE, null);
 			} 
 		}		
 	};
