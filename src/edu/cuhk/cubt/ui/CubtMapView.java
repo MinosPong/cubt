@@ -61,14 +61,6 @@ public class CubtMapView extends MapActivity {
 	    
 	    List<Overlay> mapOverlays = mapView.getOverlays();
 	    Drawable drawableStop, drawable;
-	    
-	    drawableStop = this.getResources().getDrawable(R.drawable.stop); //bus stop star
-	    stopOverlay = new BusStopOverlay(drawableStop,this);	    
-	    mapOverlays.add(stopOverlay);
-	    
-	    drawable = this.getResources().getDrawable(R.drawable.bus2);
-	    realOverlay = new ServiceOverlay(drawable, this);
-	    mapOverlays.add(realOverlay); 
 
 	    Bitmap bmp = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888);
 	    Drawable drawableBmp = new BitmapDrawable(bmp);
@@ -77,6 +69,15 @@ public class CubtMapView extends MapActivity {
 	    OverlayItem overlayitem2 = new OverlayItem(pointTmp, "Test","point");
 	    routeOverlay.addOverlay(overlayitem2);
 	    mapOverlays.add(routeOverlay);
+
+	    drawableStop = this.getResources().getDrawable(R.drawable.stop); //bus stop star
+	    stopOverlay = new BusStopOverlay(drawableStop,this);	    
+	    mapOverlays.add(stopOverlay);
+	    
+	    
+	    drawable = this.getResources().getDrawable(R.drawable.bus2);
+	    realOverlay = new ServiceOverlay(drawable, this);
+	    mapOverlays.add(realOverlay); 
 	    
 	    //Commented with bug, to be solved
 	    //routeOverlay = new PathOverlay(drawable ,mapView, this);
@@ -110,7 +111,7 @@ public class CubtMapView extends MapActivity {
 		}catch(NumberFormatException e){
 			//period = 3000;
 		}
-	    //startServiceUpdate(period); //run in real time
+	    startServiceUpdate(period); //run in real time
 	}
 	
 	
