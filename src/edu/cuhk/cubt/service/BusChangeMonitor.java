@@ -43,6 +43,9 @@ public class BusChangeMonitor implements IServiceMonitor{
 	public void stop(CubtService service){
 		locationSensor.removeHandler(handler);
 		busClassifier.removeHandler(handler);
+		if(isOnBus){
+			BusLocationUploader.remove();
+		}
 	}
 	
 	protected void busLocationChange(Location location){

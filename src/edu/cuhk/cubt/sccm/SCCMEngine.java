@@ -45,10 +45,16 @@ public class SCCMEngine {
 			throw new UnsupportedOperationException("Location serivce not exist");
 		}
 		locationSensor = new LocationSensor(locationManager);
+	
+		VirtualLocationSensor.setFile(
+				mContext.getSharedPreferences(Settings.sharedPreferenceFile,0).
+				getString(Settings.PREF_VIRTUAL_FILE, "")
+				);
 		
 		locationSensor.setVirtual(
 				mContext.getSharedPreferences(Settings.sharedPreferenceFile,0).
-				getBoolean(Settings.PREF_VIRTUAL_SENSOR, false));
+				getBoolean(Settings.PREF_VIRTUAL_SENSOR, false)
+				);	
 		
 		//Initialize Classifiers
 		classifierManager.initialize();
