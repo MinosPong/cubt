@@ -7,7 +7,9 @@ import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
 import edu.cuhk.cubt.bus.BusEventObject;
+import edu.cuhk.cubt.util.CuhkLocation;
 
+import android.location.Location;
 import android.util.Log;
 
 /**
@@ -38,6 +40,7 @@ public class BusLocationUploader {
 		postHelper(SUGGEST_ID,value);
 	}
 	
+	/*
 	public static void add(){
 		String rand = "";
 		for(int i = 0;i<6; i++){
@@ -45,7 +48,22 @@ public class BusLocationUploader {
 		}
 		add(rand);
 	}
+	*/
 	
+	public static void add(Location location){
+		String rand = "";
+		for(int i = 0;i<6; i++){
+			rand += (int)(Math.random()*10);
+		}
+		
+		setId(rand);
+		
+		String value = "add/" + id + "/" + location.getLatitude()+ 
+				"/" + location.getLongitude() +
+				"/" + location.distanceTo(CuhkLocation.getInstance());
+		postHelper(value);
+	}
+	/*
 	public static void add(String id){
 		add(id,0,0);
 	}
@@ -54,7 +72,7 @@ public class BusLocationUploader {
 		setId(id);
 		String value = "add/" + id + "/" + latitude + "/" + longtitude;
 		postHelper(value);
-	}
+	}*/
 	
 	public static void updateLocation(double latitude, double longtitude){
 		String value = "update/" + id + "/" + latitude + "/" + longtitude;

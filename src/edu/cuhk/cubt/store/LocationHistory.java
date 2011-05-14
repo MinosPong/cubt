@@ -39,7 +39,7 @@ public class LocationHistory extends CircularBuffer<Location>{
 	public void add(Location location)
 		throws IllegalArgumentException{
 		
-		assertNewLocation(location);
+		//assertNewLocation(location);
 		super.add(location);
 		fireLocationHistoryUpdate();
 	}

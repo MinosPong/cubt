@@ -52,10 +52,8 @@ public class BusChangeMonitor implements IServiceMonitor{
 	protected void busEnterEvent(BusEventObject evt){
 		
 		busStopList.clear();
-		BusLocationUploader.add();
+		BusLocationUploader.add(locationSensor.getLastLocation());
 		addBusStop(evt);
-		
-		busLocationChange(locationSensor.getLastLocation());
 
 		locationSensor.addHandler(handler);
 		
