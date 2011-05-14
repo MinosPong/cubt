@@ -66,7 +66,7 @@ public class CubtMapView extends MapActivity {
 	    stopOverlay = new BusStopOverlay(drawableStop,this);	    
 	    mapOverlays.add(stopOverlay);
 	    
-	    drawable = this.getResources().getDrawable(R.drawable.bus);
+	    drawable = this.getResources().getDrawable(R.drawable.bus2);
 	    realOverlay = new ServiceOverlay(drawable, this);
 	    mapOverlays.add(realOverlay); 
 
@@ -110,7 +110,7 @@ public class CubtMapView extends MapActivity {
 		}catch(NumberFormatException e){
 			//period = 3000;
 		}
-	    startServiceUpdate(period); //run in real time
+	    //startServiceUpdate(period); //run in real time
 	}
 	
 	
