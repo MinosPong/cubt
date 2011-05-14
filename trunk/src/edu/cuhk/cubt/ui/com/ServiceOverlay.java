@@ -11,6 +11,7 @@ import android.text.format.Time;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.ItemizedOverlay;
+import com.google.android.maps.MapView;
 import com.google.android.maps.OverlayItem;
 
 import edu.cuhk.cubt.store.RouteData;
@@ -35,27 +36,25 @@ public class ServiceOverlay extends ItemizedOverlay<OverlayItem> {
 	}
 
 	public void updateDisplay(){
-		mOverlays.clear();
+		clearOverlay();
 		Iterator<GeoPoint> it = busInService().iterator();
 		if(it != null){
 			while(it.hasNext()){
 			GeoPoint busLoc = it.next();
-			mOverlays.add(new OverlayItem(busLoc, dir, "\nLast Stop:"+ lStop + "\nArrived time:" + ptime + "\nPredicted Route:"+ pRoute));
+			addOverlay(new OverlayItem(busLoc, dir, "\nLast Stop:"+ lStop + "\nArrived time:" + ptime + "\nPredicted Route:"+ pRoute));
 			}
 		}
-		populate();
 	}
 	
 	
 	public void updateDisplay(Iterator<GeoPoint> it){
-		mOverlays.clear();
+		clearOverlay();
 		if(it != null){
 			while(it.hasNext()){
 			GeoPoint busLoc = it.next();
-			mOverlays.add(new OverlayItem(busLoc, "Last Stop", "Predicted Route:"+ pRoute + "\nDirection: " + dir + "\nLast Stop:"+ lStop));
+			addOverlay(new OverlayItem(busLoc, "Last Stop", "Predicted Route:"+ pRoute + "\nDirection: " + dir + "\nLast Stop:"+ lStop));
 			}
 		}
-		populate();		
 	}
 
 	@Override
@@ -74,15 +73,25 @@ public class ServiceOverlay extends ItemizedOverlay<OverlayItem> {
 	
 	@Override
 	protected OverlayItem createItem(int i) {
-		// TODO Auto-generated method stub
 		return mOverlays.get(i);
 	}
 
 	@Override
 	public int size() {
-		// TODO Auto-generated method stub
 		return mOverlays.size();
 		//return 0;
+	}
+		
+	protected void addOverlay(OverlayItem overlay){
+		mOverlays.add(overlay);
+		setLastFocusedIndex(-1);
+		populate();
+	}
+	
+	protected void clearOverlay(){
+		mOverlays.clear();
+		setLastFocusedIndex(-1);
+		populate();		
 	}
 
 	//Received bus locations

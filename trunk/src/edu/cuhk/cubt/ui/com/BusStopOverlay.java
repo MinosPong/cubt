@@ -61,6 +61,7 @@ public class BusStopOverlay extends ItemizedOverlay<OverlayItem> {
 			}
 		}
 		populate();
+		setLastFocusedIndex(-1);
 	}
 
 	public void setRoute(String routeName){

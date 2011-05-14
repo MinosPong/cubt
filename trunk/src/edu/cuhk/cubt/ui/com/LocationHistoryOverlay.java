@@ -26,6 +26,7 @@ public class LocationHistoryOverlay extends ItemizedOverlay<OverlayItem> {
 
 	private void updateDisplay(){
 		populate();
+		setLastFocusedIndex(-1);
 	}
 	
 	
@@ -33,6 +34,7 @@ public class LocationHistoryOverlay extends ItemizedOverlay<OverlayItem> {
 	@Override
 	protected int getIndexToDraw(int drawingOrder) {
 		populate();
+		setLastFocusedIndex(-1);
 		return super.getIndexToDraw(drawingOrder);
 	}
 
