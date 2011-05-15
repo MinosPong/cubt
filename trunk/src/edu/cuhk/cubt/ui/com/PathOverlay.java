@@ -86,7 +86,7 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
         int x2=screenCoords1.x;
         int y2=screenCoords1.y;
 
-        paint.setStrokeWidth(5);
+        paint.setStrokeWidth(2);
         canvas.drawLine(x1, y1, x2, y2, paint);
 	}
 	
