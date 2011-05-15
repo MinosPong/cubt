@@ -16,6 +16,7 @@ import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.text.format.Time;
 import android.util.Log;
+import android.view.Gravity;
 import android.widget.Toast;
 
 import com.google.android.maps.GeoPoint;
@@ -132,7 +133,11 @@ public class BusStopOverlay extends ItemizedOverlay<OverlayItem> {
 			dir2 = "up";
 		else if(dir == 1)
 			dir2 = "down";
-		Toast.makeText(mContext, last, Toast.LENGTH_SHORT).show();
+		
+		Toast toast = Toast.makeText(mContext, last, Toast.LENGTH_SHORT);
+		toast.setGravity(Gravity.TOP, 0, 150);
+		toast.show();
+
 		//no need for the nextstop?
 		//dialog.setMessage(msg);
 		//dialog.show();		

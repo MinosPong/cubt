@@ -84,7 +84,7 @@ public class ServiceOverlay extends ItemizedOverlay<OverlayItem> {
 	  TextView text = (TextView) layout.findViewById(R.id.text);
 	  text.setText("Last Stop:"+ lStop + "\nPredicted Stop:"+ pStop + "\nDirection: " + dir);
 	  Toast toast = new Toast(mContext);
-	  toast.setGravity(Gravity.TOP, 0, 130);
+	  toast.setGravity(Gravity.TOP, 0, 150);
 	  toast.setDuration(Toast.LENGTH_LONG);
 	  toast.setView(layout);
 	  toast.show();
