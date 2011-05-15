@@ -209,7 +209,8 @@ public class CubtMapView extends MapActivity {
 				poiStop = stop;
 				stops.add(stop);
 				output+= stop.getName() + "\n";
-				routeOverlay2.PredictedStop(poiStop);
+				routeOverlay2.LastStop(poiStop);
+				//routeOverlay2.LastStop(PoiData.getByName(PoiData.STOP_ADM));
 			}
 			//time, current Time
 			Time time= new Time();
@@ -238,7 +239,7 @@ public class CubtMapView extends MapActivity {
 				
 				//routeOverlay2.PredictedStop(PoiData.getByName(PoiData.STOP_SRR));
 			}
-			//routeOverlay2.updateDisplay();
+			routeOverlay2.updateDisplay();
 			
 			
 			text.setText(output);
