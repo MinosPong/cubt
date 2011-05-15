@@ -29,10 +29,15 @@ public class CubtTabActivity extends TabActivity {
 	                  .setContent(intent);
 	    tabHost.addTab(spec);
 	    
-	    // Create an Intent to launch an Activity for the tab (to be reused)
-	    intent = new Intent().setClass(this, StopPassedHistoryActivity.class);
+	    
 
-	    // Initialize a TabSpec for each tab and add it to the TabHost
+	    intent = new Intent().setClass(this, TravelHistoryActivity.class);
+	    spec = tabHost.newTabSpec("travelhistory").setIndicator("Travel History")
+	                  .setContent(intent);
+	    tabHost.addTab(spec);
+	    
+	    
+	    intent = new Intent().setClass(this, StopPassedHistoryActivity.class);
 	    spec = tabHost.newTabSpec("stophistory").setIndicator("Stop History")
 	                  .setContent(intent);
 	    tabHost.addTab(spec);

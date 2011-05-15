@@ -12,7 +12,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper{
 	
 	public static final String DATABASE_NAME = "CUBT_DATABASE";
 	
-	public static final int DATABASE_VERSION = 4;
+	public static final int DATABASE_VERSION = 6;
 	
 	
 	public DatabaseOpenHelper(Context context) {
@@ -22,6 +22,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper{
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		DbStopPassed.createTable(db);
+    	DbTravelLocation.createTable(db);
 	}
 
 	@Override
@@ -31,8 +32,9 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper{
         if(oldVersion<4){
         	db.execSQL("ALTER TABLE " + DbStopPassed.TABLE_NAME + " ADD " + StopPassedColumns.TRAVEL_ID + " integer ");
         }
-        if(oldVersion<5){
-        	
+        if(oldVersion<6){
+        	DbTravelLocation.deleteTable(db);
+        	DbTravelLocation.createTable(db);
         }
 	}
 

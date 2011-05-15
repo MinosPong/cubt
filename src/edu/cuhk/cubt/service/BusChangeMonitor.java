@@ -9,6 +9,7 @@ import edu.cuhk.cubt.bus.Route;
 import edu.cuhk.cubt.bus.RoutePrediction;
 import edu.cuhk.cubt.bus.Stop;
 import edu.cuhk.cubt.bus.BusEventObject;
+import edu.cuhk.cubt.db.DbTravelLocation;
 import edu.cuhk.cubt.net.BusLocationUploader;
 import edu.cuhk.cubt.sccm.LocationSensor;
 import edu.cuhk.cubt.sccm.classifier.BusClassifier;
@@ -29,13 +30,15 @@ public class BusChangeMonitor implements IServiceMonitor{
 	
 	BusClassifier busClassifier;
 	LocationSensor locationSensor;
-	
+	DbTravelLocation db;
+	int tid;
 	List<Stop> busStopList = new ArrayList<Stop>();
 	
 	boolean isOnBus = false;
 		
 	public void start(CubtService service){
 		locationSensor = service.getSCCMEngine().getLocationSensor();
+		db = DbTravelLocation.getInstance(service.getApplicationContext());
 		busClassifier = service.getSCCMEngine().getClassifierManager().getClassifier(BusClassifier.class);
 		busClassifier.addHandler(handler);
 	}
@@ -50,6 +53,7 @@ public class BusChangeMonitor implements IServiceMonitor{
 	
 	protected void busLocationChange(Location location){
 		BusLocationUploader.updateLocation(location.getLatitude(), location.getLongitude());
+		db.insert(tid,locationSensor.getLastLocation());
 	}
 	
 	protected void busEnterEvent(BusEventObject evt){
@@ -58,6 +62,9 @@ public class BusChangeMonitor implements IServiceMonitor{
 		BusLocationUploader.add(locationSensor.getLastLocation());
 		addBusStop(evt);
 
+		tid = db.getTid();
+		db.insert(tid,locationSensor.getLastLocation());
+		
 		locationSensor.addHandler(handler);
 		
 		isOnBus = true;
@@ -66,9 +73,9 @@ public class BusChangeMonitor implements IServiceMonitor{
 	protected void busExitEvent(BusEventObject evt){
 		isOnBus = false;		
 
-		locationSensor.removeHandler(handler);
 		
-		addBusStop(evt);		
+		addBusStop(evt);	
+		locationSensor.removeHandler(handler);	
 		
 		BusLocationUploader.remove();
 	}

@@ -15,6 +15,7 @@
 			</intent-filter>
 		</activity>    
 		<activity android:name="edu.cuhk.cubt.ui.TestUserStateActivity" android:label="CUBT_TEST"></activity>
+		<activity android:name="edu.cuhk.cubt.ui.TravelHistoryActivity" android:label="CUBT_TEST"></activity>
 		<activity android:name="edu.cuhk.cubt.ui.CubtMapView" android:label="@string/app_name"></activity>
 		<activity android:name="edu.cuhk.cubt.ui.Settings" android:label="@string/app_name"></activity>
 		<activity android:name="edu.cuhk.cubt.ui.StopPassedHistoryActivity" android:label="@string/app_name"></activity>
