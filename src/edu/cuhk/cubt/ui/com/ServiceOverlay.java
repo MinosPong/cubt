@@ -97,15 +97,6 @@ public class ServiceOverlay extends ItemizedOverlay<OverlayItem> {
 	  return true;
 	}
 	
-	private ViewGroup findViewById(int toastviewRoot) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	private LayoutInflater getLayoutInflater() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	protected OverlayItem createItem(int i) {
