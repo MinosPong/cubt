@@ -18,6 +18,7 @@ import com.google.android.maps.OverlayItem;
 
 import edu.cuhk.cubt.bus.Poi;
 import edu.cuhk.cubt.bus.Route;
+import edu.cuhk.cubt.bus.Stop;
 import edu.cuhk.cubt.store.PoiData;
 import edu.cuhk.cubt.store.RouteData;
 import edu.cuhk.cubt.ui.com.ServiceOverlay.ServiceOverlayItem;
@@ -93,7 +94,7 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
     public void draw(Canvas canvas, MapView mapView, boolean shadow) {        
         super.draw(canvas, mapView, shadow);
         if(routeName != null)
-        	drawRoute(canvas, routeName); //RouteData.ROUTE_0
+        	newDrawRoute(canvas, routeName); //RouteData.ROUTE_0
         //last = PoiData.STOP_CCS;
         //next = PoiData.STOP_MTR;
         String last = "", next = "";
@@ -246,6 +247,21 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
 		}
 		if(lastStop != null && nextStop != null)
 			drawPortion(canvas, getPortion(path).iterator());
+	}
+	
+	public void newDrawRoute(Canvas canvas,String routeName){
+		Route route = RouteData.getRouteByName(routeName);
+		Iterator<Stop> stops = route.getStops();
+		Stop prevStop,nextStop;
+		if(stops.hasNext()){
+			prevStop = stops.next();
+			while(stops.hasNext()){
+				nextStop = stops.next();
+				drawPrediction(canvas, prevStop.getName(),nextStop.getName());
+				prevStop = nextStop;
+			}
+		}
+		
 	}
 	
 	public void drawRoute (Canvas canvas, String routeName){
