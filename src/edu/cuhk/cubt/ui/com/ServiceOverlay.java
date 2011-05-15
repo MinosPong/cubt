@@ -79,7 +79,7 @@ public class ServiceOverlay extends ItemizedOverlay<OverlayItem> {
 	protected boolean onTap(int index) {
 	  ServiceOverlayItem item = mOverlays.get(index);
 	  //cubtMapView.setDisplayRoute(routeName);		 //Move the above action to CubtMapView, then routeOverlay and stopOverlay can pervent from static
-	  cubtMapView.displayRouteInfo(item.getId());
+	  cubtMapView.doDisplayRouteInfo(item.getId());
 	  /*
 	  AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
 	  dialog.setTitle(item.getTitle());

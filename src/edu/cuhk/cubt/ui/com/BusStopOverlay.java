@@ -105,6 +105,7 @@ public class BusStopOverlay extends ItemizedOverlay<OverlayItem> {
 	@Override
 	protected boolean onTap(int index){
 		Log.d(Tag,"TAP : (" + index + "/" +size() + ")");
+		/*
 		Poi poi= mOverlays.get(index);
 		AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
 		dialog.setCancelable(true);
@@ -133,8 +134,9 @@ public class BusStopOverlay extends ItemizedOverlay<OverlayItem> {
 			dir2 = "up";
 		else if(dir == 1)
 			dir2 = "down";
-		
-		Toast toast = Toast.makeText(mContext, last, Toast.LENGTH_SHORT);
+		*/
+
+		Toast toast = Toast.makeText(mContext, mOverlays.get(index).getName(), Toast.LENGTH_SHORT);
 		toast.setGravity(Gravity.TOP, 0, 150);
 		toast.show();
 

@@ -1,13 +1,9 @@
 package edu.cuhk.cubt.ui;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import android.app.AlertDialog;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
@@ -30,12 +26,9 @@ import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
-import com.google.android.maps.OverlayItem;
 
-import edu.cuhk.cubt.CubtApplication;
 import edu.cuhk.cubt.R;
 import edu.cuhk.cubt.bus.BusEventObject;
-import edu.cuhk.cubt.bus.Poi;
 import edu.cuhk.cubt.bus.Route;
 import edu.cuhk.cubt.bus.RoutePrediction;
 import edu.cuhk.cubt.bus.Stop;
@@ -43,7 +36,6 @@ import edu.cuhk.cubt.net.BusActivityRequest;
 import edu.cuhk.cubt.net.BusActivityRequest.BusActivityRecord;
 import edu.cuhk.cubt.net.BusPassedStopRequest;
 import edu.cuhk.cubt.store.LocationHistory;
-import edu.cuhk.cubt.store.PoiData;
 import edu.cuhk.cubt.store.RouteData;
 import edu.cuhk.cubt.ui.com.BusStopOverlay;
 import edu.cuhk.cubt.ui.com.LocationHistoryOverlay;
@@ -57,7 +49,7 @@ public class CubtMapView extends MapActivity {
 	BusStopOverlay stopOverlay;
 	ServiceOverlay realOverlay;
 	LocationHistoryOverlay locationHistoryOverlay;
-	PathOverlay routeOverlay, routeOverlay2;
+	PathOverlay routeOverlay;
 	View layout;
 	TextView toastText;
 	
@@ -101,6 +93,7 @@ public class CubtMapView extends MapActivity {
 	    List<Overlay> mapOverlays = mapView.getOverlays();
 	    Drawable drawableStop, drawable;
 
+	    /*
 	    Bitmap bmp = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888);
 	    Drawable drawableBmp = new BitmapDrawable(bmp);
 	    routeOverlay = new PathOverlay(drawableBmp ,mapView, this);
@@ -110,6 +103,7 @@ public class CubtMapView extends MapActivity {
 	    routeOverlay.addOverlay(overlayitem2);
 	    
 	    mapOverlays.add(routeOverlay);
+	    */
 
 	    /*stop: busStop2D, stop3d: busStop3D, pstop:busStop3D with base, left:busStop indicates left, right:busStop indicate right*/
 	    drawableStop = this.getResources().getDrawable(R.drawable.pstop); //bus stop
@@ -134,8 +128,8 @@ public class CubtMapView extends MapActivity {
 	    
 	    
 
-	    routeOverlay2 = new PathOverlay(drawableStop ,mapView, this);
-	    mapOverlays.add(routeOverlay2);
+	    routeOverlay = new PathOverlay(drawableStop ,mapView, this);
+	    mapOverlays.add(routeOverlay);
 	    
 	    drawable = this.getResources().getDrawable(R.drawable.bus2);
 	    realOverlay = new ServiceOverlay(drawable, this);
@@ -177,7 +171,6 @@ public class CubtMapView extends MapActivity {
 	@Override
 	protected void onDestroy() {
 		stopServiceUpdate();
-		//routeOverlay2.clearOverlay();
 		unsetHandler();
 		super.onDestroy();
 	}
@@ -185,7 +178,7 @@ public class CubtMapView extends MapActivity {
 
 	public void setDisplayRoute(String routeName){
 		//since dunno the predicted route BUT stops!?  
-		routeOverlay.setPath(routeName); //show predicted path
+		routeOverlay.drawRoute(routeName); //show predicted path
 		stopOverlay.setRoute(routeName); //show predicted stops
 	}
 	
@@ -193,20 +186,23 @@ public class CubtMapView extends MapActivity {
 	private boolean newClick = false;
 	private static final int MSG_REQUEST_STOP_UPDATE = 28012;
 	
-	public void displayRouteInfo(long id){
+	
+	public void doDisplayRouteInfo(long id){
+		setDisplayRoute(null);
+		displayRouteInfo(id);
+	}
+	private void displayRouteInfo(long id){
 		if(busShowingId != id){
 			busShowingId = id;
 		}
 		newClick = true;
 		displayRouteInfo();
 	}
-	public void displayRouteInfo(){
+	private void displayRouteInfo(){
 		if(busShowingId>=0){
 			BusPassedStopRequest.getPassedStop(busShowingId, passedStopCallback);
 		}else{
-			routeOverlay2.setLastStop(null);
-			routeOverlay2.setPredictedStop(null);
-			routeOverlay2.updateDisplay();
+			routeOverlay.clear();			
 		}
 	}
 	
@@ -264,7 +260,6 @@ public class CubtMapView extends MapActivity {
 			Stop lastStop = (stops.isEmpty())? null : stops.get(stops.size()-1);
 			if(lastStop!=null){
 				output += lastStop.getName() + "\n";
-				routeOverlay2.setLastStop(lastStop);
 			}
 			
 			//time, current Time
@@ -287,7 +282,7 @@ public class CubtMapView extends MapActivity {
 			while(siter.hasNext()){			
 				output+= siter.next().getName() + "\n";
 			}
-			routeOverlay2.drawPrediction(lastStop, predictedStops);
+			routeOverlay.drawPrediction(lastStop, predictedStops);
 			
 			if(predictedStops.size() == 0){
 				output = "Route Ended";
