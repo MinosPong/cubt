@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.ItemizedOverlay;
@@ -104,7 +105,7 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
         if(nextStop != null)
         	next = nextStop.getName();
         else next = null;
-        //if(last != null && next != null)
+        if(last != null && next != null)
         	drawPrediction(canvas, last, next);
     }
 
@@ -138,110 +139,138 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
 	
 	public void drawPrediction(Canvas canvas,String lastStop, String nextStop){
 		String path = null;
-		if(lastStop == PoiData.STOP_MTR && nextStop == PoiData.STOP_SPU)
+		
+		if(		lastStop == PoiData.STOP_MTR && nextStop == PoiData.STOP_SPU)
 			path = "MTRtoSPU";
-		else if(lastStop == PoiData.STOP_SPD && nextStop == PoiData.STOP_MTR)
-			path = "MTRtoSPU";
-		else if(lastStop == PoiData.STOP_MTR && nextStop == PoiData.STOP_PGH){
+		else if(lastStop == PoiData.STOP_MTR && nextStop == PoiData.STOP_PGH)
+		{
         	path = "SPDtoPGH";
 			drawPortion(canvas, getPortion(path).iterator());
 			path = "MTRtoSPU";
 		}
+		else if(lastStop == PoiData.STOP_MTR && nextStop == PoiData.STOP_ADM)
+		{
+        	path = "FKHtoR34";
+        	drawPortion(canvas, getPortion(path).iterator());
+			path = "FKHtoADM";
+		}
+		
 		else if(lastStop == PoiData.STOP_PGH && nextStop == PoiData.STOP_SPU)
         	path = "SPDtoPGH";
-		else if(lastStop == PoiData.STOP_MTR && nextStop == PoiData.STOP_ADM){
-        	path = "FKHtoR34";
-        	drawPortion(canvas, getPortion(path).iterator());
-			path = "FKHtoADM";
-		}
+		else if(lastStop == PoiData.STOP_PGH && nextStop == PoiData.STOP_MTR)
+        	path = "SPDtoPGH";
+		//TODO Missing STOP_PGH to STOP_MTR
+		
 		else if(lastStop == PoiData.STOP_SPU && nextStop == PoiData.STOP_SRR)
         	path = "SPUtoSRR";
-		else if(lastStop == PoiData.STOP_ADM && nextStop == PoiData.STOP_SRR)
-        	path = "ADMtoSRR";
+		
+		else if(lastStop == PoiData.STOP_SPD && nextStop == PoiData.STOP_MTR)
+			path = "MTRtoSPU";
+		else if(lastStop == PoiData.STOP_SPD && nextStop == PoiData.STOP_PGH)
+        	path = "SPDtoPGH";
+		else if(lastStop == PoiData.STOP_SPD && nextStop == PoiData.STOP_CCS)
+        	path = "SPDtoCCS";
+		
 		else if(lastStop == PoiData.STOP_SRR && nextStop == PoiData.STOP_FKH)
         	path = "SRRtoFKH";
-		else if(lastStop == PoiData.STOP_FKH && nextStop == PoiData.STOP_UCS)
-        	path = "FKHtoUCS";
-		else if(lastStop == PoiData.STOP_UCS && nextStop == PoiData.STOP_NAS)
-        	path = "UCStoNAS";
-		else if(lastStop == PoiData.STOP_NAS && nextStop == PoiData.STOP_UCS)
-        	path = "UCStoNAS";
-		else if(lastStop == PoiData.STOP_UCS && nextStop == PoiData.STOP_ADM){
-        	path = "FKHtoUCS";
-        	drawPortion(canvas, getPortion(path).iterator());
-			path = "FKHtoADM";
-		}
 		else if(lastStop == PoiData.STOP_SRR && nextStop == PoiData.STOP_NAS)
         	path = "SRRtoNAS";
-		else if(lastStop == PoiData.STOP_UCS && nextStop == PoiData.STOP_R34)
-        	path = "UCStoR34";
+		else if(lastStop == PoiData.STOP_SRR && nextStop == PoiData.STOP_ADM)
+        	path = "SRRtoADM";
+		
+		else if(lastStop == PoiData.STOP_FKH && nextStop == PoiData.STOP_UCS)
+        	path = "FKHtoUCS";
 		else if(lastStop == PoiData.STOP_FKH && nextStop == PoiData.STOP_R34)
         	path = "FKHtoR34";
-		else if(lastStop == PoiData.STOP_R34 && nextStop == PoiData.STOP_ADM){
-	        	path = "FKHtoR34";
-	        	drawPortion(canvas, getPortion(path).iterator());
-				path = "FKHtoADM";
-			}
 		else if(lastStop == PoiData.STOP_FKH && nextStop == PoiData.STOP_SCS){
         	path = "FKHtoR34";
         	drawPortion(canvas, getPortion(path).iterator());
 			path = "R34toSCS";
 		}
+		
+		else if(lastStop == PoiData.STOP_UCS && nextStop == PoiData.STOP_NAS)
+        	path = "UCStoNAS";
+		else if(lastStop == PoiData.STOP_UCS && nextStop == PoiData.STOP_R34)
+        	path = "UCStoR34";
+		else if(lastStop == PoiData.STOP_UCS && nextStop == PoiData.STOP_ADM){
+        	path = "FKHtoUCS";
+        	drawPortion(canvas, getPortion(path).iterator());
+			path = "FKHtoADM";
+		}
+		
+		else if(lastStop == PoiData.STOP_NAS && nextStop == PoiData.STOP_UCS)
+        	path = "UCStoNAS";
+		
 		else if(lastStop == PoiData.STOP_R34 && nextStop == PoiData.STOP_ADM){
         	path = "FKHtoR34";
         	drawPortion(canvas, getPortion(path).iterator());
 			path = "FKHtoADM";
 		}
+		else if(lastStop == PoiData.STOP_R34 && nextStop == PoiData.STOP_SCS)
+        	path = "R34toSCS";
+		else if(lastStop == PoiData.STOP_R34 && nextStop == PoiData.STOP_UCS)
+        	path = "UCStoR34";
+		else if(lastStop == PoiData.STOP_R34 && nextStop == PoiData.STOP_NAS)
+		{
+			path = "UCStoR34";
+    		drawPortion(canvas, getPortion(path).iterator());
+    		path = "UCStoNAS";
+		}
+		else if(lastStop == PoiData.STOP_R34 && nextStop == PoiData.STOP_RUC){
+        	path = "RUCtoCCH";
+        	drawPortion(canvas, getPortion(path).iterator());
+        	path = "CCHtoR34";
+        }
+		
+		else if(lastStop == PoiData.STOP_ADM && nextStop == PoiData.STOP_SRR)
+        	path = "ADMtoSRR";
+		else if(lastStop == PoiData.STOP_ADM && nextStop == PoiData.STOP_P5H)
+        	path = "ADMtoP5H";
+		
+		else if(lastStop == PoiData.STOP_P5H && nextStop == PoiData.STOP_SPD)
+        	path = "P5HtoSPD";
+		
 		else if(lastStop == PoiData.STOP_CCH && nextStop == PoiData.STOP_FKH){
         	path = "FKHtoR34";
         	drawPortion(canvas, getPortion(path).iterator());
 			path = "CCHtoR34";
 		}
-		else if(lastStop == PoiData.STOP_R34 && nextStop == PoiData.STOP_SCS)
-        	path = "R34toSCS";
-		else if(lastStop == PoiData.STOP_R34 && nextStop == PoiData.STOP_UCS)
-        	path = "UCStoR34";
+		
 		else if(lastStop == PoiData.STOP_SCS && nextStop == PoiData.STOP_R34)
         	path = "R34toSCS";
 		else if(lastStop == PoiData.STOP_SCS && nextStop == PoiData.STOP_R11)
         	path = "SCStoR11";
+		
 		else if(lastStop == PoiData.STOP_R11 && nextStop == PoiData.STOP_R15)
         	path = "R11toR15";
 		else if(lastStop == PoiData.STOP_R15 && nextStop == PoiData.STOP_R11)
         	path = "R11toR15";
 		else if(lastStop == PoiData.STOP_R15 && nextStop == PoiData.STOP_RUC)
         	path = "R15toRUC";
+		
 		else if(lastStop == PoiData.STOP_RUC && nextStop == PoiData.STOP_R15)
         	path = "R15toRUC";
 		else if(lastStop == PoiData.STOP_RUC && nextStop == PoiData.STOP_CCH)
         	path = "RUCtoCCH";
+		
 		else if(lastStop == PoiData.STOP_CCH && nextStop == PoiData.STOP_R34)
         	path = "CCHtoR34";
-		else if(lastStop == PoiData.STOP_SPD && nextStop == PoiData.STOP_PGH)
-        	path = "SPDtoPGH";
-		else if(lastStop == PoiData.STOP_SPD && nextStop == PoiData.STOP_CCS)
-        	path = "SPDtoCCS";
-		else if(lastStop == PoiData.STOP_FKH && nextStop == PoiData.STOP_ADM)
-            path = "FKHtoADM";
-		else if(lastStop == PoiData.STOP_ADM && nextStop == PoiData.STOP_P5H)
-        	path = "ADMtoP5H";
-		else if(lastStop == PoiData.STOP_P5H && nextStop == PoiData.STOP_SPD)
-        	path = "P5HtoSPD";
-		else if(lastStop == PoiData.STOP_SRR && nextStop == PoiData.STOP_ADM)
-        	path = "SRRtoADM";
+		//else if(lastStop == PoiData.STOP_FKH && nextStop == PoiData.STOP_ADM)
+        //    path = "FKHtoADM";
+		
+		
+		
 		else if(lastStop == PoiData.STOP_CCS && nextStop == PoiData.STOP_MTR)
         	path = "CCStoMTR";
-		else if(lastStop == PoiData.STOP_R34 && nextStop == PoiData.STOP_RUC){
-        	path = "RUCtoCCH";
-        	drawPortion(canvas, getPortion(path).iterator());
-        	path = "CCHtoR34";
-        }
-		else if(lastStop == PoiData.STOP_CCS && nextStop == PoiData.STOP_SPU){
+		else if(lastStop == PoiData.STOP_CCS && nextStop == PoiData.STOP_SPU)
+		{
         	path = "CCStoMTR";
         	drawPortion(canvas, getPortion(path).iterator());
         	path = "MTRtoSPU";
         }
+		
 		else {
+			Log.w("PATH MISSING", lastStop + " > " + nextStop);
 			lastStop = null;
 			nextStop = null;
 		}

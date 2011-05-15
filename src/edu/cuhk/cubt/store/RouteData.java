@@ -148,9 +148,8 @@ public class RouteData {
 					"Weekday 1800-2330: University Station > University Residence Nos. 10-11", 
 					Route.TYPE_EVENING , 0, 0, new String[]{
 					PoiData.STOP_MTR,
-					//PoiData.STOP_PGH, //<<---suppose no??
-					PoiData.STOP_SPU,
 					PoiData.STOP_PGH,
+					PoiData.STOP_SPU,
 					PoiData.STOP_SRR,
 					PoiData.STOP_FKH,
 					PoiData.STOP_UCS,
