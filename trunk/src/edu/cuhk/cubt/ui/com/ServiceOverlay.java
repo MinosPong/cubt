@@ -77,8 +77,8 @@ public class ServiceOverlay extends ItemizedOverlay<OverlayItem> {
 	  //dialog.setMessage(item.getSnippet());
 	  //dialog.show();
 	  
-	  LayoutInflater inflater = getLayoutInflater();
-	  View layout = inflater.inflate(R.layout.toastview,(ViewGroup)findViewById(R.id.toastview_root));
+	  LayoutInflater inflater = cubtMapView.getLayoutInflater();
+	  View layout = inflater.inflate(R.layout.toastview,(ViewGroup)cubtMapView.findViewById(R.id.toastview_root));
 	  ImageView image = (ImageView) layout.findViewById(R.id.image);
 	  image.setImageResource(R.drawable.bus2);
 	  TextView text = (TextView) layout.findViewById(R.id.text);
