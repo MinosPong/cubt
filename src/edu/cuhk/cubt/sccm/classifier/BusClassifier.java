@@ -12,10 +12,6 @@ import edu.cuhk.cubt.state.event.StateChangeEvent;
 public class BusClassifier extends AbstractClassifier<BusState>
 	implements Classifier{
 	
-	public static final int BUS_ENTER_EVENT = 10701;
-	public static final int BUS_EXIT_EVENT = 10702;
-	public static final int BUS_STOP_PASSED_EVENT = 10703;
-	
 	private static final int MSG_STOP_LEAVE_DELAY = 13101;
 	private static final int STOP_LEAVE_DELAY_TIME = 20 * 1000;	//20 seconds
 	
@@ -50,16 +46,16 @@ public class BusClassifier extends AbstractClassifier<BusState>
 				//Speed Matched, Bus Enter/ or Passed Stop
 				if(getState() == BusState.ONBUS){
 					//STOP PASSED
-					this.notifyOutgoingHandlers(BUS_STOP_PASSED_EVENT, 
-							new BusEventObject(BUS_STOP_PASSED_EVENT,
+					this.notifyOutgoingHandlers(BusEventObject.BUS_STOP_PASSED_EVENT, 
+							new BusEventObject(BusEventObject.BUS_STOP_PASSED_EVENT,
 									(Stop) stopEnterEvent.getPoi(),
 									stopEnterEvent.getCause().getTime(),
 									stopLeaveEvent.getCause().getTime()
 									));
 				}else{
 					//BUS ENTER
-					this.notifyOutgoingHandlers(BUS_ENTER_EVENT, 
-							new BusEventObject(BUS_ENTER_EVENT,
+					this.notifyOutgoingHandlers(BusEventObject.BUS_ENTER_EVENT, 
+							new BusEventObject(BusEventObject.BUS_ENTER_EVENT,
 									(Stop) stopEnterEvent.getPoi(),
 									stopEnterEvent.getCause().getTime(),
 									stopLeaveEvent.getCause().getTime()
@@ -72,8 +68,8 @@ public class BusClassifier extends AbstractClassifier<BusState>
 		}else{
 			if(getState() == BusState.ONBUS){
 				//BUS_LEAVE_EVENT
-				this.notifyOutgoingHandlers(BUS_EXIT_EVENT, 
-						new BusEventObject(BUS_EXIT_EVENT,
+				this.notifyOutgoingHandlers(BusEventObject.BUS_EXIT_EVENT, 
+						new BusEventObject(BusEventObject.BUS_EXIT_EVENT,
 								(Stop) stopEnterEvent.getPoi(),
 								stopEnterEvent.getCause().getTime(),
 								stopLeaveEvent.getCause().getTime()

@@ -192,6 +192,7 @@ public class CubtMapView extends MapActivity {
 			//text.setText("Last Stop:"+ lStop + "\nPredicted Stop:"+ pStop  + "\nDirection: " + dir);
 			String output = "";
 			
+			//stops, the passed Stop got from the server
 			List<Stop> stops = new ArrayList<Stop>();
 			Iterator<BusEventObject> iter = stopEvents.iterator();
 			output+="Passed Stop:\n";
@@ -201,11 +202,13 @@ public class CubtMapView extends MapActivity {
 				output+= stop.getName() + "\n";
 			}
 			
+			//time, current Time
 			Time time= new Time();
 			time.setToNow();
+			
+			//routes the Predicted routes
 			List<Route> routes = RoutePrediction.getRoutesByPassedStop(time.toMillis(false), stops);
 			
-
 			output+="\nPredicted Route:\n";
 			Iterator<Route> riter = routes.iterator();
 			while(riter.hasNext()){
@@ -213,7 +216,11 @@ public class CubtMapView extends MapActivity {
 			}
 			
 			output+="\nPossible Next Stop:\n";
-			Iterator<Stop> siter = RoutePrediction.getPossibleNextStop(routes.iterator(), stops.get(stops.size()-1)).iterator();
+			
+			Stop lastStop = (stops.isEmpty())? null : stops.get(stops.size()-1);
+			Iterator<Stop> siter = RoutePrediction.getPossibleNextStop(
+					routes.iterator(), 
+					lastStop).iterator();
 			while(siter.hasNext()){
 				output+= siter.next().getName() + "\n";
 			}
