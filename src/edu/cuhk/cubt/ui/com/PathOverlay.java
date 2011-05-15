@@ -31,6 +31,7 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
 	private String routeName = null; //RouteData.ROUTE_0
 	private Poi lastStop = null;
 	private Poi nextStop = null;
+	//private String last = "", next = "";
 	
 	public PathOverlay(Drawable defaultMarker,MapView mapview,Context context) {
 
@@ -63,7 +64,7 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
 		}
 	}
 	
-	protected void clearOverlay(){
+	public void clearOverlay(){
 		mOverlays.clear();
 		setLastFocusedIndex(-1);
 		populate();		
@@ -95,17 +96,15 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
         	drawRoute(canvas, routeName); //RouteData.ROUTE_0
         //last = PoiData.STOP_CCS;
         //next = PoiData.STOP_MTR;
-        
         String last = "", next = "";
         if(lastStop != null)
         	last = lastStop.getName();
+        else last = null;
         if(nextStop != null)
         	next = nextStop.getName();
-        if(last != null && next != null)
+        else next = null;
+        //if(last != null && next != null)
         	drawPrediction(canvas, last, next);
-        	
-        //if(lastStop != null && nextStop != null)
-        	//direction = drawPrediction(canvas, lastStop, nextStop); //"SRRtoFKH"
     }
 
 	public void drawBasic(Canvas canvas, GeoPoint prePoint, GeoPoint currentPoint){
@@ -140,7 +139,9 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
 		String path = null;
 		if(lastStop == PoiData.STOP_MTR && nextStop == PoiData.STOP_SPU)
 			path = "MTRtoSPU";
-		if(lastStop == PoiData.STOP_MTR && nextStop == PoiData.STOP_PGH){
+		else if(lastStop == PoiData.STOP_SPD && nextStop == PoiData.STOP_MTR)
+			path = "MTRtoSPU";
+		else if(lastStop == PoiData.STOP_MTR && nextStop == PoiData.STOP_PGH){
         	path = "SPDtoPGH";
 			drawPortion(canvas, getPortion(path).iterator());
 			path = "MTRtoSPU";

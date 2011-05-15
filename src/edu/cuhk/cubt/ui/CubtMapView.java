@@ -161,6 +161,7 @@ public class CubtMapView extends MapActivity {
 	@Override
 	protected void onDestroy() {
 		stopServiceUpdate();
+		//routeOverlay2.clearOverlay();
 		unsetHandler();
 		super.onDestroy();
 	}
@@ -197,8 +198,8 @@ public class CubtMapView extends MapActivity {
 			image.setImageResource(R.drawable.bus2);
 			TextView text = (TextView) layout.findViewById(R.id.text);
 			//text.setText("Last Stop:"+ lStop + "\nPredicted Stop:"+ pStop  + "\nDirection: " + dir);
-			String output = "";
-			Poi poiStop;
+			String output = "", store = "";
+			Poi poiStop = null;
 			
 			//stops, the passed Stop got from the server
 			List<Stop> stops = new ArrayList<Stop>();
@@ -208,10 +209,11 @@ public class CubtMapView extends MapActivity {
 				Stop stop = iter.next().getStop();
 				poiStop = stop;
 				stops.add(stop);
-				output+= stop.getName() + "\n";
+				//output+= stop.getName() + "\n";
 				routeOverlay2.LastStop(poiStop);
 				//routeOverlay2.LastStop(PoiData.getByName(PoiData.STOP_ADM));
 			}
+			output += poiStop.getName() + "\n";
 			//time, current Time
 			Time time= new Time();
 			time.setToNow();
@@ -221,8 +223,10 @@ public class CubtMapView extends MapActivity {
 			
 			output+="\nPredicted Route:\n";
 			Iterator<Route> riter = routes.iterator();
-			while(riter.hasNext()){
+			int i = 2;
+			while(riter.hasNext()&& i > 0){
 				output+= riter.next().getName() + "\n";
+				i--;
 			}
 			
 			output+="\nPossible Next Stop:\n";
@@ -231,12 +235,13 @@ public class CubtMapView extends MapActivity {
 			Iterator<Stop> siter = RoutePrediction.getPossibleNextStop(
 					routes.iterator(), 
 					lastStop).iterator();
-			while(siter.hasNext()){
-				Poi tmp2 = siter.next();
+			int j = 2;
+			while(siter.hasNext() && j > 0){
+				Poi tmp2 = siter.next();				
 				output+= tmp2.getName() + "\n";
 				//output+= siter.next().getName() + "\n";
 				routeOverlay2.PredictedStop(tmp2);
-				
+				j--;
 				//routeOverlay2.PredictedStop(PoiData.getByName(PoiData.STOP_SRR));
 			}
 			routeOverlay2.updateDisplay();
