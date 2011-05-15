@@ -35,7 +35,7 @@ public class ServiceOverlay extends ItemizedOverlay<OverlayItem> {
 	CubtMapView cubtMapView;
 	
 	
-	public ServiceOverlay(Drawable defaultMarker, Context context) {
+	public ServiceOverlay(Drawable defaultMarker, CubtMapView context) {
 		super(boundCenterBottom(defaultMarker));
 		mContext = context;
 		cubtMapView = (CubtMapView) context;
