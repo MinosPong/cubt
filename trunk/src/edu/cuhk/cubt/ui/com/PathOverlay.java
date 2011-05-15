@@ -95,9 +95,7 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
     public void draw(Canvas canvas, MapView mapView, boolean shadow) {        
         super.draw(canvas, mapView, shadow);
         if(routeName != null)
-        	newDrawRoute(canvas, routeName); //RouteData.ROUTE_0
-        //last = PoiData.STOP_CCS;
-        //next = PoiData.STOP_MTR;
+        	drawRoute(canvas, routeName); //RouteData.ROUTE_0
         String last = "", next = "";
         if(lastStop != null)
         	last = lastStop.getName();
@@ -144,9 +142,7 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
 			path = "MTRtoSPU";
 		else if(lastStop == PoiData.STOP_MTR && nextStop == PoiData.STOP_PGH)
 		{
-        	path = "SPDtoPGH";
-			drawPortion(canvas, getPortion(path).iterator());
-			path = "MTRtoSPU";
+        	path = "MTRtoPGH";
 		}
 		else if(lastStop == PoiData.STOP_MTR && nextStop == PoiData.STOP_ADM)
 		{
@@ -156,10 +152,13 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
 		}
 		
 		else if(lastStop == PoiData.STOP_PGH && nextStop == PoiData.STOP_SPU)
+		{
+        	path = "SPUtoSPD";
+        	drawPortion(canvas, getPortion(path).iterator());
         	path = "SPDtoPGH";
+		}
 		else if(lastStop == PoiData.STOP_PGH && nextStop == PoiData.STOP_MTR)
-        	path = "SPDtoPGH";
-		//TODO Missing STOP_PGH to STOP_MTR
+        	path = "MTRtoPGH";
 		
 		else if(lastStop == PoiData.STOP_SPU && nextStop == PoiData.STOP_SRR)
         	path = "SPUtoSRR";
@@ -200,7 +199,13 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
 		
 		else if(lastStop == PoiData.STOP_NAS && nextStop == PoiData.STOP_UCS)
         	path = "UCStoNAS";
-		
+		else if(lastStop == PoiData.STOP_NAS && nextStop == PoiData.STOP_R34)
+		{
+        	path = "UCStoNAS";
+        	drawPortion(canvas, getPortion(path).iterator());
+        	path = "UCStoR34";        	
+		}
+        	
 		else if(lastStop == PoiData.STOP_R34 && nextStop == PoiData.STOP_ADM){
         	path = "FKHtoR34";
         	drawPortion(canvas, getPortion(path).iterator());
@@ -240,9 +245,26 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
         	path = "R34toSCS";
 		else if(lastStop == PoiData.STOP_SCS && nextStop == PoiData.STOP_R11)
         	path = "SCStoR11";
-		
+		else if(lastStop == PoiData.STOP_SCS && nextStop == PoiData.STOP_ADM)
+		{
+        	path = "R34toSCS";
+        	drawPortion(canvas, getPortion(path).iterator());
+        	path = "FKHtoR34";
+        	drawPortion(canvas, getPortion(path).iterator());
+        	path = "FKHtoADM";
+		}
+		else if(lastStop == PoiData.STOP_SCS && nextStop == PoiData.STOP_RUC)
+		{
+        	path = "R34toSCS";
+        	drawPortion(canvas, getPortion(path).iterator());
+        	path = "CCHtoR34";
+        	drawPortion(canvas, getPortion(path).iterator());
+        	path = "RUCtoCCH";
+		}
+        
 		else if(lastStop == PoiData.STOP_R11 && nextStop == PoiData.STOP_R15)
         	path = "R11toR15";
+		
 		else if(lastStop == PoiData.STOP_R15 && nextStop == PoiData.STOP_R11)
         	path = "R11toR15";
 		else if(lastStop == PoiData.STOP_R15 && nextStop == PoiData.STOP_RUC)
@@ -252,9 +274,23 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
         	path = "R15toRUC";
 		else if(lastStop == PoiData.STOP_RUC && nextStop == PoiData.STOP_CCH)
         	path = "RUCtoCCH";
+		else if(lastStop == PoiData.STOP_RUC && nextStop == PoiData.STOP_SCS)
+		{
+        	path = "RUCtoCCH";
+        	drawPortion(canvas, getPortion(path).iterator());
+        	path = "CCHtoR34";
+        	drawPortion(canvas, getPortion(path).iterator());
+        	path = "R34toSCS";
+		}
 		
 		else if(lastStop == PoiData.STOP_CCH && nextStop == PoiData.STOP_R34)
         	path = "CCHtoR34";
+		else if(lastStop == PoiData.STOP_CCH && nextStop == PoiData.STOP_SCS)
+		{
+        	path = "CCHtoR34";
+        	drawPortion(canvas, getPortion(path).iterator());
+        	path = "R34toSCS";
+		}
 		//else if(lastStop == PoiData.STOP_FKH && nextStop == PoiData.STOP_ADM)
         //    path = "FKHtoADM";
 		
@@ -278,7 +314,7 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
 			drawPortion(canvas, getPortion(path).iterator());
 	}
 	
-	public void newDrawRoute(Canvas canvas,String routeName){
+	public void drawRoute(Canvas canvas,String routeName){
 		Route route = RouteData.getRouteByName(routeName);
 		Iterator<Stop> stops = route.getStops();
 		Stop prevStop,nextStop;
@@ -293,6 +329,8 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
 		
 	}
 	
+	//Sorry that I need to remove these code... Because I will use the more simple code in above..
+	/*
 	public void drawRoute (Canvas canvas, String routeName){
 		//MTR=>NA(1) && //MTR=>10+11(17) &&//CC=>SHAW(4) &&//MTR=>10+11(Sun)(0*)
 		if(		routeName == RouteData.RM_MTR_NA || 
@@ -395,7 +433,6 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
 			drawPortion(canvas, getPortion("MTRtoSPU").iterator());
 			drawPortion(canvas, getPortion("SPUtoSRR").iterator());
 			drawPortion(canvas, getPortion("SRRtoFKH").iterator());
-			drawPortion(canvas, getPortion("FKHtoADM").iterator());
 			drawPortion(canvas, getPortion("ADMtoP5H").iterator());
 			drawPortion(canvas, getPortion("P5HtoSPD").iterator());
 			drawPortion(canvas, getPortion("FKHtoR34").iterator());
@@ -406,6 +443,7 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
 			drawPortion(canvas, getPortion("RUCtoCCH").iterator());
 			drawPortion(canvas, getPortion("CCHtoR34").iterator());
 			drawPortion(canvas, getPortion("FKHtoR34").iterator());
+			drawPortion(canvas, getPortion("FKHtoADM").iterator());
 		}
 		
 		//LHC=>SHAW=>LHC(11) && SHAW=>ADMIN=>SHAW<same>
@@ -431,6 +469,7 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
 			drawPortion(canvas, getPortion("SHAWsmallcircle").iterator());
 		}
 	}
+	*/
 	
 	Collection<GeoPoint> getPortion(String portion){
 		Collection<GeoPoint> busLine = new ArrayList<GeoPoint>();
@@ -731,6 +770,24 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
 			busLine.add(new GeoPoint((int)(22.41528*1e6),(int)(114.20818*1e6)));
 			busLine.add(new GeoPoint((int)(22.41560*1e6),(int)(114.20823*1e6))); 
 			busLine.add(new GeoPoint((int)(22.415541*1e6),(int)(114.208218*1e6)));
+		}else if(portion == "MTRtoPGH"){
+			busLine.add(new GeoPoint((int)(22.414670*1e6),(int)(114.210292*1e6))); //MTR
+	        busLine.add(new GeoPoint((int)(22.41529*1e6),(int)(114.21046*1e6)));
+	        busLine.add(new GeoPoint((int)(22.41544*1e6),(int)(114.21056*1e6)));
+	        busLine.add(new GeoPoint((int)(22.41699*1e6),(int)(114.21220*1e6)));
+	        busLine.add(new GeoPoint((int)(22.41710*1e6),(int)(114.21228*1e6)));
+	        busLine.add(new GeoPoint((int)(22.41725*1e6),(int)(114.21232*1e6)));
+			busLine.add(new GeoPoint((int)(22.4177*1e6),(int)(114.2123*1e6)));
+			busLine.add(new GeoPoint((int)(22.4184*1e6),(int)(114.2127*1e6)));
+			busLine.add(new GeoPoint((int)(22.4189*1e6),(int)(114.2128*1e6)));
+			busLine.add(new GeoPoint((int)(22.4194*1e6),(int)(114.2128*1e6)));
+			busLine.add(new GeoPoint((int)(22.4194*1e6),(int)(114.2126*1e6)));
+			busLine.add(new GeoPoint((int)(22.4196*1e6),(int)(114.2124*1e6)));
+			busLine.add(new GeoPoint((int)(22.4199*1e6),(int)(114.2125*1e6)));
+			busLine.add(new GeoPoint((int)(22.420360*1e6),(int)(114.212200*1e6))); //PGH			
+		}else if(portion == "SPUtoSPD"){
+			busLine.add(new GeoPoint((int)(22.41790*1e6),(int)(114.21028*1e6))); //SPU
+			busLine.add(new GeoPoint((int)(22.417773*1e6),(int)(114.211350*1e6))); //SPD				
 		}
 		return busLine;
 	}
