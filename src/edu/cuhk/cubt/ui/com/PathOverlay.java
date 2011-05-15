@@ -31,9 +31,6 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
 	private String routeName = null; //RouteData.ROUTE_0
 	private Poi lastStop = null;
 	private Poi nextStop = null;
-	private enum stopIndicator{
-		LEFT,RIGHT,UNDEFINED
-	};
 	
 	public PathOverlay(Drawable defaultMarker,MapView mapview,Context context) {
 
@@ -96,16 +93,17 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
         super.draw(canvas, mapView, shadow);
         if(routeName != null)
         	drawRoute(canvas, routeName); //RouteData.ROUTE_0
-        //lastStop = PoiData.STOP_CCS;
-        //nextStop = PoiData.STOP_MTR;
-        /*
+        //last = PoiData.STOP_CCS;
+        //next = PoiData.STOP_MTR;
+        
         String last = "", next = "";
-        last = lastStop.getName();
-        next = nextStop.getName();
-        stopIndicator direction;
-        if(lastStop != null && nextStop != null)
-        	direction = drawPrediction(canvas, last, next);
-        	*/
+        if(lastStop != null)
+        	last = lastStop.getName();
+        if(nextStop != null)
+        	next = nextStop.getName();
+        if(last != null && next != null)
+        	drawPrediction(canvas, last, next);
+        	
         //if(lastStop != null && nextStop != null)
         	//direction = drawPrediction(canvas, lastStop, nextStop); //"SRRtoFKH"
     }
@@ -138,8 +136,10 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
         }
 	}
 	
-	public stopIndicator drawPrediction(Canvas canvas,String lastStop, String nextStop){
+	public void drawPrediction(Canvas canvas,String lastStop, String nextStop){
 		String path = null;
+		if(lastStop == PoiData.STOP_MTR && nextStop == PoiData.STOP_SPU)
+			path = "MTRtoSPU";
 		if(lastStop == PoiData.STOP_MTR && nextStop == PoiData.STOP_PGH){
         	path = "SPDtoPGH";
 			drawPortion(canvas, getPortion(path).iterator());
@@ -155,7 +155,7 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
 		else if(lastStop == PoiData.STOP_SPU && nextStop == PoiData.STOP_SRR)
         	path = "SPUtoSRR";
 		else if(lastStop == PoiData.STOP_ADM && nextStop == PoiData.STOP_SRR)
-        	path = "SDMtoSRR";
+        	path = "ADMtoSRR";
 		else if(lastStop == PoiData.STOP_SRR && nextStop == PoiData.STOP_FKH)
         	path = "SRRtoFKH";
 		else if(lastStop == PoiData.STOP_FKH && nextStop == PoiData.STOP_UCS)
@@ -245,7 +245,6 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
 		}
 		if(lastStop != null && nextStop != null)
 			drawPortion(canvas, getPortion(path).iterator());
-		return stopIndicator.LEFT;
 	}
 	
 	public void drawRoute (Canvas canvas, String routeName){
