@@ -38,6 +38,8 @@ public class RoutePrediction {
 	private static List<Route> getPossibleRoute(Iterator<Route> routes, List<Stop> input){
 		List<Route> results = new ArrayList<Route>();		
 		
+		if(input== null || input.size() == 0) return results;
+		
 		while(routes.hasNext()){
 			Route route = routes.next();
 			
@@ -52,6 +54,7 @@ public class RoutePrediction {
 		return results;
 	}
 	
+
 	
 	public static List<Stop> getPossibleNextStop(Stop stop){		
 		return getPossibleNextStop(RouteData.getRoutes().values().iterator(), stop);	
@@ -65,6 +68,9 @@ public class RoutePrediction {
 	 */
 	public static List<Stop> getPossibleNextStop(Iterator<Route> routes, Stop stop){
 		List<Stop> results = new ArrayList<Stop>();
+		
+		if(stop==null)
+			return results;
 		
 		while(routes.hasNext()){
 			Route route = routes.next();

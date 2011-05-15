@@ -2,6 +2,12 @@ package edu.cuhk.cubt.bus;
 
 
 public class BusEventObject{
+	
+	public static final int BUS_ENTER_EVENT = 10701;
+	public static final int BUS_EXIT_EVENT = 10702;
+	public static final int BUS_STOP_PASSED_EVENT = 10703;
+	
+	
 	public BusEventObject(int event, Stop stop, long enterTime, long leaveTime){
 		this.event = event;
 		this.stop = stop;

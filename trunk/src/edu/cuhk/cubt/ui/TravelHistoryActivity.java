@@ -29,6 +29,16 @@ public class TravelHistoryActivity extends MapActivity{
 	TravelHistoryOverlay travelHistoryOverlay;
 	
 	@Override
+	protected void onResume() {
+		super.onResume();	    
+	    Location location = CuhkLocation.getInstance();
+	    
+	    mapView.getController().animateTo(new GeoPoint(
+	    		(int)(location.getLatitude() * 1E6),
+	    		(int)(location.getLongitude() * 1E6)));
+	}
+	
+	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.travellocation);

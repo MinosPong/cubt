@@ -116,13 +116,13 @@ public class BusChangeMonitor implements IServiceMonitor{
 						busExitEvent();	
 					}*/
 					break;
-				case BusClassifier.BUS_ENTER_EVENT:
+				case BusEventObject.BUS_ENTER_EVENT:
 					busEnterEvent((BusEventObject) msg.obj);
 					break;
-				case BusClassifier.BUS_EXIT_EVENT:
+				case BusEventObject.BUS_EXIT_EVENT:
 					busExitEvent((BusEventObject) msg.obj);
 					break;					
-				case BusClassifier.BUS_STOP_PASSED_EVENT:	
+				case BusEventObject.BUS_STOP_PASSED_EVENT:	
 					busStopPassedEvent((BusEventObject) msg.obj);
 					break;
 				case LocationSensor.MSG_NEW_LOCATION:					
