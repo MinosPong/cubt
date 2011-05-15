@@ -4,10 +4,18 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
+import edu.cuhk.cubt.R;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.text.format.Time;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.ItemizedOverlay;
@@ -66,11 +74,39 @@ public class ServiceOverlay extends ItemizedOverlay<OverlayItem> {
 	  
 	  AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
 	  dialog.setTitle(item.getTitle());
-	  dialog.setMessage(item.getSnippet());
-	  dialog.show();
+	  //dialog.setMessage(item.getSnippet());
+	  //dialog.show();
+	  
+	  LayoutInflater inflater = getLayoutInflater();
+	  View layout = inflater.inflate(R.layout.toastview,(ViewGroup)findViewById(R.id.toastview_root));
+	  ImageView image = (ImageView) layout.findViewById(R.id.image);
+	  image.setImageResource(R.drawable.bus2);
+	  TextView text = (TextView) layout.findViewById(R.id.text);
+	  text.setText("Last Stop:"+ lStop + "\nPredicted Stop:"+ pStop + "\nDirection: " + dir);
+	  Toast toast = new Toast(mContext);
+	  toast.setGravity(Gravity.TOP, 0, 130);
+	  toast.setDuration(Toast.LENGTH_LONG);
+	  toast.setView(layout);
+	  toast.show();
+	  
+	  /*
+	  Toast toast = Toast.makeText(mContext, "Last Stop:"+ lStop + "\nPredicted Stop:"+ pStop + "\nDirection: " + dir, Toast.LENGTH_LONG);
+	  toast.setGravity(Gravity.TOP, 0, 130);
+	  toast.show();
+	  */
 	  return true;
 	}
 	
+	private ViewGroup findViewById(int toastviewRoot) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private LayoutInflater getLayoutInflater() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	@Override
 	protected OverlayItem createItem(int i) {
 		return mOverlays.get(i);

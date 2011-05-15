@@ -30,7 +30,7 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
 	private String lastStop = null;
 	private String nextStop = null;
 	private enum stopIndicator{
-		left,right,undefined
+		LEFT,RIGHT,UNDEFINED
 	};
 	
 	public PathOverlay(Drawable defaultMarker,MapView mapview,Context context) {
@@ -74,9 +74,11 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
         super.draw(canvas, mapView, shadow);
         if(routeName != null)
         	drawRoute(canvas, routeName); //RouteData.ROUTE_0
-        lastStop = PoiData.STOP_CCS;
-        nextStop = PoiData.STOP_MTR;        
-        drawPrediction(canvas, lastStop, nextStop); //"SRRtoFKH"
+        //lastStop = PoiData.STOP_CCS;
+        //nextStop = PoiData.STOP_MTR;       
+        stopIndicator direction;
+        if(lastStop != null && nextStop != null)
+        	direction = drawPrediction(canvas, lastStop, nextStop); //"SRRtoFKH"
     }
 
 	public void drawBasic(Canvas canvas, GeoPoint prePoint, GeoPoint currentPoint){
@@ -107,7 +109,7 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
         }
 	}
 	
-	public void drawPrediction(Canvas canvas,String lastStop, String nextStop){
+	public stopIndicator drawPrediction(Canvas canvas,String lastStop, String nextStop){
 		String path = null;
 		if(lastStop == PoiData.STOP_MTR && nextStop == PoiData.STOP_PGH){
         	path = "SPDtoPGH";
@@ -214,6 +216,7 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
 		}
 		if(lastStop != null && nextStop != null)
 			drawPortion(canvas, getPortion(path).iterator());
+		return stopIndicator.LEFT;
 	}
 	
 	public void drawRoute (Canvas canvas, String routeName){
