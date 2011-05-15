@@ -12,6 +12,8 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
+import android.view.Gravity;
+import android.widget.Toast;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.ItemizedOverlay;
@@ -42,7 +44,7 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
 	    super(boundCenterBottom(defaultMarker));
 	    mapView=mapview;
 	    mContext=context; 
-	    updateDisplay();
+		clearOverlay();	
 	}
 	
 	//connect to the CubtMapView(menus)
@@ -52,32 +54,36 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
 		}
 	}
 	
-	public void updateDisplay() {		
-		clearOverlay();
-		if(lastStop != null){			
-			GeoPoint stopLoc = new GeoPoint((int)(lastStop.getLatitude()*1e6),(int)(lastStop.getLongitude()*1e6));
-			addOverlay(new OverlayItem(stopLoc, "last", "stop"));
-		}
-		if(nextStop != null){			
-			GeoPoint stopLoc = new GeoPoint((int)(nextStop.getLatitude()*1e6),(int)(nextStop.getLongitude()*1e6));
-			addOverlay(new OverlayItem(stopLoc, "next", "stop"));
-		}
+	public void clear(){
+		lastStop = null;
+		nextStops = null;
+		routeName = null;	
+		clearOverlay();	
 	}
 	
 	public void drawPrediction(Stop lastStop, List<Stop> nextStops){
 		clearOverlay();
+		routeName = null;
 		this.lastStop = lastStop;
 		this.nextStops = nextStops;
 		if(lastStop!=null){
 			GeoPoint stopLoc = new GeoPoint((int)(lastStop.getLatitude()*1e6),(int)(lastStop.getLongitude()*1e6));
-			addOverlay(new OverlayItem(stopLoc, "Last Stop", "Last Stop"));			
+			addOverlay(new OverlayItem(stopLoc, "Last Stop", lastStop.getName()));			
 		}
 		Iterator<Stop> iter = nextStops.iterator();
 		while(iter.hasNext()){
 			Stop nextStop = iter.next();
 			GeoPoint stopLoc = new GeoPoint((int)(nextStop.getLatitude()*1e6),(int)(nextStop.getLongitude()*1e6));
-			addOverlay(new OverlayItem(stopLoc, "Next Stop", "Next Stop"));			
+			addOverlay(new OverlayItem(stopLoc, "Next Stop", nextStop.getName()));			
 		}		
+	}
+	
+	public void drawRoute(String routeName){
+		clearOverlay();
+		lastStop = null;
+		nextStops = null;
+		this.routeName = routeName;
+		populate();
 	}
 	
 	public void clearOverlay(){
@@ -109,7 +115,7 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
         if(routeName != null)
         	drawRoute(canvas, routeName); //RouteData.ROUTE_0
         
-        if(lastStop != null){
+        if(lastStop != null && nextStops!=null){
         	Iterator<Stop> iter = nextStops.iterator();
         	while(iter.hasNext()){
         		drawPrediction(canvas, lastStop.getName(), iter.next().getName());
@@ -122,7 +128,7 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
 		mapView.invalidate();
 	}
 	
-	public void drawBasic(Canvas canvas, GeoPoint prePoint, GeoPoint currentPoint){
+	private void drawBasic(Canvas canvas, GeoPoint prePoint, GeoPoint currentPoint){
 		Paint paint=new Paint();
         paint.setAntiAlias(true);
         paint.setColor(Color.RED); 
@@ -141,7 +147,17 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
         canvas.drawLine(x1, y1, x2, y2, paint);
 	}
 	
-	public void drawPortion (Canvas canvas, Iterator<GeoPoint> it){
+
+	@Override
+	protected boolean onTap(int index){
+
+		Toast toast = Toast.makeText(mContext, mOverlays.get(index).getSnippet(), Toast.LENGTH_SHORT);
+		toast.setGravity(Gravity.TOP, 0, 150);
+		toast.show();
+		return true;
+	}
+	
+	private void drawPortion (Canvas canvas, Iterator<GeoPoint> it){
 		GeoPoint prePoint = (GeoPoint)it.next();
         while(it.hasNext()){
         	GeoPoint currentPoint = (GeoPoint)it.next();
@@ -329,7 +345,7 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
 			drawPortion(canvas, getPortion(path).iterator());
 	}
 	
-	public void drawRoute(Canvas canvas,String routeName){
+	private void drawRoute(Canvas canvas,String routeName){
 		Route route = RouteData.getRouteByName(routeName);
 		Iterator<Stop> stops = route.getStops();
 		Stop prevStop,nextStop;
@@ -668,15 +684,5 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
 		return busLine;
 	}
 
-	public void setPredictedStop(Stop stop){		
-		if(nextStop != stop){
-			this.nextStop = stop;
-		}
-	}
-	
-	public void setLastStop(Stop stop){
-		if(lastStop != stop){
-			this.lastStop = stop;
-		}
-	}
+
 }
