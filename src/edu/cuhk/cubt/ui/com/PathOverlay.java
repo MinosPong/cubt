@@ -17,6 +17,7 @@ import com.google.android.maps.MapView;
 import com.google.android.maps.OverlayItem;
 
 import edu.cuhk.cubt.bus.Route;
+import edu.cuhk.cubt.store.PoiData;
 import edu.cuhk.cubt.store.RouteData;
 
 public class PathOverlay extends ItemizedOverlay<OverlayItem> {
@@ -26,6 +27,11 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
 	Paint paint=new Paint();
 	private Context mContext;
 	private String routeName = null; //RouteData.ROUTE_0
+	private String lastStop = null;
+	private String nextStop = null;
+	private enum stopIndicator{
+		left,right,undefined
+	};
 	
 	public PathOverlay(Drawable defaultMarker,MapView mapview,Context context) {
 
@@ -68,8 +74,10 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
         super.draw(canvas, mapView, shadow);
         if(routeName != null)
         	drawRoute(canvas, routeName); //RouteData.ROUTE_0
+        lastStop = PoiData.STOP_CCS;
+        nextStop = PoiData.STOP_MTR;        
+        drawPrediction(canvas, lastStop, nextStop); //"SRRtoFKH"
     }
-	
 
 	public void drawBasic(Canvas canvas, GeoPoint prePoint, GeoPoint currentPoint){
 		Paint paint=new Paint();
@@ -90,7 +98,6 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
         canvas.drawLine(x1, y1, x2, y2, paint);
 	}
 	
-	
 	public void drawPortion (Canvas canvas, Iterator<GeoPoint> it){
 		GeoPoint prePoint = (GeoPoint)it.next();
         while(it.hasNext()){
@@ -100,6 +107,114 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
         }
 	}
 	
+	public void drawPrediction(Canvas canvas,String lastStop, String nextStop){
+		String path = null;
+		if(lastStop == PoiData.STOP_MTR && nextStop == PoiData.STOP_PGH){
+        	path = "SPDtoPGH";
+			drawPortion(canvas, getPortion(path).iterator());
+			path = "MTRtoSPU";
+		}
+		else if(lastStop == PoiData.STOP_PGH && nextStop == PoiData.STOP_SPU)
+        	path = "SPDtoPGH";
+		else if(lastStop == PoiData.STOP_MTR && nextStop == PoiData.STOP_ADM){
+        	path = "FKHtoR34";
+        	drawPortion(canvas, getPortion(path).iterator());
+			path = "FKHtoADM";
+		}
+		else if(lastStop == PoiData.STOP_SPU && nextStop == PoiData.STOP_SRR)
+        	path = "SPUtoSRR";
+		else if(lastStop == PoiData.STOP_ADM && nextStop == PoiData.STOP_SRR)
+        	path = "SDMtoSRR";
+		else if(lastStop == PoiData.STOP_SRR && nextStop == PoiData.STOP_FKH)
+        	path = "SRRtoFKH";
+		else if(lastStop == PoiData.STOP_FKH && nextStop == PoiData.STOP_UCS)
+        	path = "FKHtoUCS";
+		else if(lastStop == PoiData.STOP_UCS && nextStop == PoiData.STOP_NAS)
+        	path = "UCStoNAS";
+		else if(lastStop == PoiData.STOP_NAS && nextStop == PoiData.STOP_UCS)
+        	path = "UCStoNAS";
+		else if(lastStop == PoiData.STOP_UCS && nextStop == PoiData.STOP_ADM){
+        	path = "FKHtoUCS";
+        	drawPortion(canvas, getPortion(path).iterator());
+			path = "FKHtoADM";
+		}
+		else if(lastStop == PoiData.STOP_SRR && nextStop == PoiData.STOP_NAS)
+        	path = "SRRtoNAS";
+		else if(lastStop == PoiData.STOP_UCS && nextStop == PoiData.STOP_R34)
+        	path = "UCStoR34";
+		else if(lastStop == PoiData.STOP_FKH && nextStop == PoiData.STOP_R34)
+        	path = "FKHtoR34";
+		else if(lastStop == PoiData.STOP_R34 && nextStop == PoiData.STOP_ADM){
+	        	path = "FKHtoR34";
+	        	drawPortion(canvas, getPortion(path).iterator());
+				path = "FKHtoADM";
+			}
+		else if(lastStop == PoiData.STOP_FKH && nextStop == PoiData.STOP_SCS){
+        	path = "FKHtoR34";
+        	drawPortion(canvas, getPortion(path).iterator());
+			path = "R34toSCS";
+		}
+		else if(lastStop == PoiData.STOP_R34 && nextStop == PoiData.STOP_ADM){
+        	path = "FKHtoR34";
+        	drawPortion(canvas, getPortion(path).iterator());
+			path = "FKHtoADM";
+		}
+		else if(lastStop == PoiData.STOP_CCH && nextStop == PoiData.STOP_FKH){
+        	path = "FKHtoR34";
+        	drawPortion(canvas, getPortion(path).iterator());
+			path = "CCHtoR34";
+		}
+		else if(lastStop == PoiData.STOP_R34 && nextStop == PoiData.STOP_SCS)
+        	path = "R34toSCS";
+		else if(lastStop == PoiData.STOP_R34 && nextStop == PoiData.STOP_UCS)
+        	path = "UCStoR34";
+		else if(lastStop == PoiData.STOP_SCS && nextStop == PoiData.STOP_R34)
+        	path = "R34toSCS";
+		else if(lastStop == PoiData.STOP_SCS && nextStop == PoiData.STOP_R11)
+        	path = "SCStoR11";
+		else if(lastStop == PoiData.STOP_R11 && nextStop == PoiData.STOP_R15)
+        	path = "R11toR15";
+		else if(lastStop == PoiData.STOP_R15 && nextStop == PoiData.STOP_R11)
+        	path = "R11toR15";
+		else if(lastStop == PoiData.STOP_R15 && nextStop == PoiData.STOP_RUC)
+        	path = "R15toRUC";
+		else if(lastStop == PoiData.STOP_RUC && nextStop == PoiData.STOP_R15)
+        	path = "R15toRUC";
+		else if(lastStop == PoiData.STOP_RUC && nextStop == PoiData.STOP_CCH)
+        	path = "RUCtoCCH";
+		else if(lastStop == PoiData.STOP_CCH && nextStop == PoiData.STOP_R34)
+        	path = "CCHtoR34";
+		else if(lastStop == PoiData.STOP_SPD && nextStop == PoiData.STOP_PGH)
+        	path = "SPDtoPGH";
+		else if(lastStop == PoiData.STOP_SPD && nextStop == PoiData.STOP_CCS)
+        	path = "SPDtoCCS";
+		else if(lastStop == PoiData.STOP_FKH && nextStop == PoiData.STOP_ADM)
+            path = "FKHtoADM";
+		else if(lastStop == PoiData.STOP_ADM && nextStop == PoiData.STOP_P5H)
+        	path = "ADMtoP5H";
+		else if(lastStop == PoiData.STOP_P5H && nextStop == PoiData.STOP_SPD)
+        	path = "P5HtoSPD";
+		else if(lastStop == PoiData.STOP_SRR && nextStop == PoiData.STOP_ADM)
+        	path = "SRRtoADM";
+		else if(lastStop == PoiData.STOP_CCS && nextStop == PoiData.STOP_MTR)
+        	path = "CCStoMTR";
+		else if(lastStop == PoiData.STOP_R34 && nextStop == PoiData.STOP_RUC){
+        	path = "RUCtoCCH";
+        	drawPortion(canvas, getPortion(path).iterator());
+        	path = "CCHtoR34";
+        }
+		else if(lastStop == PoiData.STOP_CCS && nextStop == PoiData.STOP_SPU){
+        	path = "CCStoMTR";
+        	drawPortion(canvas, getPortion(path).iterator());
+        	path = "MTRtoSPU";
+        }
+		else {
+			lastStop = null;
+			nextStop = null;
+		}
+		if(lastStop != null && nextStop != null)
+			drawPortion(canvas, getPortion(path).iterator());
+	}
 	
 	public void drawRoute (Canvas canvas, String routeName){
 		//MTR=>NA(1) && //MTR=>10+11(17) &&//CC=>SHAW(4) &&//MTR=>10+11(Sun)(0*)
@@ -302,15 +417,6 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
 	        busLine.add(new GeoPoint((int)(22.41984*1e6),(int)(114.20854*1e6)));	  
 	        busLine.add(new GeoPoint((int)(22.419830*1e6),(int)(114.207024*1e6))); //SRR
 		}
-		else if(portion == "SRRtoADM"){
-			busLine.add(new GeoPoint((int)(22.419830*1e6),(int)(114.207024*1e6))); //SRR
-			busLine.add(new GeoPoint((int)(22.41981*1e6),(int)(114.2061*1e6)));
-	        busLine.add(new GeoPoint((int)(22.41983*1e6),(int)(114.2043*1e6)));
-	        busLine.add(new GeoPoint((int)(22.41983*1e6),(int)(114.2043*1e6)));
-			busLine.add(new GeoPoint((int)(22.41983*1e6),(int)(114.2043*1e6))); 
-	        busLine.add(new GeoPoint((int)(22.41873*1e6),(int)(114.2043*1e6)));	        
-	        busLine.add(new GeoPoint((int)(22.4187801e6),(int)(114.205260*1e6))); //ADM
-		}
 		else if(portion == "SRRtoFKH"){
 			busLine.add(new GeoPoint((int)(22.419830*1e6),(int)(114.207024*1e6))); //SRR
 			busLine.add(new GeoPoint((int)(22.41981*1e6),(int)(114.2061*1e6)));
@@ -479,6 +585,15 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
 			busLine.add(new GeoPoint((int)(22.420360*1e6),(int)(114.212200*1e6))); //PGH
 		}
 		//DOWN
+		else if(portion == "SRRtoADM"){
+			busLine.add(new GeoPoint((int)(22.419830*1e6),(int)(114.207024*1e6))); //SRR
+			busLine.add(new GeoPoint((int)(22.41981*1e6),(int)(114.2061*1e6)));
+	        busLine.add(new GeoPoint((int)(22.41983*1e6),(int)(114.2043*1e6)));
+	        busLine.add(new GeoPoint((int)(22.41983*1e6),(int)(114.2043*1e6)));
+			busLine.add(new GeoPoint((int)(22.41983*1e6),(int)(114.2043*1e6))); 
+	        busLine.add(new GeoPoint((int)(22.41873*1e6),(int)(114.2043*1e6)));	        
+	        busLine.add(new GeoPoint((int)(22.4187801e6),(int)(114.205260*1e6))); //ADM
+		}
 		else if(portion == "SPDtoCCS"){
 			busLine.add(new GeoPoint((int)(22.415541*1e6),(int)(114.208218*1e6))); //CCS
 			busLine.add(new GeoPoint((int)(22.41560*1e6),(int)(114.20823*1e6)));
@@ -525,7 +640,7 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
 			busLine.add(new GeoPoint((int)(22.4187801e6),(int)(114.205260*1e6))); //ADM
 		}
 		else if(portion == "CCStoMTR"){
-			busLine.add(new GeoPoint((int)(22.41430*1e6),(int)(114.20995*1e6))); //CCS
+			busLine.add(new GeoPoint((int)(22.414670*1e6),(int)(114.210292*1e6))); //MTR			
 			busLine.add(new GeoPoint((int)(22.41419*1e6),(int)(114.20989*1e6)));
 			busLine.add(new GeoPoint((int)(22.41386*1e6),(int)(114.20969*1e6)));
 			busLine.add(new GeoPoint((int)(22.41373*1e6),(int)(114.20955*1e6)));
@@ -537,8 +652,8 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
 			busLine.add(new GeoPoint((int)(22.41456*1e6),(int)(114.20838*1e6)));
 			busLine.add(new GeoPoint((int)(22.41505*1e6),(int)(114.20818*1e6)));
 			busLine.add(new GeoPoint((int)(22.41528*1e6),(int)(114.20818*1e6)));
-			busLine.add(new GeoPoint((int)(22.41560*1e6),(int)(114.20823*1e6)));
-			busLine.add(new GeoPoint((int)(22.414670*1e6),(int)(114.210292*1e6))); //MTR
+			busLine.add(new GeoPoint((int)(22.41560*1e6),(int)(114.20823*1e6))); 
+			busLine.add(new GeoPoint((int)(22.415541*1e6),(int)(114.208218*1e6)));
 		}
 		return busLine;
 	}

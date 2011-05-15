@@ -79,8 +79,10 @@ public class CubtMapView extends MapActivity {
 	    GeoPoint plast = new GeoPoint((int)(22.419830*1e6),(int)(114.207024*1e6)); //SRR
 	    GeoPoint pnext = new GeoPoint((int)(22.419860*1e6),(int)(114.203270*1e6)); //FKH
 	    Drawable drawablelast = this.getResources().getDrawable(R.drawable.left);
-	    Drawable drawableright = this.getResources().getDrawable(R.drawable.left);
+	    Drawable drawableright = this.getResources().getDrawable(R.drawable.right);
 	    routeOverlay2 = new PathOverlay(drawablelast ,mapView, this);
+	    routeOverlay2 = new PathOverlay(drawableright ,mapView, this);
+	    
 	    OverlayItem overlayitem3 = new OverlayItem(plast, "Test","point");
 	    OverlayItem overlayitem4 = new OverlayItem(pnext, "Test","point");
 	    routeOverlay2.addOverlay(overlayitem3);
@@ -124,7 +126,7 @@ public class CubtMapView extends MapActivity {
 		}catch(NumberFormatException e){
 			//period = 3000;
 		}
-	    startServiceUpdate(period); //run in real time
+	    //startServiceUpdate(period); //run in real time
 	}
 	
 	
