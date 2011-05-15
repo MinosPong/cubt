@@ -147,10 +147,12 @@ public class ServiceOverlay extends ItemizedOverlay<OverlayItem> {
 	}
 
 	//Received bus locations
-	Collection<GeoPoint> busInService(){
+	
+	public Collection<GeoPoint> busInService(){
 		Collection<GeoPoint> bus = new ArrayList<GeoPoint>();
-		bus.add(new GeoPoint((int)(22.41988*1e6),(int)(114.20551*1e6)));
-		bus.add(new GeoPoint((int)(22.41608*1e6),(int)(114.2088*1e6)));
+		//bus.add(new GeoPoint((int)(22.41988*1e6),(int)(114.20551*1e6)));
+		//bus.add(new GeoPoint((int)(22.41608*1e6),(int)(114.2088*1e6)));
 		return bus;
 	}
+	
 }

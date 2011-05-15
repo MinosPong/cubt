@@ -16,9 +16,11 @@ import com.google.android.maps.ItemizedOverlay;
 import com.google.android.maps.MapView;
 import com.google.android.maps.OverlayItem;
 
+import edu.cuhk.cubt.bus.Poi;
 import edu.cuhk.cubt.bus.Route;
 import edu.cuhk.cubt.store.PoiData;
 import edu.cuhk.cubt.store.RouteData;
+import edu.cuhk.cubt.ui.com.ServiceOverlay.ServiceOverlayItem;
 
 public class PathOverlay extends ItemizedOverlay<OverlayItem> {
 
@@ -27,8 +29,8 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
 	Paint paint=new Paint();
 	private Context mContext;
 	private String routeName = null; //RouteData.ROUTE_0
-	private String lastStop = null;
-	private String nextStop = null;
+	private Poi lastStop = null;
+	private Poi nextStop = null;
 	private enum stopIndicator{
 		LEFT,RIGHT,UNDEFINED
 	};
@@ -37,7 +39,8 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
 
 	    super(boundCenterBottom(defaultMarker));
 	    mapView=mapview;
-	    mContext=context; 	    
+	    mContext=context; 
+	    updateDisplay();
 	}
 	
 	public PathOverlay(Drawable defaultMarker) {
@@ -51,9 +54,28 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
 		}
 	}
 	
+	public void updateDisplay() {		
+		clearOverlay();
+		if(lastStop != null){			
+			GeoPoint stopLoc = new GeoPoint((int)(lastStop.getLatitude()*1e6),(int)(lastStop.getLongitude()*1e6));
+			addOverlay(new OverlayItem(stopLoc, "last", "stop"));
+		}
+		if(nextStop != null){			
+			GeoPoint stopLoc = new GeoPoint((int)(nextStop.getLatitude()*1e6),(int)(nextStop.getLongitude()*1e6));
+			addOverlay(new OverlayItem(stopLoc, "next", "stop"));
+		}
+	}
+	
+	protected void clearOverlay(){
+		mOverlays.clear();
+		setLastFocusedIndex(-1);
+		populate();		
+	}
+	
 	public void addOverlay(OverlayItem overlay) {
-	    mOverlays.add(overlay);
-	    populate();
+		mOverlays.add(overlay);
+		setLastFocusedIndex(-1);
+		populate();
 	}
 	
 	@Override
@@ -75,10 +97,17 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
         if(routeName != null)
         	drawRoute(canvas, routeName); //RouteData.ROUTE_0
         //lastStop = PoiData.STOP_CCS;
-        //nextStop = PoiData.STOP_MTR;       
+        //nextStop = PoiData.STOP_MTR;
+        /*
+        String last = "", next = "";
+        last = lastStop.getName();
+        next = nextStop.getName();
         stopIndicator direction;
         if(lastStop != null && nextStop != null)
-        	direction = drawPrediction(canvas, lastStop, nextStop); //"SRRtoFKH"
+        	direction = drawPrediction(canvas, last, next);
+        	*/
+        //if(lastStop != null && nextStop != null)
+        	//direction = drawPrediction(canvas, lastStop, nextStop); //"SRRtoFKH"
     }
 
 	public void drawBasic(Canvas canvas, GeoPoint prePoint, GeoPoint currentPoint){
@@ -661,4 +690,15 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
 		return busLine;
 	}
 
+	public void PredictedStop(Poi stop){		
+		if(nextStop != stop){
+			this.nextStop = stop;
+		}
+	}
+	
+	public void LastStop(Poi stop){
+		if(lastStop != stop){
+			this.lastStop = stop;
+		}
+	}
 }
