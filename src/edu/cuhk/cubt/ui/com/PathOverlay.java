@@ -33,7 +33,6 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
 	Paint paint=new Paint();
 	private Context mContext;
 	private String routeName = null; //RouteData.ROUTE_0
-	private Stop nextStop = null;
 	
 	private Stop lastStop = null;
 	private List<Stop> nextStops = new ArrayList<Stop>();
