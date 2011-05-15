@@ -113,11 +113,11 @@ public class CubtMapView extends MapActivity {
 	    registerForContextMenu(mapView);
 	    
 	    setHandler();
-	    
+	    /*
 	    Toast.makeText(getBaseContext(), 
                 "Bus Stop" , 
                 Toast.LENGTH_SHORT).show();
-	    
+	    */
 	    long period = 3000;
 		String periodString = this.getSharedPreferences(Settings.sharedPreferenceFile,0)
 			.getString(Settings.PREF_MAPVIEW_REFRESH_PERIOD, "");
