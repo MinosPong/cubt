@@ -327,7 +327,6 @@ public class RouteData {
 					PoiData.STOP_P5H,
 					PoiData.STOP_SPD,
 					PoiData.STOP_CCS});
-*/						
 			routesInitHelper(routes, ROUTE_13, 
 					"", 
 					Route.TYPE_UNDEFINED , 0, 0, new String[]{
@@ -375,9 +374,8 @@ public class RouteData {
 					PoiData.STOP_SRR,
 					PoiData.STOP_FKH,
 					PoiData.STOP_UCS,
-					PoiData.STOP_NAS});
-			
-			
+					PoiData.STOP_NAS});			
+*/						
 
 			
 		}			
