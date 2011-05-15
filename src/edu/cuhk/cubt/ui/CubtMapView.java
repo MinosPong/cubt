@@ -202,7 +202,7 @@ public class CubtMapView extends MapActivity {
 		if(busShowingId>=0){
 			BusPassedStopRequest.getPassedStop(busShowingId, passedStopCallback);
 		}else{
-			routeOverlay.clear();			
+			//routeOverlay.clear();			
 		}
 	}
 	
@@ -326,7 +326,10 @@ public class CubtMapView extends MapActivity {
 							break;
 						}
 					}
-					if(!find) displayRouteInfo(-1);
+					if(!find){ 
+						displayRouteInfo(-1);
+						routeOverlay.clear();
+					}
 				}
 				
 				realOverlay.updateDisplay(buses.iterator());
