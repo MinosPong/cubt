@@ -21,6 +21,13 @@
 	android:numeric="integer"
 	android:dialogTitle="Map refresh rate" />
 
+
+<CheckBoxPreference 
+	android:key="key_display_location_history" 
+	android:title="Display Location History"
+	android:summary="Show the current location on the Map">
+</CheckBoxPreference>
+
 <CheckBoxPreference 
 	android:key="Activation enable" 
 	android:title="Activation"

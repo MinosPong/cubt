@@ -137,8 +137,11 @@ public class CubtMapView extends MapActivity {
 	    	    
 	    /* Location Histoy Overlay */
 	    drawable = this.getResources().getDrawable(android.R.drawable.star_on); //stat_sys_upload
-	    locationHistoryOverlay = new LocationHistoryOverlay(drawable,this);	    
-	    //mapOverlays.add(locationHistoryOverlay);
+	    locationHistoryOverlay = new LocationHistoryOverlay(drawable,this);
+	    
+	    if(getSharedPreferences(Settings.sharedPreferenceFile,0).
+			getBoolean(Settings.PREF_DISPLAY_LOCATION_HISTORY, false)
+		) mapOverlays.add(locationHistoryOverlay);
 	    
 	    
 	    Location location = CuhkLocation.getInstance();

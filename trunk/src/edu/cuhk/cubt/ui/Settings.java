@@ -14,6 +14,7 @@ public class Settings extends PreferenceActivity {
 	public static String PREF_VIRTUAL_SENSOR = "key_virtual_sensor";
 	public static String PREF_VIRTUAL_FILE = "key_virtual_file";
 	public static String PREF_MAPVIEW_REFRESH_PERIOD = "key_refresh_preiod";
+	public static String PREF_DISPLAY_LOCATION_HISTORY = "key_display_location_history";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
