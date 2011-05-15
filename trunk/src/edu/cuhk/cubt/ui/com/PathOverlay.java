@@ -22,7 +22,6 @@ import edu.cuhk.cubt.bus.Route;
 import edu.cuhk.cubt.bus.Stop;
 import edu.cuhk.cubt.store.PoiData;
 import edu.cuhk.cubt.store.RouteData;
-import edu.cuhk.cubt.ui.com.ServiceOverlay.ServiceOverlayItem;
 
 public class PathOverlay extends ItemizedOverlay<OverlayItem> {
 
@@ -43,10 +42,6 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
 	    updateDisplay();
 	}
 	
-	public PathOverlay(Drawable defaultMarker) {
-		super(defaultMarker);
-	}
-
 	//connect to the CubtMapView(menus)
 	public void setPath(String routeName){
 		if(this.routeName!= routeName){
@@ -80,29 +75,30 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
 	
 	@Override
 	protected OverlayItem createItem(int i) {
-		// TODO Auto-generated method stub
 		return mOverlays.get(i);
 	}
 
 	@Override
 	public int size() {
-		// TODO Auto-generated method stub
 		return mOverlays.size();
-		//return 0;
 	}
 	
 	@Override
     public void draw(Canvas canvas, MapView mapView, boolean shadow) {        
         super.draw(canvas, mapView, shadow);
+        
         if(routeName != null)
         	drawRoute(canvas, routeName); //RouteData.ROUTE_0
         String last = "", next = "";
+        
         if(lastStop != null)
         	last = lastStop.getName();
         else last = null;
+        
         if(nextStop != null)
         	next = nextStop.getName();
         else next = null;
+        
         if(last != null && next != null)
         	drawPrediction(canvas, last, next);
         else invalidate();
@@ -335,146 +331,7 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
 	}
 	
 	//Sorry that I need to remove these code... Because I will use the more simple code in above..
-	/*
-	public void drawRoute (Canvas canvas, String routeName){
-		//MTR=>NA(1) && //MTR=>10+11(17) &&//CC=>SHAW(4) &&//MTR=>10+11(Sun)(0*)
-		if(		routeName == RouteData.RM_MTR_NA || 
-				routeName == RouteData.RD_MTR_NA || 
-				routeName == RouteData.RH_MTR_R11 || 
-				routeName == RouteData.RH_MTR_SHAW || 
-				routeName == RouteData.RE_MTR_R11){ 
-			drawPortion(canvas, getPortion("MTRtoSPU").iterator());
-			drawPortion(canvas, getPortion("SPUtoSRR").iterator());
-			drawPortion(canvas, getPortion("SRRtoFKH").iterator());
-			drawPortion(canvas, getPortion("FKHtoUCS").iterator());
-			drawPortion(canvas, getPortion("UCStoNAS").iterator());
-			//MTR=>10+11
-			if(routeName == RouteData.RE_MTR_R11){
-				drawPortion(canvas, getPortion("FKHtoR34").iterator());
-				drawPortion(canvas, getPortion("R11toR15").iterator());
-				drawPortion(canvas, getPortion("R15toRUC").iterator());
-				drawPortion(canvas, getPortion("RUCtoCCH").iterator());
-				drawPortion(canvas, getPortion("CCHtoR34").iterator());
-				//drawPortion(canvas, getPortion("R11toTerminal").iterator());
-				drawPortion(canvas, getPortion("SPDtoPGH").iterator());					
-			}
-			//MTR=>10+11(Sun)
-			if(routeName == RouteData.RH_MTR_R11){
-				drawPortion(canvas, getPortion("FKHtoR34").iterator());
-				drawPortion(canvas, getPortion("R11toR15").iterator());
-				drawPortion(canvas, getPortion("R15toRUC").iterator());
-				drawPortion(canvas, getPortion("RUCtoCCH").iterator());
-				drawPortion(canvas, getPortion("CCHtoR34").iterator());
-				drawPortion(canvas, getPortion("R34toSCS").iterator());
-				drawPortion(canvas, getPortion("SHAWsmallcircle").iterator());
-			}
-			//CC=>SHAW
-			if(routeName == RouteData.RH_MTR_SHAW){
-				drawPortion(canvas, getPortion("FKHtoR34").iterator());
-				drawPortion(canvas, getPortion("R34toSCS").iterator());
-				drawPortion(canvas, getPortion("SHAWsmallcircle").iterator());
-			}
-		}
-		
-		//NA=>CC(8) && SHAW=>CC(9)
-		if(routeName == RouteData.RC_NA_CC || routeName == RouteData.RC_SHAW_CC){
-			drawPortion(canvas, getPortion("SPDtoCCS").iterator());
-			drawPortion(canvas, getPortion("FKHtoADM").iterator());
-			drawPortion(canvas, getPortion("ADMtoP5H").iterator());
-			drawPortion(canvas, getPortion("P5HtoSPD").iterator());
-			drawPortion(canvas, getPortion("FKHtoUCS").iterator());
-			drawPortion(canvas, getPortion("UCStoNAS").iterator());
-			//SHAW=>CC
-			if(routeName == RouteData.RC_SHAW_CC){
-				drawPortion(canvas, getPortion("R34toSCS").iterator());
-				drawPortion(canvas, getPortion("FKHtoR34").iterator());
-			}
-		}
-		
-		//NA=>MTR(5) && //SHAW=>MTR(6) && //10+11=>MTR(7)
-		if(		routeName == RouteData.RM_NA_MTR || 
-				routeName == RouteData.RD_NA_MTR || 
-				routeName == RouteData.RE_SHAW_MTR || 
-				routeName == RouteData.RH_SHAW_MTR || 
-				routeName == RouteData.RE_R11_MTR){
-			drawPortion(canvas, getPortion("MTRtoSPU").iterator());
-			drawPortion(canvas, getPortion("FKHtoADM").iterator());
-			drawPortion(canvas, getPortion("ADMtoP5H").iterator());
-			drawPortion(canvas, getPortion("P5HtoSPD").iterator());
-			drawPortion(canvas, getPortion("FKHtoUCS").iterator());
-			drawPortion(canvas, getPortion("UCStoNAS").iterator());
-			//SHAW=>MTR && SHAE=>MTR(Sun)<same>`
-			if(routeName == RouteData.RE_SHAW_MTR || routeName == RouteData.RH_SHAW_MTR
-					){
-				drawPortion(canvas, getPortion("R34toSCS").iterator());
-				drawPortion(canvas, getPortion("FKHtoR34").iterator());
-			}
-			//10+11=>MTR && 10+11=>MTR(Sun)
-			if(routeName == RouteData.RE_R11_MTR){
-				drawPortion(canvas, getPortion("FKHtoR34").iterator());
-				drawPortion(canvas, getPortion("R11toR15").iterator());
-				drawPortion(canvas, getPortion("R15toRUC").iterator());
-				drawPortion(canvas, getPortion("RUCtoCCH").iterator());
-				drawPortion(canvas, getPortion("CCHtoR34").iterator());
-				//drawPortion(canvas, getPortion("R11toTerminal").iterator());
-				if(routeName == RouteData.RE_R11_MTR) //10+11=>MTR (not Sun)*
-					drawPortion(canvas, getPortion("SPDtoPGH").iterator());
-				drawPortion(canvas, getPortion("R34toSCS").iterator());
-				drawPortion(canvas, getPortion("SHAWsmallcircle").iterator());
-			}
-		}
-		
-		//MTR=>SRR=>MTR(10)
-		if(routeName == RouteData.RM_MTR_SRR){        		
-			drawPortion(canvas, getPortion("MTRtoSPU").iterator());
-			drawPortion(canvas, getPortion("SPUtoSRR").iterator());
-			drawPortion(canvas, getPortion("SRRtoADM").iterator());
-			drawPortion(canvas, getPortion("ADMtoP5H").iterator());
-			drawPortion(canvas, getPortion("P5HtoSPD").iterator());
-		}
-		
-		//MTR=>SHAW=>MTR(2)
-		if(routeName == RouteData.RD_SHAW_C){
-			drawPortion(canvas, getPortion("MTRtoSPU").iterator());
-			drawPortion(canvas, getPortion("SPUtoSRR").iterator());
-			drawPortion(canvas, getPortion("SRRtoFKH").iterator());
-			drawPortion(canvas, getPortion("ADMtoP5H").iterator());
-			drawPortion(canvas, getPortion("P5HtoSPD").iterator());
-			drawPortion(canvas, getPortion("FKHtoR34").iterator());
-			drawPortion(canvas, getPortion("R34toSCS").iterator());
-			drawPortion(canvas, getPortion("SCStoR11").iterator());
-			drawPortion(canvas, getPortion("R11toR15").iterator());
-			drawPortion(canvas, getPortion("R15toRUC").iterator());
-			drawPortion(canvas, getPortion("RUCtoCCH").iterator());
-			drawPortion(canvas, getPortion("CCHtoR34").iterator());
-			drawPortion(canvas, getPortion("FKHtoR34").iterator());
-			drawPortion(canvas, getPortion("FKHtoADM").iterator());
-		}
-		
-		//LHC=>SHAW=>LHC(11) && SHAW=>ADMIN=>SHAW<same>
-		if(routeName == RouteData.RM_SRR_SHAW){
-			drawPortion(canvas, getPortion("ADMtoSRR").iterator());
-			drawPortion(canvas, getPortion("FKHtoR34").iterator());			
-			drawPortion(canvas, getPortion("FKHtoADM").iterator());
-			drawPortion(canvas, getPortion("R34toSCS").iterator());
-			drawPortion(canvas, getPortion("FKHtoUCS").iterator());
-			drawPortion(canvas, getPortion("UCStoNAS").iterator());
-			drawPortion(canvas, getPortion("SRRtoNAS").iterator());
-			drawPortion(canvas, getPortion("SHAWsmallcircle").iterator());
-		}
-		
-		//MTR=>SHAW(3) && MTR=>SHAW(Sun)<same>
-		if(routeName == RouteData.RE_MTR_SHAW){
-			drawPortion(canvas, getPortion("MTRtoSPU").iterator());
-			drawPortion(canvas, getPortion("SPUtoSRR").iterator());
-			drawPortion(canvas, getPortion("SRRtoNAS").iterator());
-			drawPortion(canvas, getPortion("UCStoNAS").iterator());
-			drawPortion(canvas, getPortion("UCStoR34").iterator());				
-			drawPortion(canvas, getPortion("R34toSCS").iterator());
-			drawPortion(canvas, getPortion("SHAWsmallcircle").iterator());
-		}
-	}
-	*/
+	//Totally removed, if u miss them, find in the revision history =o=
 	
 	Collection<GeoPoint> getPortion(String portion){
 		Collection<GeoPoint> busLine = new ArrayList<GeoPoint>();

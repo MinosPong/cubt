@@ -19,7 +19,6 @@ import android.widget.Toast;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.ItemizedOverlay;
-import com.google.android.maps.MapView;
 import com.google.android.maps.OverlayItem;
 
 import edu.cuhk.cubt.net.BusActivityRequest.BusActivityRecord;
@@ -79,9 +78,7 @@ public class ServiceOverlay extends ItemizedOverlay<OverlayItem> {
 	@Override
 	protected boolean onTap(int index) {
 	  ServiceOverlayItem item = mOverlays.get(index);
-	  //CubtMapView.routeOverlay.setPath(routeName); //show predicted path
-	  //CubtMapView.stopOverlay.setRoute(routeName); //show predicted stops
-	  cubtMapView.setDisplayRoute(routeName);		 //Move the above action to CubtMapView, then routeOverlay and stopOverlay can pervent from static
+	  //cubtMapView.setDisplayRoute(routeName);		 //Move the above action to CubtMapView, then routeOverlay and stopOverlay can pervent from static
 	  cubtMapView.displayRouteInfo(item.getId());
 	  /*
 	  AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
