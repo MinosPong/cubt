@@ -85,12 +85,7 @@ public class BusStopOverlay extends ItemizedOverlay<OverlayItem> {
 	@Override
     public void draw(Canvas canvas, MapView mapView, boolean shadow) {        
         if(!shadow)
-        	super.draw(canvas, mapView, false);
-
-GeoPoint busPoint = new GeoPoint((int)(22.41699*1e6),(int)(114.21220*1e6));
-        //Poi poi;
-        //GeoPoint busPoint = new GeoPoint((int)(poi.getLatitude()*1E6), (int)(poi.getLongitude()*1E6));
-        //drawBasic(canvas, mapView, busPoint);      
+        	super.draw(canvas, mapView, false); //false for no shadow     
     }
 /*	
 	public void drawBasic(Canvas canvas, MapView mapView, GeoPoint busPoint){
