@@ -105,8 +105,13 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
         else next = null;
         if(last != null && next != null)
         	drawPrediction(canvas, last, next);
+        else invalidate();
     }
 
+	public void invalidate(){
+		mapView.invalidate();
+	}
+	
 	public void drawBasic(Canvas canvas, GeoPoint prePoint, GeoPoint currentPoint){
 		Paint paint=new Paint();
         paint.setAntiAlias(true);
