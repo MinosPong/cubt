@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import android.app.AlertDialog;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -12,12 +13,17 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.format.Time;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.maps.GeoPoint;
@@ -28,9 +34,13 @@ import com.google.android.maps.OverlayItem;
 
 import edu.cuhk.cubt.CubtApplication;
 import edu.cuhk.cubt.R;
+import edu.cuhk.cubt.bus.BusEventObject;
+import edu.cuhk.cubt.bus.Route;
+import edu.cuhk.cubt.bus.RoutePrediction;
+import edu.cuhk.cubt.bus.Stop;
 import edu.cuhk.cubt.net.BusActivityRequest;
 import edu.cuhk.cubt.net.BusActivityRequest.BusActivityRecord;
-import edu.cuhk.cubt.net.BusActivityRequest.ResponseListener;
+import edu.cuhk.cubt.net.BusPassedStopRequest;
 import edu.cuhk.cubt.store.LocationHistory;
 import edu.cuhk.cubt.store.RouteData;
 import edu.cuhk.cubt.ui.com.BusStopOverlay;
@@ -46,11 +56,22 @@ public class CubtMapView extends MapActivity {
 	ServiceOverlay realOverlay;
 	LocationHistoryOverlay locationHistoryOverlay;
 	PathOverlay routeOverlay, routeOverlay2;
-	String pRoute, dir, lStop;
 
 	static final int MENU_ROUTE = Menu.FIRST + 201;
 	
 	
+	@Override
+	protected void onResume() {
+		super.onResume();
+	    
+	    Location location = CuhkLocation.getInstance();
+	    
+	    mapView.getController().animateTo(new GeoPoint(
+	    		(int)(location.getLatitude() * 1E6),
+	    		(int)(location.getLongitude() * 1E6)));
+	}
+
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -126,7 +147,8 @@ public class CubtMapView extends MapActivity {
 		}catch(NumberFormatException e){
 			//period = 3000;
 		}
-	    //startServiceUpdate(period); //run in real time
+	    
+		startServiceUpdate(period); //run in real time
 	}
 	
 	
@@ -145,22 +167,83 @@ public class CubtMapView extends MapActivity {
 	}
 	
 	
+	public void displayRouteInfo(long id){
+		//TODO display loading bar
+		BusPassedStopRequest.getPassedStop(id, passedStopCallback);
+	}
+	
+	BusPassedStopRequest.ResponseListener passedStopCallback = new BusPassedStopRequest.ResponseListener() {
+		
+		@Override
+		public void onDataReceive(List<BusEventObject> stopEvents) {
+			//TODO remove loading bar
+			
+
+			//AlertDialog.Builder dialog = new AlertDialog.Builder(CubtMapView.this);
+			//dialog.setTitle(item.getTitle());
+			//dialog.setMessage(item.getSnippet());
+			//dialog.show();
+			  
+			LayoutInflater inflater = getLayoutInflater();
+			View layout = inflater.inflate(R.layout.toastview,(ViewGroup)findViewById(R.id.toastview_root));
+			ImageView image = (ImageView) layout.findViewById(R.id.image);
+			image.setImageResource(R.drawable.bus2);
+			TextView text = (TextView) layout.findViewById(R.id.text);
+			//text.setText("Last Stop:"+ lStop + "\nPredicted Stop:"+ pStop  + "\nDirection: " + dir);
+			String output = "";
+			
+			List<Stop> stops = new ArrayList<Stop>();
+			Iterator<BusEventObject> iter = stopEvents.iterator();
+			output+="Passed Stop:\n";
+			while(iter.hasNext()){
+				Stop stop = iter.next().getStop();
+				stops.add(stop);
+				output+= stop.getName() + "\n";
+			}
+			
+			Time time= new Time();
+			time.setToNow();
+			List<Route> routes = RoutePrediction.getRoutesByPassedStop(time.toMillis(false), stops);
+			
+
+			output+="\nPredicted Route:\n";
+			Iterator<Route> riter = routes.iterator();
+			while(riter.hasNext()){
+				output+= riter.next().getName() + "\n";
+			}
+			
+			output+="\nPossible Next Stop:\n";
+			Iterator<Stop> siter = RoutePrediction.getPossibleNextStop(routes.iterator(), stops.get(stops.size()-1)).iterator();
+			while(siter.hasNext()){
+				output+= siter.next().getName() + "\n";
+			}
+			
+			
+			text.setText(output);
+			
+			Toast toast = new Toast(CubtMapView.this);
+			toast.setGravity(Gravity.TOP, 0, 130);
+			toast.setDuration(Toast.LENGTH_LONG);
+			toast.setView(layout);
+			toast.show();
+			
+		}
+	};
+	
+	
+	
 	private long updatePeriod;
 	private long minPeriod = 3000;
 	
 	private static final int MSG_REQUEST_UPDATE = 28011;
 	
-	ResponseListener callback = new ResponseListener(){
+	BusActivityRequest.ResponseListener busActivityCallback = new BusActivityRequest.ResponseListener(){
 		@Override
 		public void onDataReceive(List<BusActivityRecord> buses) {
 			if(updatePeriod>0){
 				Collection<GeoPoint> points = new ArrayList<GeoPoint>();
 				Iterator<BusActivityRecord> busesIter = buses.iterator();
-				while(busesIter.hasNext()){
-					BusActivityRecord bus = busesIter.next();
-					points.add(new GeoPoint((int)(bus.getLatitude()*1e6) , (int)(bus.getLongitude()*1e6)));			
-				}
-				realOverlay.updateDisplay(points.iterator());
+				realOverlay.updateDisplay(buses.iterator());
 				mapView.invalidate();
 				handler.sendEmptyMessageDelayed(MSG_REQUEST_UPDATE,updatePeriod);
 			}		
@@ -169,7 +252,7 @@ public class CubtMapView extends MapActivity {
 	
 	public void startServiceUpdate(long period){
 		this.updatePeriod = (period < minPeriod ) ? minPeriod : period;
-		BusActivityRequest.sendRequest(callback);
+		BusActivityRequest.sendRequest(busActivityCallback);
 	}
 	
 	public void stopServiceUpdate(){
@@ -251,7 +334,7 @@ public class CubtMapView extends MapActivity {
 					mapView.invalidate();
 					break;
 				case MSG_REQUEST_UPDATE:
-					BusActivityRequest.sendRequest(callback);
+					BusActivityRequest.sendRequest(busActivityCallback);
 					break;
 			}
 			super.handleMessage(msg);

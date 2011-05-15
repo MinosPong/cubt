@@ -133,6 +133,14 @@ public class Route{
 		return stops.iterator();
 	}
 	
+	public int getStopPosition(Stop stop){
+		return stops.indexOf(stop);
+	}
+	
+	public boolean isLastStop(Stop stop){
+		return (stops.indexOf(stop) == (stops.size()-1));
+	}
+	
 }
 
 /*test*/
