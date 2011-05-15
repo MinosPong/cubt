@@ -40,12 +40,18 @@ public class RoutePrediction {
 		
 		while(routes.hasNext()){
 			Route route = routes.next();
+			
+			//If include Last Stop, not a possible route
+			if(route.isLastStop(input.get(input.size()-1)))
+				continue;
+			
 			if(route.isMatch(input.iterator())){
 				results.add(route);
 			}
 		}
 		return results;
 	}
+	
 	
 	public static List<Stop> getPossibleNextStop(Stop stop){		
 		return getPossibleNextStop(RouteData.getRoutes().values().iterator(), stop);	

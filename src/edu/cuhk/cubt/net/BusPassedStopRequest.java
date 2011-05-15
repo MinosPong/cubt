@@ -19,7 +19,7 @@ public class BusPassedStopRequest {
 	private static final String NAME_CMSG = "cmsg";
 	
 	@SuppressWarnings("unchecked")
-	public static void getPassedStop(String id, ResponseListener callback){
+	public static void getPassedStop(long id, ResponseListener callback){
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair(NAME_CMSG, "passed/"+id));
 		new BusPassedStopHttpTask(callback).execute(params );
