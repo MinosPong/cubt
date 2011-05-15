@@ -325,7 +325,7 @@ public class CubtMapView extends MapActivity {
 		super.onCreateContextMenu(menu, v, menuInfo);
 		
 		int i = 0;
-		menu.add(0, i++, 0, "All Stops");
+		menu.add(0, i++, 0, "Route Cleared");
 		Iterator<String> iter = RouteData.getRoutes().keySet().iterator();
 		while(iter.hasNext()){
 			menu.add(0, i++, 0, iter.next());
