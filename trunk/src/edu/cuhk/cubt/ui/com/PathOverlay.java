@@ -3,6 +3,7 @@ package edu.cuhk.cubt.ui.com;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -30,8 +31,10 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
 	Paint paint=new Paint();
 	private Context mContext;
 	private String routeName = null; //RouteData.ROUTE_0
-	private Poi lastStop = null;
-	private Poi nextStop = null;
+	private Stop nextStop = null;
+	
+	private Stop lastStop = null;
+	private List<Stop> nextStops = new ArrayList<Stop>();
 	//private String last = "", next = "";
 	
 	public PathOverlay(Drawable defaultMarker,MapView mapview,Context context) {
@@ -59,6 +62,22 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
 			GeoPoint stopLoc = new GeoPoint((int)(nextStop.getLatitude()*1e6),(int)(nextStop.getLongitude()*1e6));
 			addOverlay(new OverlayItem(stopLoc, "next", "stop"));
 		}
+	}
+	
+	public void drawPrediction(Stop lastStop, List<Stop> nextStops){
+		clearOverlay();
+		this.lastStop = lastStop;
+		this.nextStops = nextStops;
+		if(lastStop!=null){
+			GeoPoint stopLoc = new GeoPoint((int)(lastStop.getLatitude()*1e6),(int)(lastStop.getLongitude()*1e6));
+			addOverlay(new OverlayItem(stopLoc, "Last Stop", "Last Stop"));			
+		}
+		Iterator<Stop> iter = nextStops.iterator();
+		while(iter.hasNext()){
+			Stop nextStop = iter.next();
+			GeoPoint stopLoc = new GeoPoint((int)(nextStop.getLatitude()*1e6),(int)(nextStop.getLongitude()*1e6));
+			addOverlay(new OverlayItem(stopLoc, "Next Stop", "Next Stop"));			
+		}		
 	}
 	
 	public void clearOverlay(){
@@ -89,18 +108,13 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
         
         if(routeName != null)
         	drawRoute(canvas, routeName); //RouteData.ROUTE_0
-        String last = "", next = "";
         
-        if(lastStop != null)
-        	last = lastStop.getName();
-        else last = null;
-        
-        if(nextStop != null)
-        	next = nextStop.getName();
-        else next = null;
-        
-        if(last != null && next != null)
-        	drawPrediction(canvas, last, next);
+        if(lastStop != null){
+        	Iterator<Stop> iter = nextStops.iterator();
+        	while(iter.hasNext()){
+        		drawPrediction(canvas, lastStop.getName(), iter.next().getName());
+        	}
+        }
         else invalidate();
     }
 
@@ -654,13 +668,13 @@ public class PathOverlay extends ItemizedOverlay<OverlayItem> {
 		return busLine;
 	}
 
-	public void PredictedStop(Poi stop){		
+	public void setPredictedStop(Stop stop){		
 		if(nextStop != stop){
 			this.nextStop = stop;
 		}
 	}
 	
-	public void LastStop(Poi stop){
+	public void setLastStop(Stop stop){
 		if(lastStop != stop){
 			this.lastStop = stop;
 		}
