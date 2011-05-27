@@ -136,7 +136,7 @@ public class SCCMEngine {
 					StateChangeEvent<PoiState> poiEvt = (StateChangeEvent<PoiState>) msg.obj;
 					PoiState poiState = poiEvt.getNewState();
 					if(poiState == PoiState.INSIDE_BUS_STOP ){
-						locationSensor.setCapturingState(LocationSensor.STATE_HOT);						
+						//locationSensor.setCapturingState(LocationSensor.STATE_HOT);						
 					}
 					break;
 				case State.TYPE_BUS:
@@ -144,6 +144,8 @@ public class SCCMEngine {
 					BusState busState = busEvt.getNewState();
 					if(busState == BusState.OFFBUS){
 						locationSensor.setCapturingState(LocationSensor.STATE_INSIDE);
+					}else{
+						locationSensor.setCapturingState(LocationSensor.STATE_HOT);							
 					}
 					break;
 			}
