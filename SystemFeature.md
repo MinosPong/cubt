@@ -1,0 +1,12 @@
+# Introduction #
+
+This page is the features of CUHK Bus Tracking System
+
+
+# Features #
+
+  * Provides real time bus activities
+  * Estimate the waiting time/ arrival time of bus
+  * Notify user for incoming bus
+  * Use Mobile Sensor to capture real time activities
+  * Reports for bus operator

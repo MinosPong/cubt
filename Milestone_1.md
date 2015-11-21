@@ -1,0 +1,8 @@
+# Details #
+
+  * Basic Bus Timetable, without using sensor for bus tracking
+  * Allow user to update the future app
+  * Put on app store to see the the reaction from public
+
+# Release Date #
+Early March
