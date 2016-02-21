@@ -1,6 +1,6 @@
 apply plugin: 'com.android.application'
 android {
-    compileSdkVersion 'Google Inc.:Google APIs:21'
+    compileSdkVersion 'Google Inc.:Google APIs:19'
     buildToolsVersion "20.0.0"
 
     defaultConfig {
