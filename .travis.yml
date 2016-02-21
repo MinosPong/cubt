@@ -1,7 +1,7 @@
 language: android
 android:
   components:
-    - build-tools-23.0.2
+    - build-tools-20.0.0
     - android-23
     - addon-google_apis-google-19
 
