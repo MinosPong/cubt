@@ -3,7 +3,7 @@ android:
   components:
     - build-tools-23.0.2
     - android-23
-    - addon-google_apis-google-8
+    - addon-google_apis-google-19
 
   licenses:
     - 'android-sdk-license-.+'
