@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+  xmlns:android="http://schemas.android.com/apk/res/android">
+  
+<CheckBoxPreference 
+	android:key="key_virtual_sensor" 
+	android:title="@string/settings_virtual">
+</CheckBoxPreference>
+
+<EditTextPreference
+	android:key="key_virtual_file"
+	android:title="Virtual File"
+	android:summary="gps_demoN.txt"
+	android:numeric="integer"
+	android:dialogTitle="Virtual File" />
+
+<EditTextPreference
+	android:key="key_refresh_preiod"
+	android:title="Map refresh rate"
+	android:summary="Map refresh rate (in ms) "
+	android:numeric="integer"
+	android:dialogTitle="Map refresh rate" />
+
+
+<CheckBoxPreference 
+	android:key="key_display_location_history" 
+	android:title="Display Location History"
+	android:summary="Show the current location on the Map">
+</CheckBoxPreference>
+
+<CheckBoxPreference 
+	android:key="Activation enable" 
+	android:title="Activation"
+	android:summary="Enable the activation">
+</CheckBoxPreference>
+
+<ListPreference
+	android:key="Actpref"
+	android:title="Activation Settings"
+	android:summary="Set the activation preference"
+	android:entries="@array/entries_list_preference"  
+    android:entryValues="@array/entriesvalue_list_preference"  >
+</ListPreference>
+
+
+</PreferenceScreen>
